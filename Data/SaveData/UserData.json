@@ -1,15 +1,7 @@
 {
   "UserData": [
     {
-      "SlotID": 1,
-      "ClassType": "THIEF",
-      "Level": 1,
-      "Name": "ddd",
-      "HP": 100,
-      "Attack": 9.0,
-      "Defense": 7.0,
-      "Gold": 1500,
-      "Items": null
+
     }
   ]
 }
