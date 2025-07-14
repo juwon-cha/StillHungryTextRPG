@@ -1,0 +1,40 @@
+{
+    "Stats": [
+      {
+        "ClassType": "WARRIOR",
+        "Level": 1,
+        "MaxHp": 100,
+        "Attack": 10,
+        "Defense": 5,
+        "TotalExp": 10,
+        "Gold": 1500
+      },
+      {
+        "ClassType": "MAGICIAN",
+        "Level": 1,
+        "MaxHp": 100,
+        "Attack": 11,
+        "Defense": 4,
+        "TotalExp": 10,
+        "Gold": 1500
+      },
+      {
+        "ClassType": "ARCHER",
+        "Level": 1,
+        "MaxHp": 100,
+        "Attack": 12,
+        "Defense": 3,
+        "TotalExp": 10,
+        "Gold": 1500
+      },
+      {
+        "ClassType": "THIEF",
+        "Level": 1,
+        "MaxHp": 100,
+        "Attack": 9,
+        "Defense": 7,
+        "TotalExp": 10,
+        "Gold": 1500
+      }
+    ]
+}

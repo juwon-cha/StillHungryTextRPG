@@ -1,0 +1,19 @@
+{
+    "Dungeons": [
+      {
+        "Level": "EASY",
+        "RecommendedDefense": 5,
+        "BaseRewardGold": 1000
+      },
+      {
+        "Level": "NORMAL",
+        "RecommendedDefense": 11,
+        "BaseRewardGold": 1700
+      },
+      {
+        "Level": "HARD",
+        "RecommendedDefense": 17,
+        "BaseRewardGold": 2500
+      }
+    ]
+}

@@ -1,0 +1,53 @@
+using StillHungry.Commands;
+using StillHungry.Managers;
+using StillHungry.UI;
+
+namespace StillHungry.Scene
+{
+    public enum ERestResult
+    {
+        SUCCESS,
+        NOT_ENOUGH_GOLD,
+        FULL_HP
+    }
+
+    public class CampsiteScene : BaseScene
+    {
+        private readonly string[] mMenuItems = { "1. 휴식하기", "0. 나가기" };
+        private readonly IExecutable[] mMenuCommands;
+        private readonly MenuNavigator mNavigator;
+
+        public CampsiteScene()
+        {
+            mNavigator = new MenuNavigator(mMenuItems.Length);
+            mMenuCommands = new IExecutable[]
+            {
+                new RestCommand(RequestRedraw),
+                new ChangeSceneCommand(ESceneType.TOWN_SCENE)
+            };
+        }
+
+        public override void Display()
+        {
+            Update();
+            ProcessInput(mMenuCommands, mNavigator);
+            Render();
+        }
+
+        public override void Render()
+        {
+            if (!bNeedsRedraw)
+            {
+                return;
+            }
+
+            Console.Clear();
+            Manager.Instance.UI.ShowCampsiteScreen(mMenuItems, mNavigator.SelectedIndex);
+            bNeedsRedraw = false;
+        }
+
+        protected override void Update()
+        {
+        }
+    }
+}
