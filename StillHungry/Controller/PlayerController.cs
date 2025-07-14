@@ -2,6 +2,7 @@ using StillHungry.Data;
 using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Scene;
+using System;
 
 namespace StillHungry.Controller
 {
@@ -21,6 +22,8 @@ namespace StillHungry.Controller
         // 기본 능력치!!
         public float BaseAttack { get; private set; }
         public float BaseDefense { get; private set; }
+        public float BaseCriticalChance { get; private set; } // 치명타 확률
+        public float BaseEvasionChance { get; private set; } // 회피 확률
 
         // 장비로 인한 추가 능력치
         public float BonusAttack { get; private set; }
@@ -30,6 +33,8 @@ namespace StillHungry.Controller
         // 외부에서는 이 프로퍼티를 통해 최종 값만 읽을 수 있음
         public override float Attack => BaseAttack + BonusAttack;
         public override float Defense => BaseDefense + BonusDefense;
+        public float CriticalChance => BaseCriticalChance;
+        public float EvasionChance => BaseEvasionChance;
 
         public int Gold { get; private set; }
         public InventoryController InventoryController { get; private set; } = new InventoryController();
@@ -49,6 +54,10 @@ namespace StillHungry.Controller
                 HP = stat.MaxHp;
                 MaxHP = stat.MaxHp;
                 Gold = stat.Gold;
+                BaseCriticalChance = stat.CriticalRate;
+                BaseEvasionChance = stat.EvadeRate;
+                
+                
             }
             else
             {
@@ -76,6 +85,7 @@ namespace StillHungry.Controller
             BaseDefense = userData.Defense;
             HP = userData.HP;
             Gold = userData.Gold;
+
 
             // 인벤토리 초기화 후 저장 데이터 세팅
             InventoryController.ClearInventory();

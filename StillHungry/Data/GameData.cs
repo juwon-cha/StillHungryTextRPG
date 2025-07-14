@@ -1,4 +1,4 @@
-﻿using StillHungry.Controller;
+using StillHungry.Controller;
 using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Scene;
@@ -15,6 +15,8 @@ namespace StillHungry.Data
         public int Defense;
         public int TotalExp;
         public int Gold;
+        public float CriticalRate;
+        public float EvadeRate;
     }
 
     public class PlayerStatLoader : ILoader<EClassType, PlayerStat>
