@@ -1,4 +1,4 @@
-using StillHungry.Managers;
+﻿using StillHungry.Managers;
 
 namespace StillHungry
 {
@@ -8,9 +8,7 @@ namespace StillHungry
         {
             while (true)
             {
-                //as 
                 Manager.Instance.Scene.DisplayScene();
-
             }
         }
     }
