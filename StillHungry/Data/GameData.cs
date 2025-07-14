@@ -110,7 +110,7 @@ namespace StillHungry.Data
     #region MonsterStat
     public struct MonsterStat
     {
-        public EMonsterType MonsterType;
+        public int ID;
         public string Name;
         public int MaxHp;
         public int Attack;
@@ -119,17 +119,17 @@ namespace StillHungry.Data
         public int GoldReward;
     }
 
-    public class MonsterStatLoader : ILoader<EMonsterType, MonsterStat>
+    public class MonsterStatLoader : ILoader<int, MonsterStat>
     {
         public List<MonsterStat> MonsterStats = new List<MonsterStat>();
 
-        public Dictionary<EMonsterType, MonsterStat> MakeData()
+        public Dictionary<int, MonsterStat> MakeData()
         {
-            Dictionary<EMonsterType, MonsterStat> dict = new Dictionary<EMonsterType, MonsterStat>();
+            Dictionary<int, MonsterStat> dict = new Dictionary<int, MonsterStat>();
 
             foreach (MonsterStat monster in MonsterStats)
             {
-                dict.Add(monster.MonsterType, monster);
+                dict.Add(monster.ID, monster);
             }
 
             return dict;

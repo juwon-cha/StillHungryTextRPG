@@ -1,7 +1,7 @@
 {
     "MonsterStats": [
       {
-        "MonsterType": "SLIME",
+        "ID": "1",
         "Name": "슬라임",
         "MaxHp": 10,
         "Attack": 5,
@@ -10,7 +10,7 @@
         "GoldReward": 100
       },
       {
-        "MonsterType": "GOBLIN",
+        "ID": "2",
         "Name": "고블린",
         "MaxHp": 20,
         "Attack": 7,
@@ -19,7 +19,7 @@
         "Gold": 300
       },
       {
-        "MonsterType": "MIMICK",
+        "ID": "3",
         "Name": "미믹",
         "MaxHp": 30,
         "Attack": 10,
