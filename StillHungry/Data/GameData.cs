@@ -56,16 +56,16 @@ namespace StillHungry.Data
         public int Defense;
     }
 
-    public class PotionData : ItemData
+    public class ConsumableData : ItemData
     {
-        public int recovery;
+        public int Recovery;
     }
 
     public class ItemLoader : ILoader<int, ItemData>
     {
         public List<WeaponData> Weapons = new List<WeaponData>();
         public List<ArmorData> Armors = new List<ArmorData>();
-        public List<PotionData> Potions = new List<PotionData>();
+        public List<ConsumableData> Consumable = new List<ConsumableData>();
 
         public Dictionary<int, ItemData> MakeData()
         {
@@ -82,10 +82,10 @@ namespace StillHungry.Data
                 dict.Add(item.ID, item);
             }
 
-            foreach (ItemData item in Potions)
+            foreach (ItemData itemData in Consumable)
             {
-                item.ItemType = EItemType.ITEM_POTION;
-                dict.Add(item.ID, item);
+                itemData.ItemType = EItemType.ITEM_CONSUMABLE;
+                dict.Add(itemData.ID, itemData);
             }
 
             return dict;

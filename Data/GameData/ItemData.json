@@ -79,13 +79,13 @@
             "Description": "스파르타의 전사들이 사용했다는 전설의 갑옷입니다."
         }
     ],
-    "Potion": [
+    "Consumable": [
         {
             "ID": 200,
             "Name": "초소형 체력 회복 물약",
             "Price": 50,
             "Description": "체력을 10 회복합니다.",
-            "recovery": 10
+            "Recovery": 10
             
         },
         {
@@ -93,21 +93,21 @@
             "Name": "소형 체력 회복 물약",
             "Price": 100,
             "Description": "체력을 20 회복합니다.",
-            "recovery": 20
+            "Recovery": 20
         },
         {
             "ID": 202,
             "Name": "중형 체력 회복 물약",
             "Price": 200,
             "Description": "체력을 50 회복합니다.",
-            "recovery": 50
+            "Recovery": 50
         },
         {
             "ID": 203,
             "Name": "대형 체력 회복 물약",
             "Price": 500,
             "Description": "체력을 100 회복합니다.",
-            "recovery": 100
+            "Recovery": 100
         }
 
     ]

@@ -9,7 +9,7 @@ namespace StillHungry.Items
         ITEM_NONE = 0,
         ITEM_WEAPON,
         ITEM_ARMOR,
-        ITEM_POTION
+        ITEM_CONSUMABLE
     }
 
     public enum EWeaponType
@@ -60,8 +60,8 @@ namespace StillHungry.Items
                 case EItemType.ITEM_ARMOR:
                     item = new Armor(itemId);
                     break;
-                case EItemType.ITEM_POTION:
-                    item = new Potion(itemId);
+                case EItemType.ITEM_CONSUMABLE:
+                    item = new Consumable(itemId);
                     break;
                 case EItemType.ITEM_NONE:
                     break;
@@ -135,10 +135,10 @@ namespace StillHungry.Items
         }
     }
 
-    public class Potion : Item
+    public class Consumable : Item
     {
         public int HealAmount { get; private set; }
-        public Potion(int id) : base(EItemType.ITEM_POTION)
+        public Consumable(int id) : base(EItemType.ITEM_CONSUMABLE)
         {
             Init(id);
         }
@@ -146,14 +146,14 @@ namespace StillHungry.Items
         {
             ItemData itemData = null;
             DataManager.ItemDict.TryGetValue(id, out itemData);
-            if (itemData.ItemType != EItemType.ITEM_POTION)
+            if (itemData.ItemType != EItemType.ITEM_CONSUMABLE)
             {
                 return;
             }
-            PotionData data = (PotionData)itemData;
+            ConsumableData data = (ConsumableData)itemData;
             ID = data.ID;
             Name = data.Name;
-            HealAmount = data.recovery;
+            HealAmount = data.Recovery;
             Price = data.Price;
             Description = data.Description;
             HasPurchased = false;
