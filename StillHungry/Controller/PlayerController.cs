@@ -1,4 +1,4 @@
-﻿using StillHungry.Data;
+using StillHungry.Data;
 using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Scene;
@@ -18,7 +18,7 @@ namespace StillHungry.Controller
     {
         public EClassType ClassType { get; private set; }
 
-        // 기본 능력치
+        // 기본 능력치!!
         public float BaseAttack { get; private set; }
         public float BaseDefense { get; private set; }
 
