@@ -1,4 +1,4 @@
-﻿using StillHungry.Controller;
+using StillHungry.Controller;
 using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Scene;
@@ -56,10 +56,16 @@ namespace StillHungry.Data
         public int Defense;
     }
 
+    public class PotionData : ItemData
+    {
+        public int recovery;
+    }
+
     public class ItemLoader : ILoader<int, ItemData>
     {
         public List<WeaponData> Weapons = new List<WeaponData>();
         public List<ArmorData> Armors = new List<ArmorData>();
+        public List<PotionData> Potions = new List<PotionData>();
 
         public Dictionary<int, ItemData> MakeData()
         {
@@ -73,6 +79,12 @@ namespace StillHungry.Data
             foreach (ItemData item in Armors)
             {
                 item.ItemType = EItemType.ITEM_ARMOR;
+                dict.Add(item.ID, item);
+            }
+
+            foreach (ItemData item in Potions)
+            {
+                item.ItemType = EItemType.ITEM_POTION;
                 dict.Add(item.ID, item);
             }
 

@@ -1,5 +1,6 @@
-﻿using StillHungry.Data;
+using StillHungry.Data;
 using StillHungry.Managers;
+using StillHungry.Controller;
 
 namespace StillHungry.Items
 {
@@ -8,6 +9,7 @@ namespace StillHungry.Items
         ITEM_NONE = 0,
         ITEM_WEAPON,
         ITEM_ARMOR,
+        ITEM_POTION
     }
 
     public enum EWeaponType
@@ -57,6 +59,9 @@ namespace StillHungry.Items
                     break;
                 case EItemType.ITEM_ARMOR:
                     item = new Armor(itemId);
+                    break;
+                case EItemType.ITEM_POTION:
+                    item = new Potion(itemId);
                     break;
                 case EItemType.ITEM_NONE:
                     break;
@@ -125,6 +130,32 @@ namespace StillHungry.Items
             Price = data.Price;
             Description = data.Description;
 
+            HasPurchased = false;
+            SellingPrice = (int)(Price * SELLING_PRICE_PERCENTAGE);
+        }
+    }
+
+    public class Potion : Item
+    {
+        public int HealAmount { get; private set; }
+        public Potion(int id) : base(EItemType.ITEM_POTION)
+        {
+            Init(id);
+        }
+        private void Init(int id)
+        {
+            ItemData itemData = null;
+            DataManager.ItemDict.TryGetValue(id, out itemData);
+            if (itemData.ItemType != EItemType.ITEM_POTION)
+            {
+                return;
+            }
+            PotionData data = (PotionData)itemData;
+            ID = data.ID;
+            Name = data.Name;
+            HealAmount = data.recovery;
+            Price = data.Price;
+            Description = data.Description;
             HasPurchased = false;
             SellingPrice = (int)(Price * SELLING_PRICE_PERCENTAGE);
         }

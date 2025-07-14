@@ -2,13 +2,13 @@
   "UserData": [
     {
       "SlotID": 1,
-      "ClassType": "ARCHER",
-      "Level": 1,
-      "Name": "chacha",
-      "HP": 100,
-      "Attack": 12.0,
-      "Defense": 3.0,
-      "Gold": 1500,
+      "ClassType": "NONE",
+      "Level": 0,
+      "Name": null,
+      "HP": 0,
+      "Attack": 0.0,
+      "Defense": 0.0,
+      "Gold": 0,
       "Items": null
     }
   ]
