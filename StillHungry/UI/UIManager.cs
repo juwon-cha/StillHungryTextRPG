@@ -1,6 +1,7 @@
 using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Utils;
+using System.Runtime.CompilerServices;
 
 namespace StillHungry.UI
 {
@@ -162,8 +163,12 @@ namespace StillHungry.UI
                 {
                     statDisplay = $"방어력 +{armor.Defense}";
                 }
+                else if (item is Consumable consumable)
+                { 
+                    statDisplay = $"회복량 +{consumable.Recovery}";
+                }
 
-                string priceDisplay;
+                    string priceDisplay;
                 if (isSellingContext)
                 {
                     priceDisplay = $"{item.SellingPrice} G";

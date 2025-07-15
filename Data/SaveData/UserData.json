@@ -3,13 +3,22 @@
     {
       "SlotID": 1,
       "ClassType": "NONE",
-      "Level": 0,
+      "Level": 1,
       "Name": null,
-      "HP": 0,
-      "Attack": 0.0,
-      "Defense": 0.0,
-      "Gold": 0,
-      "Items": null
+      "HP": 31,
+      "Attack": 0.5,
+      "Defense": 1.0,
+      "Gold": 1000000350,
+      "Items": [
+        {
+          "ID": 200,
+          "HasEquipped": false
+        },
+        {
+          "ID": 201,
+          "HasEquipped": false
+        }
+      ]
     }
   ]
 }

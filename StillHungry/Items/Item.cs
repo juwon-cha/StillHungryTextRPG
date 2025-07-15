@@ -137,7 +137,7 @@ namespace StillHungry.Items
 
     public class Consumable : Item
     {
-        public int HealAmount { get; private set; }
+        public int Recovery { get; private set; }
         public Consumable(int id) : base(EItemType.ITEM_CONSUMABLE)
         {
             Init(id);
@@ -153,7 +153,7 @@ namespace StillHungry.Items
             ConsumableData data = (ConsumableData)itemData;
             ID = data.ID;
             Name = data.Name;
-            HealAmount = data.Recovery;
+            Recovery = data.Recovery;
             Price = data.Price;
             Description = data.Description;
             HasPurchased = false;

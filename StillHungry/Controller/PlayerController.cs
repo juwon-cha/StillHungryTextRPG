@@ -1,7 +1,8 @@
-﻿using StillHungry.Data;
+using StillHungry.Data;
 using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Scene;
+using System.Security.Cryptography.X509Certificates;
 
 namespace StillHungry.Controller
 {
@@ -287,9 +288,25 @@ namespace StillHungry.Controller
 
         }
 
-        public void UseItem()
+        public void UseItem(Consumable consumable)
         {
+            if (InventoryController.Inventory.ContainsKey(consumable.ID) && consumable.HasEquipped)
+            {
+                // 아이템 사용
+                HP += consumable.Recovery;
+                if (HP > MaxHP)
+                {
+                    HP = MaxHP; // 최대 체력 초과 방지
+                }
+                // 인벤토리에서 아이템 제거
+                InventoryController.RemoveItem(consumable);
 
+                Console.WriteLine($"{consumable.Name}을 사용하여 체력을 {consumable.Recovery}회복했습니다.");
+            }
+            else
+            {
+                Console.WriteLine("해당 아이템을 사용할 수 없습니다.");
+            }
         }
 
         public bool IsDead()
