@@ -16,7 +16,7 @@ namespace StillHungry.Controller
             // 1~3마리의 몬스터를 생성
             int numberOfMonsters = mRand.Next(1, 4); 
 
-            for (int i = 0; i < numberOfMonsters; i++)
+            for (int i = 1; i <= numberOfMonsters; i++)
             {
                 // TODO: 랜덤 몬스터 스폰
                 ActiveMonsters.Add(i, Monster.SpawnMonster(i));
