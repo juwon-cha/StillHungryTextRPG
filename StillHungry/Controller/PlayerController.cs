@@ -141,7 +141,10 @@ namespace StillHungry.Controller
             }
 
             // 아이템 장착 상태 반전
-            item.HasEquipped = !item.HasEquipped;
+            if(item.HasEquipped)
+            {
+                item.HasEquipped = !item.HasEquipped;
+            }
 
             // 모든 장비의 보너스 능력치를 다시 계산하여 플레이어에게 적용
             RecalculateStats();

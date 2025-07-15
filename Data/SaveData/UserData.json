@@ -8,17 +8,8 @@
       "HP": 31,
       "Attack": 0.5,
       "Defense": 1.0,
-      "Gold": 999998455,
-      "Items": [
-        {
-          "ID": 1,
-          "HasEquipped": false
-        },
-        {
-          "ID": 3,
-          "HasEquipped": false
-        }
-      ]
+      "Gold": 999997960,
+      "Items": null
     }
   ]
 }
