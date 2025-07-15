@@ -30,7 +30,7 @@ namespace StillHungry.Managers
             }
             else if(item.ID < 400)
             {
-                EquipmentItems.Add(item.ID, item);
+                ConsumableItems.Add(item.ID, item);
             }
            
         }

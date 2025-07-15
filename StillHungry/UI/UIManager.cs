@@ -148,6 +148,8 @@ namespace StillHungry.UI
         {
             Console.WriteLine("[내 아이템]");
             PrintItemList(Manager.Instance.Game.PlayerController.InventoryController.Inventory, isSellingContext);
+            Console.WriteLine();
+            PrintItemList(Manager.Instance.Game.PlayerController.InventoryController.ConsumableInventory, isSellingContext);
         }
 
         private void PrintItemList(Dictionary<int, Item> items, bool isSellingContext)
@@ -199,7 +201,12 @@ namespace StillHungry.UI
                 }
                 else
                 {
-                    priceDisplay = item.HasPurchased ? "구매완료" : $"{item.Price} G";
+                    if(item is ConsumableHP consumable || item is ConsumableMP consumableMP)
+                    {
+                        priceDisplay = $"{item.SellingPrice} G" + " ";
+                    }
+                    else
+                        priceDisplay = item.HasPurchased ? "구매완료" : $"{item.Price} G";
                 }
 
                 // 각 부분을 유틸 함수를 이용해 정렬된 문자열로 만든다.

@@ -36,6 +36,7 @@ namespace StillHungry.Items
         public bool HasEquipped { get; set; }
         public bool HasPurchased { get; set; }
 
+        public int Quantity { get; set; } // 소모품 아이템의 개수
         public Item(EItemType type)
         {
             ItemType = type;

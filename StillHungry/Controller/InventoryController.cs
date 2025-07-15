@@ -5,6 +5,8 @@ namespace StillHungry.Controller
     class InventoryController
     {
         public Dictionary<int, Item> Inventory = new Dictionary<int, Item>();
+        public Dictionary<int, Item> ConsumableInventory = new Dictionary<int, Item>();
+
 
         public void AddItem(Item item)
         {
@@ -13,7 +15,25 @@ namespace StillHungry.Controller
                 return;
             }
 
-            Inventory.Add(item.ID, item);
+            if (item.ID < 200)
+            {
+                Inventory.Add(item.ID, item);
+            }
+            else if (item.ID < 400)
+            {
+                // 이미 있으면 수량 증가, 없으면 추가
+                if (ConsumableInventory.TryGetValue(item.ID, out var existItem))
+                {
+                    existItem.Quantity += 1;
+                }
+                else
+                {
+                    item.Quantity = 1;
+                    ConsumableInventory.Add(item.ID, item);
+                }
+            }
+
+                
         }
 
         public bool RemoveItem(Item item)
@@ -24,7 +44,23 @@ namespace StillHungry.Controller
             }
 
             // 키 존재해서 성공적으로 제거하면 true 반환, 아니라면  false 반환
-            return Inventory.Remove(item.ID);
+            if (item.ID < 200)
+            {
+                return Inventory.Remove(item.ID);
+            }
+            else if (item.ID < 400)
+            {
+                if (ConsumableInventory.TryGetValue(item.ID, out var existItem))
+                {
+                    existItem.Quantity -= 1;
+                    if (existItem.Quantity <= 0)
+                    {
+                        return ConsumableInventory.Remove(item.ID);
+                    }
+                    return true;
+                }
+            }
+            return false;
         }
 
         // 상점에 배치된 리스트의 번호로 인벤토리에 있는 아이템 가져옴
@@ -48,6 +84,7 @@ namespace StillHungry.Controller
         public void ClearInventory()
         {
             Inventory.Clear();
+            ConsumableInventory.Clear();
         }
     }
 }
