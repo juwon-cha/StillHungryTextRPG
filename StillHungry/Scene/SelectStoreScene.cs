@@ -1,34 +1,38 @@
 using StillHungry.Commands;
-using StillHungry.Managers;
 using StillHungry.UI;
+using StillHungry.Managers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace StillHungry.Scene
 {
-    public class TownScene : BaseScene
+    internal class SelectStoreScene : BaseScene
     {
-        private readonly string[] mMenuItems = { "1. 상태 보기", "2. 인벤토리", "3. 상점", "4. 던전 입장", "5. 휴식하기", "0. 게임 종료" };
+        private readonly string[] mMenuItems = { "1. 장비 상점", "2. 소모품 상점","3. 재료 상점" ,"0. 나가기" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
-        public TownScene()
+        public SelectStoreScene()
         {
             mNavigator = new MenuNavigator(mMenuItems.Length);
             mMenuCommands = new IExecutable[]
             {
-                new ChangeSceneCommand(ESceneType.STATUS_SCENE),
-                new ChangeSceneCommand(ESceneType.INVENTORY_SCENE),
-                new ChangeSceneCommand(ESceneType.SELECT_STORE_SCENE),
-                new ChangeSceneCommand(ESceneType.DUNGEON_SCENE),
-                new ChangeSceneCommand(ESceneType.CAMPSITE_SCENE),
-                new ExitGameCommand()
+                new ChangeSceneCommand(ESceneType.STORE_SCENE)
+                //new ChangeSceneCommand(ESceneType.CONSUMABLE_STORE_SCENE),
+                //new ChangeSceneCommand(ESceneType.MATERIAL_STORE_SCENE),
+                //new ChangeSceneCommand(ESceneType.TOWN_SCENE)
             };
         }
-
         public override void Display()
         {
+
             Update();
             ProcessInput(mMenuCommands, mNavigator);
             Render();
+
         }
 
         public override void Render()
@@ -39,12 +43,13 @@ namespace StillHungry.Scene
             }
 
             Console.Clear();
-            Manager.Instance.UI.ShowTownScreen(mMenuItems, mNavigator.SelectedIndex);
+            Manager.Instance.UI.SelectStoreScreen(mMenuItems, mNavigator.SelectedIndex);
             bNeedsRedraw = false;
         }
 
         protected override void Update()
         {
+            
         }
     }
 }

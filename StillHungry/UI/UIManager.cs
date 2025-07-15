@@ -108,6 +108,17 @@ namespace StillHungry.UI
             DisplayOptions(menuOptions, selectedIndex);
         }
 
+        public void SelectStoreScreen(string[] menuOptions, int selectedIndex)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("상점");
+            Console.ResetColor();
+            Console.WriteLine("길.\n");
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{Manager.Instance.Game.PlayerController.Gold} G\n");
+            DisplayOptions(menuOptions, selectedIndex);
+        }
+
         public void ShowInventoryScreen(string[] menuOptions, int selectedIndex)
         {
             Console.ForegroundColor = ConsoleColor.Green;
