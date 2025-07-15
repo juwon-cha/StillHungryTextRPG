@@ -255,11 +255,11 @@ namespace StillHungry.Commands
             Console.WriteLine("[보유 골드]");
             Console.WriteLine($"{Manager.Instance.Game.PlayerController.Gold} G\n");
 
-            Manager.Instance.UI.PrintStoreItemList();
+            Manager.Instance.UI.PrintStoreItemList(Manager.Instance.Item.EquipmentItems);
 
             Console.Write("\n구매할 아이템의 번호를 입력해주세요 (0: 나가기) >> ");
             string input = Console.ReadLine();
-            var storeItems = Manager.Instance.Item.Items;
+            var storeItems = Manager.Instance.Item.EquipmentItems;
             if (int.TryParse(input, out int choice) && choice > 0 && choice <= storeItems.Count)
             {
                 Item itemToBuy = storeItems.Values.ElementAt(choice - 1);

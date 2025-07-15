@@ -104,7 +104,7 @@ namespace StillHungry.UI
             Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.\n");
             Console.WriteLine("[보유 골드]");
             Console.WriteLine($"{Manager.Instance.Game.PlayerController.Gold} G\n");
-            PrintStoreItemList();
+            PrintStoreItemList(Manager.Instance.Item.EquipmentItems);
             DisplayOptions(menuOptions, selectedIndex);
         }
 
@@ -129,10 +129,10 @@ namespace StillHungry.UI
             DisplayOptions(menuOptions, selectedIndex);
         }
 
-        public void PrintStoreItemList()
+        public void PrintStoreItemList(Dictionary<int, Item> items)
         {
             Console.WriteLine("[아이템 목록]");
-            PrintItemList(Manager.Instance.Item.Items, false);
+            PrintItemList(items, false);
         }
 
         public void PrintInventoryList(bool isSellingContext = false)

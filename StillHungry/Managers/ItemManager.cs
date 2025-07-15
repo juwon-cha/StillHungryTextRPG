@@ -1,11 +1,13 @@
-﻿using StillHungry.Data;
+using StillHungry.Commands;
+using StillHungry.Data;
 using StillHungry.Items;
 
 namespace StillHungry.Managers
 {
     class ItemManager
     {
-        public Dictionary<int, Item> Items = new Dictionary<int, Item>();
+        public Dictionary<int, Item> EquipmentItems = new Dictionary<int, Item>();
+        public Dictionary<int, Item> ConsumableItems = new Dictionary<int, Item>();
 
         public void Init()
         {
@@ -22,15 +24,25 @@ namespace StillHungry.Managers
 
         public void Add(Item item)
         {
-            Items.Add(item.ID, item);
+            if (item.ID < 200)
+            {
+                EquipmentItems.Add(item.ID, item);
+            }
+            else if(item.ID < 400)
+            {
+                EquipmentItems.Add(item.ID, item);
+            }
+           
         }
 
         // 아이템 아이디로 아이템 가져옴
         public Item GetItemFromID(int itemId)
         {
             Item item = null;
-
-            Items.TryGetValue(itemId, out item);
+            if (itemId < 200)
+                EquipmentItems.TryGetValue(itemId, out item);
+            else if (itemId < 400)
+                ConsumableItems.TryGetValue(itemId, out item);
 
             return item;
         }
@@ -43,14 +55,14 @@ namespace StillHungry.Managers
             int index = listNumber - 1;
 
             // 인덱스가 유효한 범위 내에 있는지 확인
-            if (index < 0 || index >= Items.Count)
+            if (index < 0 || index >= EquipmentItems.Count)
             {
                 return null; // 잘못된 번호일 경우 null 반환
             }
 
             // 딕셔너리의 값들을 순서대로 가져와서 해당 인덱스의 아이템을 반환
             // LINQ의 ElementAt()을 사용하여 N번째 요소를 찾음
-            return Items.Values.ElementAt(index);
+            return EquipmentItems.Values.ElementAt(index);
         }
     }
 }

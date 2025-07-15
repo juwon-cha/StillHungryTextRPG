@@ -9,20 +9,7 @@
       "Attack": 0.5,
       "Defense": 1.0,
       "Gold": 1000000300,
-      "Items": [
-        {
-          "ID": 200,
-          "HasEquipped": false
-        },
-        {
-          "ID": 201,
-          "HasEquipped": false
-        },
-        {
-          "ID": 300,
-          "HasEquipped": false
-        }
-      ]
+      "Items": null
     }
   ]
 }
