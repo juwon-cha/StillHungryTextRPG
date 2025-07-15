@@ -1,4 +1,4 @@
-﻿using StillHungry.Data;
+using StillHungry.Data;
 using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Scene;
@@ -67,7 +67,7 @@ namespace StillHungry.Controller
         }
 
         // 로드한 저장 데이터를 플레이어 데이터에 설정
-        public void LoadPlayerSettings(UserData userData)
+        public void SetPlayerSettingsFromLoadData(UserData userData)
         {
             ClassType = userData.ClassType;
             Level = userData.Level;
@@ -103,7 +103,6 @@ namespace StillHungry.Controller
                     }
                 }
             }
-
         }
 
         public void EquipItem(Item item)

@@ -16,7 +16,7 @@ namespace StillHungry.Scene
             mMenuCommands = new IExecutable[]
             {
                 new NewGameCommand(),
-                new LoadGameCommand(this), // LoadGameCommand가 자신을 참조할 수 있도록 this 전달
+                new LoadGameCommand(),
                 new ExitGameCommand()
             };
         }
