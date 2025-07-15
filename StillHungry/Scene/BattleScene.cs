@@ -1,26 +1,30 @@
 using StillHungry.Commands;
+using StillHungry.Controller;
 using StillHungry.Managers;
 using StillHungry.UI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static StillHungry.Scene.CharacterSettingScene;
 
 namespace StillHungry.Scene
 {
-    public class TitleScene : BaseScene
+    internal class BattleScene : BaseScene
     {
-        private readonly string[] mMenuItems = { "1. New Game", "2. Load Game", "0. Exit" };
+        private readonly string[] mMenuItems = { "1. 공격\t\t\t(공사중)", "2. 요리재료로 만들기\t\t(공사중)", "3. 너 내 동료가 되라\t\t(공사중)", "0. 도망가기\t\t\t(공사중)" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
-        public TitleScene()
+        public BattleScene()
         {
             mNavigator = new MenuNavigator(mMenuItems.Length);
             mMenuCommands = new IExecutable[]
             {
-                new NewGameCommand(),
-                new LoadGameCommand(),
-                new ExitGameCommand()
+                new ChangeSceneCommand(ESceneType.BATTLE_SCENE)
             };
         }
-
         public override void Display()
         {
             Update();
@@ -34,16 +38,13 @@ namespace StillHungry.Scene
             {
                 return;
             }
-
             Console.Clear();
-            // UI 그릴 때 네비게이터가 가진 현재 인덱스 정보를 넘겨줌
-            Manager.Instance.UI.ShowTitleScreen(mMenuItems, mNavigator.SelectedIndex);
+            Manager.Instance.UI.ShowBattleScreen(mMenuItems, mNavigator.SelectedIndex);
             bNeedsRedraw = false;
         }
 
         protected override void Update()
         {
-            // 애니메이션이나 상태 업데이트가 필요하다면 여기에 구현
         }
     }
 }

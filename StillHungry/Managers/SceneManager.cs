@@ -1,10 +1,11 @@
-﻿using StillHungry.Scene;
+using StillHungry.Scene;
 
 namespace StillHungry.Managers
 {
     public enum ESceneType
     {
         TITLE_SCENE,
+        SAVELOAD_SCENE,
         CHARACTER_SETTING_SCENE,
         TOWN_SCENE,
         STATUS_SCENE,
@@ -12,12 +13,13 @@ namespace StillHungry.Managers
         STORE_SCENE,
         DUNGEON_SCENE,
         CAMPSITE_SCENE,
+        BATTLE_SCENE
     }
 
     class SceneManager
     {
         public ESceneType CurrentSceneType { get; private set; }
-        private BaseScene mCurrentScene;
+        public BaseScene CurrentScene { get; private set; }
         private bool mbIsGameRunning = true;
 
         // 씬들을 미리 생성해서 담아 놓을 딕셔너리
@@ -27,6 +29,7 @@ namespace StillHungry.Managers
         {
             // 각 씬들 미리 생성
             mSceneDict.Add(ESceneType.TITLE_SCENE, new TitleScene());
+            mSceneDict.Add(ESceneType.SAVELOAD_SCENE, new SaveLoadScene());
             mSceneDict.Add(ESceneType.CHARACTER_SETTING_SCENE, new CharacterSettingScene());
             mSceneDict.Add(ESceneType.TOWN_SCENE, new TownScene());
             mSceneDict.Add(ESceneType.STATUS_SCENE, new StatusScene());
@@ -34,17 +37,18 @@ namespace StillHungry.Managers
             mSceneDict.Add(ESceneType.STORE_SCENE, new StoreScene());
             mSceneDict.Add(ESceneType.DUNGEON_SCENE, new DungeonScene());
             mSceneDict.Add(ESceneType.CAMPSITE_SCENE, new CampsiteScene());
+            mSceneDict.Add(ESceneType.BATTLE_SCENE, new BattleScene());
 
             // 타이틀 씬으로 초기화
-            mCurrentScene = mSceneDict[ESceneType.TITLE_SCENE];
+            CurrentScene = mSceneDict[ESceneType.TITLE_SCENE];
             CurrentSceneType = ESceneType.TITLE_SCENE;
         }
 
         public void DisplayScene()
         {
-            if (mCurrentScene != null)
+            if (CurrentScene != null)
             {
-                mCurrentScene.Display();
+                CurrentScene.Display();
             }
         }
 
@@ -53,19 +57,31 @@ namespace StillHungry.Managers
         {
             if(mSceneDict.ContainsKey(scene))
             {
-                mCurrentScene = mSceneDict[scene];
+                CurrentScene = mSceneDict[scene];
                 CurrentSceneType = scene;
-                mCurrentScene.bNeedsRedraw = true; // 씬 전환 시 화면 강제 갱신
+                CurrentScene.bNeedsRedraw = true; // 씬 전환 시 화면 강제 갱신
             }
 
             // 씬이 전환될 때마다 유저 데이터 저장
-            Manager.Instance.Game.SaveGame();
+            //Manager.Instance.Game.SaveGame();
 
             // 씬 전환 후 입력 버퍼 비우기
             while (Console.KeyAvailable)
             {
                 Console.ReadKey(true);
             }
+        }
+
+        public BaseScene GetScene(ESceneType type)
+        {
+            BaseScene scene;
+
+            if(mSceneDict.TryGetValue(type, out scene))
+            {
+                return scene;
+            }
+
+            return null;
         }
     }
 }

@@ -3,7 +3,6 @@ using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Scene;
 using StillHungry.Utils;
-using System.Xml.Linq;
 
 namespace StillHungry.Commands
 {
@@ -16,29 +15,98 @@ namespace StillHungry.Commands
         }
     }
 
+    // TitleScene에서 "불러오기" 메뉴를 눌렀을 때 호출될 커맨드
     public class LoadGameCommand : IExecutable
     {
-        private readonly TitleScene mScene;
-
-        // 불러오기 실패 시 화면을 다시 그려야 하므로, TitleScene에 신호를 보낼 방법이 필요
-        public LoadGameCommand(TitleScene scene)
+        public void Execute()
         {
-            mScene = scene;
+            // SceneManager를 통해 SaveLoadScene 인스턴스를 가져옴
+            var saveLoadScene = Manager.Instance.Scene.GetScene(ESceneType.SAVELOAD_SCENE) as SaveLoadScene;
+            // "불러오기" 모드로 설정
+            saveLoadScene?.SetMode(false);
+            // 씬 전환
+            Manager.Instance.Scene.ChangeScene(ESceneType.SAVELOAD_SCENE);
+        }
+    }
+
+    // TownScene에서 "저장하기" 메뉴를 눌렀을 때 호출될 커맨드
+    public class SaveGameCommand : IExecutable
+    {
+        public void Execute()
+        {
+            var saveLoadScene = Manager.Instance.Scene.GetScene(ESceneType.SAVELOAD_SCENE) as SaveLoadScene;
+            // "저장하기" 모드로 설정
+            saveLoadScene?.SetMode(true);
+            Manager.Instance.Scene.ChangeScene(ESceneType.SAVELOAD_SCENE);
+        }
+    }
+
+    public class SaveSlotCommand : IExecutable
+    {
+        private int slotIndex;
+
+        public SaveSlotCommand(int slot)
+        {
+            slotIndex = slot;
         }
 
         public void Execute()
         {
-            if (Manager.Instance.Game.LoadGame())
+            // 현재 슬롯에 데이터가 있는지 확인
+            if (DataManager.UserSlots.ContainsKey(slotIndex))
             {
-                Console.WriteLine("\n게임 데이터를 성공적으로 불러왔습니다.");
-                Console.WriteLine("마을로 이동합니다...");
-                Thread.Sleep(1500);
+                Console.Clear();
+                Console.WriteLine($"슬롯 {slotIndex}에 이미 데이터가 있습니다. 덮어쓰시겠습니까? (y/n)");
+                string input = Console.ReadLine()?.ToLower();
+                if (input != "y")
+                {
+                    // 사용자가 y를 입력하지 않으면 저장 작업을 중단하고 씬을 다시 그림
+                    Manager.Instance.Scene.CurrentScene.RequestRedraw();
+                    return;
+                }
+            }
+
+            // 게임 저장
+            Manager.Instance.Game.SaveGame(slotIndex);
+
+            Console.WriteLine($"슬롯 {slotIndex}에 게임을 저장했습니다.\n");
+            Console.WriteLine("아무 키나 누르면 마을로 돌아갑니다...");
+            Console.ReadKey();
+            // 저장 후 마을로 돌아감
+            Manager.Instance.Scene.ChangeScene(ESceneType.TOWN_SCENE);
+        }
+    }
+
+    public class LoadSlotCommand : IExecutable
+    {
+        private int slotIndex;
+
+        public LoadSlotCommand(int slot)
+        {
+            slotIndex = slot;
+        }
+
+        public void Execute()
+        {
+            // 지정된 슬롯에서 유저 데이터 불러오기 시도
+            if (DataManager.LoadUserDataFromSlot(slotIndex))
+            {
+                // 성공 시, GameManager에 플레이어 데이터 로드를 요청
+                Manager.Instance.Game.LoadPlayerData();
+                Console.WriteLine($"슬롯 {slotIndex}의 데이터를 불러왔습니다!");
+                Console.WriteLine("아무 키나 누르면 게임을 시작합니다...");
+                Console.ReadKey();
+                // 게임 시작 (TownScene으로 이동)
                 Manager.Instance.Scene.ChangeScene(ESceneType.TOWN_SCENE);
             }
             else
             {
-                Console.WriteLine("\n저장된 게임 데이터가 없습니다.");
-                Thread.Sleep(1500);
+                // 데이터가 없는 슬롯일 경우
+                Console.WriteLine("해당 슬롯에 데이터가 없습니다.");
+                Console.WriteLine("아무 키나 누르면 다시 선택합니다...");
+                Console.ReadKey();
+                // 현재 씬(SaveLoadScene)을 다시 그리도록 요청
+                Manager.Instance.Scene.CurrentScene.RequestRedraw();
             }
         }
     }
@@ -225,12 +293,12 @@ namespace StillHungry.Commands
                 mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
                 return;
             }
-            DungeonResult result = Manager.Instance.Dungeon.TryEnterDungeon(mDungeonLevel);
+            //DungeonResult result = Manager.Instance.Dungeon.TryEnterDungeon(mDungeonLevel);
             Console.Clear();
-            Console.WriteLine(result.IsClear ? "던전 클리어!" : "던전 공략 실패...");
-            Console.WriteLine("마을로 돌아갑니다.");
-            Thread.Sleep(2000);
-            Manager.Instance.Scene.ChangeScene(ESceneType.TOWN_SCENE);
+            //Console.WriteLine(result.IsClear ? "던전 클리어!" : "던전 공략 실패...");
+            //Console.WriteLine("마을로 돌아갑니다.");
+            //Thread.Sleep(2000);
+            Manager.Instance.Scene.ChangeScene(ESceneType.BATTLE_SCENE);
         }
     }
     #endregion

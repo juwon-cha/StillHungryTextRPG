@@ -11,25 +11,23 @@ namespace StillHungry.Managers
 
         public PlayerController PlayerController = new PlayerController();
 
-        // 플레이어 데이터 설정
+        // 새로운 캐릭터 생성 시 데이터 설정
         public void SetPlayerData(string playerName, EClassType classType)
         {
             PlayerController.Init(playerName, classType);
+            // DataManager의 현재 유저 정보도 생성된 캐릭터로 설정
+            DataManager.CurrentUser = CreateSaveData();
         }
 
-        public void SaveGame()
+        public void SaveGame(int slotIndex)
         {
-            UserData data = CreateSaveData();
-
-            DataManager.SaveUserData(data, "SaveData/UserData");
+            DataManager.CurrentUser = Manager.Instance.Game.CreateSaveData();
+            DataManager.SaveCurrentUserData(slotIndex);
         }
 
+        // 저장할 유저 데이터 생성
         public UserData CreateSaveData()
         {
-            // TODO: 저장/로드 슬롯 시스템 구현
-            // 최대 3개 까지 게임 상황을 저장/로드할 수 있는 슬롯 시스템
-            // 저장/로드 슬롯을 선택할 수 있는 씬 추가
-
             UserData userData = new UserData();
             userData.SlotID = (int)SlotID.ID;
             userData.ClassType = PlayerController.ClassType;
@@ -58,23 +56,13 @@ namespace StillHungry.Managers
             return userData;
         }
 
-        public bool LoadGame()
+        // 슬롯에서 불러온 데이터로 플레이어 정보 설정
+        public void LoadPlayerData()
         {
-            DataManager.LoadUserData();
-            if (DataManager.SaveDataDict == null || DataManager.SaveDataDict.Count == 0)
+            if (DataManager.CurrentUser != null)
             {
-                return false; // 저장된 데이터 없음
+                PlayerController.SetPlayerSettingsFromLoadData(DataManager.CurrentUser);
             }
-
-            // TODO: 슬롯 시스템 구현하면서 수정 필요
-            UserData data;
-            if(DataManager.SaveDataDict.TryGetValue((int)SlotID.ID, out data))
-            {
-                PlayerController.LoadPlayerSettings(data);
-                return true;
-            }
-
-            return false;
         }
 
         public void ExitGame()
