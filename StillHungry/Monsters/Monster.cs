@@ -6,6 +6,7 @@ namespace StillHungry.Monsters
     public class Monster
     {
         public int ID { get; set; }
+        public int Level { get; set; }
         public string Name { get; set; }
         public int MaxHp { get; set; }
         public int CurrentHp { get; set; }
@@ -24,6 +25,7 @@ namespace StillHungry.Monsters
             if (DataManager.MonsterStatDict.TryGetValue(id, out monsterData))
             {
                 ID = monsterData.ID;
+                Level = monsterData.Level;
                 Name = monsterData.Name;
                 MaxHp = monsterData.MaxHp;
                 CurrentHp = MaxHp; // 초기 체력은 최대 체력으로 설정

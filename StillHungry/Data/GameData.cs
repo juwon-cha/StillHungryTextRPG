@@ -111,6 +111,7 @@ namespace StillHungry.Data
     public struct MonsterStat
     {
         public int ID;
+        public int Level;
         public string Name;
         public int MaxHp;
         public int Attack;
