@@ -163,9 +163,9 @@ namespace StillHungry.UI
                 {
                     statDisplay = $"방어력 +{armor.Defense}";
                 }
-                else if (item is Consumable consumable)
+                else if (item is ConsumableHP consumable)
                 { 
-                    statDisplay = $"회복량 +{consumable.Recovery}";
+                    statDisplay = $"회복량 +{consumable.HPRecovery}";
                 }
 
                     string priceDisplay;

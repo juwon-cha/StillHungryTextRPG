@@ -1,4 +1,4 @@
-﻿using StillHungry.Items;
+using StillHungry.Items;
 
 namespace StillHungry.Controller
 {

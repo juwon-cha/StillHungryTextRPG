@@ -288,20 +288,20 @@ namespace StillHungry.Controller
 
         }
 
-        public void UseItem(Consumable consumable)
+        public void UseHPRecovery(ConsumableHP consumableHP)
         {
-            if (InventoryController.Inventory.ContainsKey(consumable.ID) && consumable.HasEquipped)
+            if (InventoryController.Inventory.ContainsKey(consumableHP.ID) && consumableHP.HasEquipped)
             {
                 // 아이템 사용
-                HP += consumable.Recovery;
+                HP += consumableHP.HPRecovery;
                 if (HP > MaxHP)
                 {
                     HP = MaxHP; // 최대 체력 초과 방지
                 }
                 // 인벤토리에서 아이템 제거
-                InventoryController.RemoveItem(consumable);
+                InventoryController.RemoveItem(consumableHP);
 
-                Console.WriteLine($"{consumable.Name}을 사용하여 체력을 {consumable.Recovery}회복했습니다.");
+                Console.WriteLine($"{consumableHP.Name}을 사용하여 체력을 {consumableHP.HPRecovery}회복했습니다.");
             }
             else
             {
