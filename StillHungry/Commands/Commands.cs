@@ -325,6 +325,7 @@ namespace StillHungry.Commands
                         EPurchaseResult.ALREADY_PURCHASED => "이미 구매한 아이템입니다.",
                         _ => "구매에 실패했습니다."
                     };
+                    itemToBuy.HasPurchased = false;
                     Console.WriteLine(message);
                 }
             }

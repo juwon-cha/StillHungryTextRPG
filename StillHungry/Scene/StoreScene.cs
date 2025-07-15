@@ -31,7 +31,7 @@ namespace StillHungry.Scene
             {
                 new BuyEquipmentCommand(RequestRedraw),
                 new SellItemCommand(RequestRedraw),
-                new ChangeSceneCommand(ESceneType.TOWN_SCENE)
+                new ChangeSceneCommand(ESceneType.GUILD_SCENE)
             };
         }
 
