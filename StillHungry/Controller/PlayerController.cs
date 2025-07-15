@@ -117,7 +117,7 @@ namespace StillHungry.Controller
                 return;
             }
 
-            foreach (KeyValuePair<int, Item> pair in InventoryController.Inventory)
+            foreach (KeyValuePair<int, Item> pair in InventoryController.EquipInventory)
             {
                 // 중복 장착 처리
                 // 장착된 아이템이 있는지 확인 후 아이템 타입을 판별해서 같은 타입이면 장착 상태 바꿈
@@ -158,7 +158,7 @@ namespace StillHungry.Controller
             BonusDefense = 0;
 
             // 인벤토리의 모든 아이템을 확인
-            foreach (var item in InventoryController.Inventory.Values)
+            foreach (var item in InventoryController.EquipInventory.Values)
             {
                 // 장착된 아이템일 경우에만 보너스 스탯을 더함
                 if (item.HasEquipped)
@@ -293,7 +293,7 @@ namespace StillHungry.Controller
 
         public void UseHPRecovery(ConsumableHP consumableHP)
         {
-            if (InventoryController.Inventory.ContainsKey(consumableHP.ID) && consumableHP.HasEquipped)
+            if (InventoryController.ConsumableInventory.ContainsKey(consumableHP.ID))
             {
                 // 아이템 사용
                 HP += consumableHP.HPRecovery;
@@ -310,7 +310,7 @@ namespace StillHungry.Controller
             {
                 Console.WriteLine("해당 아이템을 사용할 수 없습니다.");
             }
-        }
+        } 
 
         public bool IsDead()
         {

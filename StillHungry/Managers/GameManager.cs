@@ -1,4 +1,4 @@
-﻿using StillHungry.Controller;
+using StillHungry.Controller;
 using StillHungry.Data;
 using StillHungry.Items;
 
@@ -41,7 +41,7 @@ namespace StillHungry.Managers
             userData.Gold = PlayerController.Gold;
 
             // 유저가 소유하고 있는 아이템 정보(아이디, 장착여부) 저장
-            var inventory = PlayerController.InventoryController.Inventory;
+            var inventory = PlayerController.InventoryController.EquipInventory;
             if (inventory.Count != 0)
             {
                 userData.Items = new List<UserItemData>();

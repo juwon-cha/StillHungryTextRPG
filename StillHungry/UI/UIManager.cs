@@ -134,7 +134,6 @@ namespace StillHungry.UI
             Console.WriteLine("인벤토리");
             Console.ResetColor();
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.\n");
-            PrintInventoryList();
             DisplayOptions(menuOptions, selectedIndex);
         }
 
@@ -149,7 +148,7 @@ namespace StillHungry.UI
             Console.WriteLine("[내 아이템]");
             if (!isSellConsumable)
             {
-                PrintItemList(Manager.Instance.Game.PlayerController.InventoryController.Inventory, isSellingContext);
+                PrintItemList(Manager.Instance.Game.PlayerController.InventoryController.EquipInventory, isSellingContext);
             }
             else
             {

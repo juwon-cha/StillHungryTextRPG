@@ -3,7 +3,6 @@ using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Scene;
 using StillHungry.Utils;
-using System.Xml.Linq;
 
 namespace StillHungry.Commands
 {
@@ -236,6 +235,7 @@ namespace StillHungry.Commands
     #endregion
 
     #region 상점 및 인벤토리
+    // 장비 구매
     public class BuyEquipmentCommand : IExecutable
     {
         private readonly Action mRequestRedrawCallback;
@@ -286,7 +286,7 @@ namespace StillHungry.Commands
             mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
         }
     }
-
+    // 소모품 구매
     public class BuyConsumableCommand : IExecutable
     {
         private readonly Action mRequestRedrawCallback;
@@ -338,7 +338,7 @@ namespace StillHungry.Commands
             mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
         }
     }
-
+    // 장비 판매
     public class SellItemCommand : IExecutable
     {
         private readonly Action mRequestRedrawCallback;
@@ -361,9 +361,9 @@ namespace StillHungry.Commands
             Console.Write("\n판매할 아이템의 번호를 입력해주세요 (0: 나가기) >> ");
             string input = Console.ReadLine();
             var inventory = Manager.Instance.Game.PlayerController.InventoryController;
-            if (int.TryParse(input, out int choice) && choice > 0 && choice <= inventory.Inventory.Count)
+            if (int.TryParse(input, out int choice) && choice > 0 && choice <= inventory.EquipInventory.Count)
             {
-                Item itemToSell = inventory.Inventory.Values.ElementAt(choice - 1);
+                Item itemToSell = inventory.EquipInventory.Values.ElementAt(choice - 1);
                 if (itemToSell != null)
                 {
                     ESellResult result = Manager.Instance.Game.PlayerController.SellItem(itemToSell);
@@ -379,7 +379,7 @@ namespace StillHungry.Commands
             mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
         }
     }
-
+    // 소모품 판매
     public class SellConsumableCommand : IExecutable
     {
         private readonly Action mRequestRedrawCallback;
@@ -421,7 +421,7 @@ namespace StillHungry.Commands
             mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
         }
     }
-
+    // 장비 창고
     public class EquipManageCommand : IExecutable
     {
         private readonly Action mRequestRedrawCallback;
@@ -444,9 +444,9 @@ namespace StillHungry.Commands
             Console.Write("\n장착/해제할 아이템의 번호를 입력해주세요 (0: 나가기) >> ");
             string input = Console.ReadLine();
             var player = Manager.Instance.Game.PlayerController;
-            if (int.TryParse(input, out int choice) && choice > 0 && choice <= player.InventoryController.Inventory.Count)
+            if (int.TryParse(input, out int choice) && choice > 0 && choice <= player.InventoryController.EquipInventory.Count)
             {
-                Item itemToEquip = player.InventoryController.Inventory.Values.ElementAt(choice - 1);
+                Item itemToEquip = player.InventoryController.EquipInventory.Values.ElementAt(choice - 1);
                 if (itemToEquip != null)
                 {
                     player.EquipItem(itemToEquip);
@@ -462,4 +462,50 @@ namespace StillHungry.Commands
         }
     }
     #endregion
+
+    public class ConsumableManageCommand : IExecutable
+    {
+        private readonly Action mRequestRedrawCallback;
+
+        public ConsumableManageCommand(Action requestRedrawCallback)
+        {
+            mRequestRedrawCallback = requestRedrawCallback;
+        }
+
+        public void Execute()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("인벤토리 - 사용 하기");
+            Console.ResetColor();
+            Console.WriteLine("보유 중인 아이템을 사용할 수 있습니다.\n");
+
+            Manager.Instance.UI.PrintInventoryList(false, true);
+
+            Console.Write("\n사용할 아이템의 번호를 입력해주세요 (0: 나가기) >> ");
+            string input = Console.ReadLine();
+            var player = Manager.Instance.Game.PlayerController;
+            if (int.TryParse(input, out int choice) && choice > 0 && choice <= player.InventoryController.ConsumableInventory.Count)
+            {
+                Item itemToEquip = player.InventoryController.ConsumableInventory.Values.ElementAt(choice - 1);
+                if (itemToEquip != null)
+                {
+                    player.EquipItem(itemToEquip);
+                    Console.WriteLine($"{itemToEquip.Name}을(를) 사용했습니다.");
+                    if (itemToEquip.ID >= 200 && itemToEquip.ID < 300)
+                        player.UseHPRecovery((ConsumableHP)itemToEquip); // 아이템 사용 시 HP 회복
+                   // else (itemToEquip.ID >= 300 && itemToEquip.ID < 400)
+                       // player.UseMPRecovery((ConsumableMP)itemToEquip); // 아이템 사용 시 MP 회복
+                    else
+                        Console.WriteLine("해당 아이템은 사용할 수 없습니다.");
+                }
+            }
+            else if (choice != 0)
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+            }
+            Thread.Sleep(1000);
+            mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
+        }
+    }
 }
