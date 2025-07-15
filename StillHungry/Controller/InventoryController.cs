@@ -1,8 +1,8 @@
-﻿using StillHungry.Items;
+using StillHungry.Items;
 
 namespace StillHungry.Controller
 {
-    class InventoryController
+    public class InventoryController
     {
         public Dictionary<int, Item> Inventory = new Dictionary<int, Item>();
 
