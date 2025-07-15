@@ -1,0 +1,31 @@
+{
+    "MonsterStats": [
+      {
+        "ID": "1",
+        "Name": "슬라임",
+        "MaxHp": 10,
+        "Attack": 5,
+        "Defense": 3,
+        "ExpReward": 1,
+        "GoldReward": 100
+      },
+      {
+        "ID": "2",
+        "Name": "고블린",
+        "MaxHp": 20,
+        "Attack": 7,
+        "Defense": 4,
+        "TotalExp": 2,
+        "Gold": 300
+      },
+      {
+        "ID": "3",
+        "Name": "미믹",
+        "MaxHp": 30,
+        "Attack": 10,
+        "Defense": 5,
+        "TotalExp": 5,
+        "Gold": 500
+      }
+    ]
+}

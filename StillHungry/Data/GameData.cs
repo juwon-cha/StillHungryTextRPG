@@ -1,4 +1,4 @@
-﻿using StillHungry.Controller;
+using StillHungry.Controller;
 using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Scene;
@@ -100,6 +100,36 @@ namespace StillHungry.Data
             foreach (DungeonData dungeonData in Dungeons)
             {
                 dict.Add(dungeonData.Level.ToString(), dungeonData);
+            }
+
+            return dict;
+        }
+    }
+    #endregion
+
+    #region MonsterStat
+    public struct MonsterStat
+    {
+        public int ID;
+        public string Name;
+        public int MaxHp;
+        public int Attack;
+        public int Defense;
+        public int ExpReward;
+        public int GoldReward;
+    }
+
+    public class MonsterStatLoader : ILoader<int, MonsterStat>
+    {
+        public List<MonsterStat> MonsterStats = new List<MonsterStat>();
+
+        public Dictionary<int, MonsterStat> MakeData()
+        {
+            Dictionary<int, MonsterStat> dict = new Dictionary<int, MonsterStat>();
+
+            foreach (MonsterStat monster in MonsterStats)
+            {
+                dict.Add(monster.ID, monster);
             }
 
             return dict;
