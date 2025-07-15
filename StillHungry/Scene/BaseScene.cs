@@ -25,7 +25,7 @@ namespace StillHungry.Scene
                 // Enter가 눌리면, 네비게이터의 현재 인덱스에 맞는 커맨드 실행
                 menuCommands[navigator.SelectedIndex].Execute();
             }
-            else
+            else 
             {
                 // 다른 키(방향키)가 눌리면 네비게이터가 인덱스를 변경
                 if (navigator.Navigate(keyInfo.Key))
