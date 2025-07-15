@@ -11,6 +11,8 @@ namespace StillHungry.Data
         public EClassType ClassType;
         public int Level;
         public int MaxHp;
+        public int MaxMana; //최대 마나
+        public int Mana;
         public int Attack;
         public int Defense;
         public int TotalExp;

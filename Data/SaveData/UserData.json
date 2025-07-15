@@ -1,7 +1,18 @@
 {
   "UserData": [
     {
-
+      "SlotID": 1,
+      "ClassType": "MAGICIAN",
+      "Level": 1,
+      "Name": "fgfg",
+      "HP": 100,
+      "Mana": 100,
+      "Attack": 11.0,
+      "Defense": 4.0,
+      "Gold": 1500,
+      "CriticalRate": 0.35,
+      "EvadeRate": 0.35,
+      "Items": null
     }
   ]
 }

@@ -1,4 +1,4 @@
-﻿using StillHungry.Controller;
+using StillHungry.Controller;
 using StillHungry.Data;
 using StillHungry.Items;
 
@@ -36,9 +36,12 @@ namespace StillHungry.Managers
             userData.Level = PlayerController.Level;
             userData.Name = PlayerController.Name;
             userData.HP = PlayerController.HP;
+            userData.Mana = PlayerController.Mana;
             userData.Attack = PlayerController.BaseAttack;
             userData.Defense = PlayerController.BaseDefense;
             userData.Gold = PlayerController.Gold;
+            userData.CriticalRate = PlayerController.CriticalChance;
+            userData.EvadeRate = PlayerController.EvasionChance;
 
             // 유저가 소유하고 있는 아이템 정보(아이디, 장착여부) 저장
             var inventory = PlayerController.InventoryController.Inventory;

@@ -22,6 +22,8 @@ namespace StillHungry.Controller
         // 기본 능력치!!
         public float BaseAttack { get; private set; }
         public float BaseDefense { get; private set; }
+        public int Mana {  get; private set; }
+        public int MaxMana {  get; private set; }
         public float BaseCriticalChance { get; private set; } // 치명타 확률
         public float BaseEvasionChance { get; private set; } // 회피 확률
 
@@ -35,6 +37,8 @@ namespace StillHungry.Controller
         public override float Defense => BaseDefense + BonusDefense;
         public float CriticalChance => BaseCriticalChance;
         public float EvasionChance => BaseEvasionChance;
+        public int CurrentMana => Mana;
+        public int MaximumMana => MaxMana;
 
         public int Gold { get; private set; }
         public InventoryController InventoryController { get; private set; } = new InventoryController();
@@ -56,7 +60,8 @@ namespace StillHungry.Controller
                 Gold = stat.Gold;
                 BaseCriticalChance = stat.CriticalRate;
                 BaseEvasionChance = stat.EvadeRate;
-                
+                MaxMana = stat.MaxMana;
+                Mana = stat.Mana;
                 
             }
             else
@@ -84,8 +89,10 @@ namespace StillHungry.Controller
             BaseAttack = userData.Attack;
             BaseDefense = userData.Defense;
             HP = userData.HP;
+            Mana = userData.Mana;
             Gold = userData.Gold;
-
+            BaseCriticalChance = userData.CriticalRate;
+            BaseEvasionChance = userData.EvadeRate;
 
             // 인벤토리 초기화 후 저장 데이터 세팅
             InventoryController.ClearInventory();
@@ -285,6 +292,20 @@ namespace StillHungry.Controller
             // 기본 능력치 상승
             BaseAttack += 0.5f;
             BaseDefense += 1f;
+        }
+
+        public bool UseMana(int amount)
+        {
+            if(amount <= 0)
+            {
+                return false;
+            }
+            if(Mana >= amount)
+            {
+                Mana -= amount;
+                return true;
+            }
+            return false;
         }
 
         public void UseSkill()
