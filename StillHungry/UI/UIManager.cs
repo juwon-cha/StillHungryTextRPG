@@ -374,11 +374,18 @@ namespace StillHungry.UI
             Console.WriteLine("\u001b[33mBattle!!\u001b[0m");
 
             // 게임매니저의 인스턴스를 통해서 몬스터의 정보를 얻어온다.
-            Console.WriteLine("몬스터정보(1~4마리까지 등장 중복가능)\n");
-            //var monster = Manager.Instance.Game.MonsterController;
+            Console.WriteLine();
+            foreach (var m in Manager.Instance.Battle.MonsterController.ActiveMonsters) 
+            {
+                // 몬스터의 점보를 출력
+                string id = (Manager.Instance.Battle.isFighting) ? m.Value.ID.ToString() : "";
+                Console.Write($"\u001b[94m{id}\u001b[0m " +
+                    $"Lv.\u001b[33m{m.Value.Level}\u001b[0m " +
+                    $"{m.Value.Name}\tHP \u001b[33m{m.Value.CurrentHp}\u001b[0m\n");
+            }
 
             // 게임매니저의 인스턴스를 통해서 플레이어의 정보를 얻어온다
-            Console.WriteLine("[내정보]");
+            Console.WriteLine("\n\n[내정보]");
             var player = Manager.Instance.Game.PlayerController;
             Console.Write($"Lv. \u001b[33m{player.Level}\u001b[0m\t");
             Console.WriteLine($"Chad ({StringConverter.ClassTypeToString(player.ClassType)})");

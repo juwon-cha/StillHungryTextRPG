@@ -22,7 +22,7 @@ namespace StillHungry.Scene
             mNavigator = new MenuNavigator(mMenuItems.Length);
             mMenuCommands = new IExecutable[]
             {
-                new ChangeSceneCommand(ESceneType.BATTLE_SCENE)
+                new BattleStartCommand()
             };
         }
         public override void Display()
