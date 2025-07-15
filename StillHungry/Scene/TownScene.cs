@@ -6,7 +6,7 @@ namespace StillHungry.Scene
 {
     public class TownScene : BaseScene
     {
-        private readonly string[] mMenuItems = { "1. 상태 보기", "2. 인벤토리", "3. 상점", "4. 던전 입장", "5. 휴식하기", "0. 게임 종료" };
+        private readonly string[] mMenuItems = { "1. 상태 보기", "2. 인벤토리", "3. 상점", "4. 던전 입장", "5. 휴식하기", "6. 저장하기", "0. 게임 종료" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
@@ -20,6 +20,7 @@ namespace StillHungry.Scene
                 new ChangeSceneCommand(ESceneType.STORE_SCENE),
                 new ChangeSceneCommand(ESceneType.DUNGEON_SCENE),
                 new ChangeSceneCommand(ESceneType.CAMPSITE_SCENE),
+                new SaveGameCommand(),
                 new ExitGameCommand()
             };
         }

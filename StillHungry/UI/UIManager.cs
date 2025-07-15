@@ -1,3 +1,4 @@
+using StillHungry.Data;
 using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Utils;
@@ -77,6 +78,74 @@ namespace StillHungry.UI
             Console.WriteLine($"500 G 를 내면 체력을 회복할 수 있습니다. (보유 골드 : {player.Gold} G)\n");
             DisplayOptions(menuOptions, selectedIndex);
         }
+
+        public void ShowSaveLoadScreen(string[] menuOptions, int selectedIndex, bool isSavingMode)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(isSavingMode ? "## 저장하기 ##" : "## 불러오기 ##");
+            Console.ResetColor();
+            Console.WriteLine("데이터를 저장하거나 불러올 슬롯을 선택해주세요.");
+
+            // 모든 슬롯 데이터 불러오기
+            DataManager.LoadAllSlotsData();
+
+            Console.WriteLine();
+            for (int i = 0; i < menuOptions.Length; i++)
+            {
+                // menuOptions 배열의 마지막은 보통 '나가기'이므로, 슬롯 번호는 i + 1로 간주
+                // "슬롯" 이라는 텍스트를 포함하고 있을 때만 슬롯으로 간주
+                if (!menuOptions[i].Contains("슬롯"))
+                {
+                    if (i == selectedIndex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"> {menuOptions[i]}");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        Console.WriteLine($"  {menuOptions[i]}");
+                        Console.ResetColor();
+                    }
+                    continue;
+                }
+
+                int slotIndex = i + 1;
+                string optionText = menuOptions[i];
+                string playerInfo = "";
+
+                // 해당 슬롯에 저장된 데이터가 있는지 확인
+                if (DataManager.UserSlots.TryGetValue(slotIndex, out var userData))
+                {
+                    // 데이터가 있다면, 플레이어 정보를 문자열로 만든다.
+                    string className = StringConverter.ClassTypeToString(userData.ClassType);
+                    playerInfo = $" - {userData.Name} (Lv.{userData.Level} {className})";
+                }
+                else
+                {
+                    // 데이터가 없다면, 비어있음 표시
+                    playerInfo = " - (비어 있음)";
+                }
+
+                if (i == selectedIndex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    // 선택된 메뉴에 플레이어 정보를 합쳐서 출력
+                    Console.WriteLine($"> {optionText}{playerInfo}");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    // 선택되지 않은 메뉴에 플레이어 정보를 합쳐서 출력
+                    Console.WriteLine($"  {optionText}{playerInfo}");
+                    Console.ResetColor();
+                }
+            }
+            Console.WriteLine("\n(↑, ↓ 방향키로 이동, Enter로 선택)");
+        }
+
         #endregion
 
         #region 캐릭터 정보
@@ -300,7 +369,7 @@ namespace StillHungry.UI
         public void ShowBattleScreen(string[] menuOptions, int selectedIndex)
         {
             Console.WriteLine("\u001b[33mBattle!!\u001b[0m");
-            
+
             // 게임매니저의 인스턴스를 통해서 몬스터의 정보를 얻어온다.
             Console.WriteLine();
             foreach (var m in Manager.Instance.Battle.MonsterController.ActiveMonsters) 
@@ -321,16 +390,5 @@ namespace StillHungry.UI
             Console.WriteLine($"HP : \u001b[33m{player.HP}/{player.MaxHP}\u001b[0m");
             DisplayOptions(menuOptions, selectedIndex);
         }
-
-
-
-
-
-
-
-
-
-
-
     }
 }
