@@ -1,38 +1,45 @@
 using StillHungry.Commands;
-using StillHungry.UI;
 using StillHungry.Managers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using StillHungry.UI;
 
 namespace StillHungry.Scene
 {
-    internal class SelectStoreScene : BaseScene
+    public enum EPurchaseResult
     {
-        private readonly string[] mMenuItems = { "1. 장비 상점", "2. 소모품 상점","3. 재료 상점" ,"0. 나가기" };
+        SUCCESS,
+        NOT_ENOUGH_GOLD,
+        ALREADY_PURCHASED,
+        NONE,
+    }
+
+    public enum ESellResult
+    {
+        SUCCESS,
+        NOT_IN_INVENTORY
+    }
+
+    public class EquipmentStoreScene : BaseScene
+    {
+        private readonly string[] mMenuItems = { "1. 아이템 구매", "2. 아이템 판매", "0. 나가기" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
-        public SelectStoreScene()
+        public EquipmentStoreScene()
         {
             mNavigator = new MenuNavigator(mMenuItems.Length);
             mMenuCommands = new IExecutable[]
             {
-                new ChangeSceneCommand(ESceneType.STORE_SCENE)
-                //new ChangeSceneCommand(ESceneType.CONSUMABLE_STORE_SCENE),
-                //new ChangeSceneCommand(ESceneType.MATERIAL_STORE_SCENE),
-                //new ChangeSceneCommand(ESceneType.TOWN_SCENE)
+                new BuyEquipmentCommand(RequestRedraw),
+                new SellItemCommand(RequestRedraw),
+                new ChangeSceneCommand(ESceneType.GUILD_SCENE)
             };
         }
+
         public override void Display()
         {
-
             Update();
             ProcessInput(mMenuCommands, mNavigator);
             Render();
-
         }
 
         public override void Render()
@@ -43,13 +50,12 @@ namespace StillHungry.Scene
             }
 
             Console.Clear();
-            Manager.Instance.UI.ConsumableStoreScreen(mMenuItems, mNavigator.SelectedIndex);
+            Manager.Instance.UI.EquipmentStoreScreen(mMenuItems, mNavigator.SelectedIndex);
             bNeedsRedraw = false;
         }
 
         protected override void Update()
         {
-            
         }
     }
 }

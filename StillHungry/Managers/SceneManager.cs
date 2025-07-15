@@ -33,7 +33,7 @@ namespace StillHungry.Managers
             mSceneDict.Add(ESceneType.TOWN_SCENE, new TownScene());
             mSceneDict.Add(ESceneType.STATUS_SCENE, new StatusScene());
             mSceneDict.Add(ESceneType.INVENTORY_SCENE, new InventoryScene());
-            mSceneDict.Add(ESceneType.STORE_SCENE, new StoreScene());
+            mSceneDict.Add(ESceneType.STORE_SCENE, new EquipmentStoreScene());
             mSceneDict.Add(ESceneType.DUNGEON_SCENE, new DungeonScene());
             mSceneDict.Add(ESceneType.CAMPSITE_SCENE, new CampsiteScene());
             mSceneDict.Add(ESceneType.CONSUMABLE_STORE_SCENE, new ConsumableStoreScene()); // 소모품 상점 씬

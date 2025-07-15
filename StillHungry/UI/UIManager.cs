@@ -95,7 +95,7 @@ namespace StillHungry.UI
         #endregion
 
         #region 아이템 리스트 출력 및 상호작용 UI
-        public void ShowStoreScreen(string[] menuOptions, int selectedIndex)
+        public void EquipmentStoreScreen(string[] menuOptions, int selectedIndex)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("상점");
