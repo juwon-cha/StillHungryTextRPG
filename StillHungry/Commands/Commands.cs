@@ -225,12 +225,12 @@ namespace StillHungry.Commands
                 mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
                 return;
             }
-            DungeonResult result = Manager.Instance.Dungeon.TryEnterDungeon(mDungeonLevel);
+            //DungeonResult result = Manager.Instance.Dungeon.TryEnterDungeon(mDungeonLevel);
             Console.Clear();
-            Console.WriteLine(result.IsClear ? "던전 클리어!" : "던전 공략 실패...");
-            Console.WriteLine("마을로 돌아갑니다.");
-            Thread.Sleep(2000);
-            Manager.Instance.Scene.ChangeScene(ESceneType.TOWN_SCENE);
+            //Console.WriteLine(result.IsClear ? "던전 클리어!" : "던전 공략 실패...");
+            //Console.WriteLine("마을로 돌아갑니다.");
+            //Thread.Sleep(2000);
+            Manager.Instance.Scene.ChangeScene(ESceneType.BATTLE_SCENE);
         }
     }
     #endregion

@@ -1,4 +1,4 @@
-﻿using StillHungry.Scene;
+using StillHungry.Scene;
 
 namespace StillHungry.Managers
 {
@@ -12,6 +12,7 @@ namespace StillHungry.Managers
         STORE_SCENE,
         DUNGEON_SCENE,
         CAMPSITE_SCENE,
+        BATTLE_SCENE
     }
 
     class SceneManager
@@ -34,6 +35,7 @@ namespace StillHungry.Managers
             mSceneDict.Add(ESceneType.STORE_SCENE, new StoreScene());
             mSceneDict.Add(ESceneType.DUNGEON_SCENE, new DungeonScene());
             mSceneDict.Add(ESceneType.CAMPSITE_SCENE, new CampsiteScene());
+            mSceneDict.Add(ESceneType.BATTLE_SCENE, new BattleScene());
 
             // 타이틀 씬으로 초기화
             mCurrentScene = mSceneDict[ESceneType.TITLE_SCENE];

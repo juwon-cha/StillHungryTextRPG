@@ -206,5 +206,124 @@ namespace StillHungry.UI
             }
             Console.WriteLine("\n(↑, ↓ 방향키로 이동, Enter로 선택)");
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public void ShowBattleScreen(string[] menuOptions, int selectedIndex)
+        {
+            Console.WriteLine("\u001b[33mBattle!!\u001b[0m");
+            
+            // 게임매니저의 인스턴스를 통해서 몬스터의 정보를 얻어온다.
+            Console.WriteLine("몬스터정보(1~4마리까지 등장 중복가능)\n");
+            //var monster = Manager.Instance.Game.MonsterController;
+
+            // 게임매니저의 인스턴스를 통해서 플레이어의 정보를 얻어온다
+            Console.WriteLine("[내정보]");
+            var player = Manager.Instance.Game.PlayerController;
+            Console.Write($"Lv. \u001b[33m{player.Level}\u001b[0m\t");
+            Console.WriteLine($"Chad ({StringConverter.ClassTypeToString(player.ClassType)})");
+
+            Console.WriteLine($"HP : \u001b[33m{player.HP}/{player.MaxHP}\u001b[0m");
+            DisplayOptions(menuOptions, selectedIndex);
+        }
+
+
+
+
+
+
+
+
+
+
+
     }
 }

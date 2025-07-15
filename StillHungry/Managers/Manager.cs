@@ -1,4 +1,4 @@
-﻿using StillHungry.UI;
+using StillHungry.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +30,7 @@ namespace StillHungry.Managers
         public ItemManager Item { get; private set; }
         public DungeonManager Dungeon { get; private set; }
         public UIManager UI { get; private set; }
+        public BattleManager Battle { get; private set; }
 
         private void Init()
         {
@@ -43,6 +44,7 @@ namespace StillHungry.Managers
             Game = new GameManager();
             Item = new ItemManager();
             Dungeon = new DungeonManager();
+            Battle = new BattleManager(); 
 
             Scene.Init();
             Item.Init();
