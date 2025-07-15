@@ -225,11 +225,7 @@ namespace StillHungry.Commands
                 mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
                 return;
             }
-            //DungeonResult result = Manager.Instance.Dungeon.TryEnterDungeon(mDungeonLevel);
             Console.Clear();
-            //Console.WriteLine(result.IsClear ? "던전 클리어!" : "던전 공략 실패...");
-            //Console.WriteLine("마을로 돌아갑니다.");
-            //Thread.Sleep(2000);
             Manager.Instance.Scene.ChangeScene(ESceneType.BATTLE_SCENE);
         }
     }
@@ -364,6 +360,18 @@ namespace StillHungry.Commands
             }
             Thread.Sleep(1000);
             mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
+        }
+    }
+    #endregion
+
+    #region  전투커맨드
+    public class BattleStartCommand : IExecutable
+    {
+        public void Execute()
+        {
+            Console.Clear();
+            Manager.Instance.Battle.isFighting = true;
+            Manager.Instance.Scene.ChangeScene(ESceneType.BATTLE_SCENE);
         }
     }
     #endregion
