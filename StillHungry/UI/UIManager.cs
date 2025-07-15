@@ -118,7 +118,16 @@ namespace StillHungry.UI
             Console.WriteLine($"{Manager.Instance.Game.PlayerController.Gold} G\n");
             DisplayOptions(menuOptions, selectedIndex);
         }
-
+        public void GuildScreen(string[] menuOptions, int selectedIndex)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("길드");
+            Console.ResetColor();
+            Console.WriteLine("길드에서 다양한 활동을 할 수 있습니다.\n");
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{Manager.Instance.Game.PlayerController.Gold} G\n");
+            DisplayOptions(menuOptions, selectedIndex);
+        }
         public void ShowInventoryScreen(string[] menuOptions, int selectedIndex)
         {
             Console.ForegroundColor = ConsoleColor.Green;

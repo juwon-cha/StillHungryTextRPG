@@ -12,7 +12,8 @@ namespace StillHungry.Managers
         STORE_SCENE,
         DUNGEON_SCENE,
         CAMPSITE_SCENE,
-        SELECT_STORE_SCENE
+        SELECT_STORE_SCENE,
+        GUILD_SCENE
     }
 
     class SceneManager
@@ -35,7 +36,8 @@ namespace StillHungry.Managers
             mSceneDict.Add(ESceneType.STORE_SCENE, new StoreScene());
             mSceneDict.Add(ESceneType.DUNGEON_SCENE, new DungeonScene());
             mSceneDict.Add(ESceneType.CAMPSITE_SCENE, new CampsiteScene());
-            mSceneDict.Add(ESceneType.SELECT_STORE_SCENE, new SelectStoreScene()); // 타이틀 씬은 중복 추가
+            mSceneDict.Add(ESceneType.SELECT_STORE_SCENE, new SelectStoreScene()); 
+            mSceneDict.Add(ESceneType.GUILD_SCENE, new GuildScene()); 
            
             
 

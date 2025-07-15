@@ -29,7 +29,7 @@ namespace StillHungry.Scene
             mNavigator = new MenuNavigator(mMenuItems.Length);
             mMenuCommands = new IExecutable[]
             {
-                new BuyItemCommand(RequestRedraw),
+                new BuyEquipmentCommand(RequestRedraw),
                 new SellItemCommand(RequestRedraw),
                 new ChangeSceneCommand(ESceneType.TOWN_SCENE)
             };

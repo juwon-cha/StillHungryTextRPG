@@ -236,20 +236,21 @@ namespace StillHungry.Commands
     #endregion
 
     #region 상점 및 인벤토리
-    public class BuyItemCommand : IExecutable
+    public class BuyEquipmentCommand : IExecutable
     {
         private readonly Action mRequestRedrawCallback;
 
-        public BuyItemCommand(Action requestRedrawCallback)
+        public BuyEquipmentCommand(Action requestRedrawCallback)
         {
             mRequestRedrawCallback = requestRedrawCallback;
         }
+
 
         public void Execute()
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("상점 - 아이템 구매");
+            Console.WriteLine("장비 상점 - 아이템 구매");
             Console.ResetColor();
             Console.WriteLine("필요한 아이템을 구매할 수 있습니다.\n");
             Console.WriteLine("[보유 골드]");
@@ -260,6 +261,57 @@ namespace StillHungry.Commands
             Console.Write("\n구매할 아이템의 번호를 입력해주세요 (0: 나가기) >> ");
             string input = Console.ReadLine();
             var storeItems = Manager.Instance.Item.EquipmentItems;
+            if (int.TryParse(input, out int choice) && choice > 0 && choice <= storeItems.Count)
+            {
+                Item itemToBuy = storeItems.Values.ElementAt(choice - 1);
+                if (itemToBuy != null)
+                {
+                    EPurchaseResult result = Manager.Instance.Game.PlayerController.BuyItem(itemToBuy);
+                    string message = result switch
+                    {
+                        EPurchaseResult.SUCCESS => "구매를 완료했습니다.",
+                        EPurchaseResult.NOT_ENOUGH_GOLD => "Gold가 부족합니다.",
+                        EPurchaseResult.ALREADY_PURCHASED => "이미 구매한 아이템입니다.",
+                        _ => "구매에 실패했습니다."
+                    };
+                    Console.WriteLine(message);
+                }
+            }
+            else if (choice != 0)
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+            }
+
+            Thread.Sleep(1000);
+            mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
+        }
+    }
+
+    public class BuyConsumableCommand : IExecutable
+    {
+        private readonly Action mRequestRedrawCallback;
+
+        public BuyConsumableCommand(Action requestRedrawCallback)
+        {
+            mRequestRedrawCallback = requestRedrawCallback;
+        }
+
+
+        public void Execute()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("소모품 상점 - 아이템 구매");
+            Console.ResetColor();
+            Console.WriteLine("필요한 아이템을 구매할 수 있습니다.\n");
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{Manager.Instance.Game.PlayerController.Gold} G\n");
+
+            Manager.Instance.UI.PrintStoreItemList(Manager.Instance.Item.ConsumableItems);
+
+            Console.Write("\n구매할 아이템의 번호를 입력해주세요 (0: 나가기) >> ");
+            string input = Console.ReadLine();
+            var storeItems = Manager.Instance.Item.ConsumableItems;
             if (int.TryParse(input, out int choice) && choice > 0 && choice <= storeItems.Count)
             {
                 Item itemToBuy = storeItems.Values.ElementAt(choice - 1);
