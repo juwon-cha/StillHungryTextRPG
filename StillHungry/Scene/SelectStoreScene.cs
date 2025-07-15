@@ -43,7 +43,7 @@ namespace StillHungry.Scene
             }
 
             Console.Clear();
-            Manager.Instance.UI.SelectStoreScreen(mMenuItems, mNavigator.SelectedIndex);
+            Manager.Instance.UI.ConsumableStoreScreen(mMenuItems, mNavigator.SelectedIndex);
             bNeedsRedraw = false;
         }
 

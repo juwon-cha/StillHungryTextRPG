@@ -380,6 +380,48 @@ namespace StillHungry.Commands
         }
     }
 
+    public class SellConsumableCommand : IExecutable
+    {
+        private readonly Action mRequestRedrawCallback;
+
+        public SellConsumableCommand(Action requestRedrawCallback)
+        {
+            mRequestRedrawCallback = requestRedrawCallback;
+        }
+
+        public void Execute()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("상점 - 아이템 판매");
+            Console.ResetColor();
+            Console.WriteLine("가지고 있는 아이템을 판매할 수 있습니다.\n");
+
+            Manager.Instance.UI.PrintInventoryList(true, true);
+
+            Console.Write("\n판매할 아이템의 번호를 입력해주세요 (0: 나가기) >> ");
+            string input = Console.ReadLine();
+            var inventory = Manager.Instance.Game.PlayerController.InventoryController;
+            if (int.TryParse(input, out int choice) && choice > 0 && choice <= inventory.ConsumableInventory.Count)
+            {
+                Item itemToSell = inventory.ConsumableInventory.Values.ElementAt(choice - 1);
+                if (itemToSell != null)
+                {
+                    ESellResult result = Manager.Instance.Game.PlayerController.SellItem(itemToSell);
+                    string message = result == ESellResult.SUCCESS ? "판매를 완료했습니다." : "판매에 실패했습니다.";
+                    Console.WriteLine(message);
+                    itemToSell.HasEquipped = false;
+                }
+            }
+            else if (choice != 0)
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+            }
+            Thread.Sleep(1000);
+            mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
+        }
+    }
+
     public class EquipManageCommand : IExecutable
     {
         private readonly Action mRequestRedrawCallback;

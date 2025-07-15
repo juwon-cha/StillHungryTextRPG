@@ -1,7 +1,6 @@
 using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Utils;
-using System.Runtime.CompilerServices;
 
 namespace StillHungry.UI
 {
@@ -108,7 +107,7 @@ namespace StillHungry.UI
             DisplayOptions(menuOptions, selectedIndex);
         }
 
-        public void SelectStoreScreen(string[] menuOptions, int selectedIndex)
+        public void ConsumableStoreScreen(string[] menuOptions, int selectedIndex)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("상점");
@@ -116,6 +115,7 @@ namespace StillHungry.UI
             Console.WriteLine("길.\n");
             Console.WriteLine("[보유 골드]");
             Console.WriteLine($"{Manager.Instance.Game.PlayerController.Gold} G\n");
+            PrintStoreItemList(Manager.Instance.Item.ConsumableItems);
             DisplayOptions(menuOptions, selectedIndex);
         }
         public void GuildScreen(string[] menuOptions, int selectedIndex)
@@ -144,19 +144,25 @@ namespace StillHungry.UI
             PrintItemList(items, false);
         }
 
-        public void PrintInventoryList(bool isSellingContext = false)
+        public void PrintInventoryList(bool isSellingContext = false, bool isSellConsumable = false)
         {
             Console.WriteLine("[내 아이템]");
-            PrintItemList(Manager.Instance.Game.PlayerController.InventoryController.Inventory, isSellingContext);
-            Console.WriteLine();
-            //PrintItemList(Manager.Instance.Game.PlayerController.InventoryController.ConsumableInventory, isSellingContext);
+            if (!isSellConsumable)
+            {
+                PrintItemList(Manager.Instance.Game.PlayerController.InventoryController.Inventory, isSellingContext);
+            }
+            else
+            {
+                PrintItemList(Manager.Instance.Game.PlayerController.InventoryController.ConsumableInventory, isSellingContext);
+            }
+
         }
 
         private void PrintItemList(Dictionary<int, Item> items, bool isSellingContext)
         {
             // 문자열 포맷 폭 설정
-            const int nameWidth = 20;
-            const int statWidth = 15;
+            const int nameWidth = 22;
+            const int statWidth = 16;
             const int descWidth = 55;
 
             // 헤더를 포맷팅 함수를 적용하여 정렬
@@ -190,18 +196,25 @@ namespace StillHungry.UI
                     statDisplay = $"체력 회복량 +{consumable.HPRecovery}";
                 }
                 else if (item is ConsumableMP consumableMP)
-                { 
+                {
                     statDisplay = $"마나 회복량 +{consumableMP.MPRecovery}";
                 }
 
-                    string priceDisplay;
+                string priceDisplay;
                 if (isSellingContext)
                 {
-                    priceDisplay = $"{item.SellingPrice}G";
+                    if (item is ConsumableHP consumable || item is ConsumableMP consumableMP)
+                    {
+                        priceDisplay = $"{item.SellingPrice}G" + $" x {item.Quantity}";
+                    }
+                    else
+                    {
+                        priceDisplay = $"{item.SellingPrice}G";
+                    }
                 }
                 else
                 {
-                    if(item is ConsumableHP consumable || item is ConsumableMP consumableMP)
+                    if (item is ConsumableHP consumable || item is ConsumableMP consumableMP)
                     {
                         priceDisplay = $"{item.Price}G" + $" x {item.Quantity}";
                     }

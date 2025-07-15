@@ -1,36 +1,37 @@
 using StillHungry.Commands;
 using StillHungry.Managers;
 using StillHungry.UI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace StillHungry.Scene
 {
-
-
-    internal class GuildScene : BaseScene
+    internal class ConsumableStoreScene : BaseScene
     {
-        private readonly string[] mMenuItems = { "1. 장비 상점", "2. 소모품 상점", "3. 요리 상점  ","4. 퀘스트 보드","5. 휴식하기", "0. 나가기" };
+        private readonly string[] mMenuItems = { "1. 아이템 구매", "2. 아이템 판매", "0. 나가기" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
-        public GuildScene()
+        public ConsumableStoreScene()
         {
             mNavigator = new MenuNavigator(mMenuItems.Length);
             mMenuCommands = new IExecutable[]
             {
-                new ChangeSceneCommand(ESceneType.STORE_SCENE),
-                new ChangeSceneCommand(ESceneType.CONSUMABLE_STORE_SCENE),
-                new BuyConsumableCommand(RequestRedraw), // 이거 요리 상점
-                new BuyConsumableCommand(RequestRedraw), // 이거 퀘스트
-                new ChangeSceneCommand(ESceneType.CAMPSITE_SCENE),
-                new ChangeSceneCommand(ESceneType.TOWN_SCENE),
-                
+                new BuyConsumableCommand(RequestRedraw), // 소모품 상점
+                new SellConsumableCommand(RequestRedraw),      // 아이템 판매
+                new ChangeSceneCommand(ESceneType.GUILD_SCENE)
             };
         }
         public override void Display()
         {
+
             Update();
             ProcessInput(mMenuCommands, mNavigator);
             Render();
+
         }
 
         public override void Render()
@@ -41,7 +42,7 @@ namespace StillHungry.Scene
             }
 
             Console.Clear();
-            Manager.Instance.UI.GuildScreen(mMenuItems, mNavigator.SelectedIndex);
+            Manager.Instance.UI.ConsumableStoreScreen(mMenuItems, mNavigator.SelectedIndex);
             bNeedsRedraw = false;
         }
 
@@ -50,5 +51,4 @@ namespace StillHungry.Scene
 
         }
     }
-
 }
