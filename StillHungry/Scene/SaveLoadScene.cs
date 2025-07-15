@@ -7,7 +7,7 @@ namespace StillHungry.Scene
 {
     public class SaveLoadScene : BaseScene
     {
-        private string[] mMenuItems = new string[4];
+        private string[] mMenuItems = { "[슬롯 1]", "[슬롯 2]", "[슬롯 3]", "나가기" };
         private IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
         private bool mbIsSavingMode; // false: Load, true: Save
@@ -15,11 +15,6 @@ namespace StillHungry.Scene
         public SaveLoadScene()
         {
             mNavigator = new MenuNavigator(mMenuItems.Length);
-            // 메뉴 아이템 기본 텍스트 초기화
-            mMenuItems[0] = "[슬롯 1]";
-            mMenuItems[1] = "[슬롯 2]";
-            mMenuItems[2] = "[슬롯 3]";
-            mMenuItems[3] = "나가기";
         }
 
         // 외부에서 호출하여 저장/불러오기 모드를 설정하는 메서드
@@ -56,9 +51,6 @@ namespace StillHungry.Scene
                     new ChangeSceneCommand(ESceneType.TITLE_SCENE) // 타이틀로 돌아가기
                 };
             }
-
-            // 네비게이터가 알고 있는 메뉴 개수도 업데이트
-            //mNavigator.SetMenuCount(mMenuCommands.Length);
         }
 
         public override void Display()
