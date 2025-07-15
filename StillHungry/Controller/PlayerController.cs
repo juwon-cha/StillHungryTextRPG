@@ -15,7 +15,7 @@ namespace StillHungry.Controller
         THIEF,
     }
 
-    class PlayerController : CharacterController
+    public class PlayerController : CharacterController
     {
         public EClassType ClassType { get; private set; }
 

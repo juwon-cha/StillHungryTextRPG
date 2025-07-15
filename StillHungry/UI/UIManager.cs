@@ -1,7 +1,10 @@
+using StillHungry.Controller;
 using StillHungry.Data;
 using StillHungry.Items;
 using StillHungry.Managers;
+using StillHungry.Monsters;
 using StillHungry.Utils;
+using System.Threading;
 
 namespace StillHungry.UI
 {
@@ -280,7 +283,48 @@ namespace StillHungry.UI
         }
 
 
+        public void ShowMonsterPhaseScreen(string[] menuOptions, int selectedIndex, Monster attacker, MonsterAction action, PlayerController player)
+        {
+            Console.WriteLine("\u001b[33mBattle!!\u001b[0m\n");
 
+            // 공격자나 행동 정보가 없을 경우의 예외 처리
+            if (attacker == null || action == null || action.Type == EMonsterActionType.NONE)
+            {
+                Console.WriteLine("몬스터들이 다음 행동을 준비합니다...");
+            }
+            else
+            {
+                // MonsterAction에 담긴 메시지를 출력
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                if(action.Type == EMonsterActionType.ATTACK)
+                {
+                    Console.WriteLine($"{attacker.Name}이(가) 공격 자세를 취합니다!");
+                }
+                else
+                {
+                    Console.WriteLine($"{attacker.Name}이(가) 방어 자세를 취합니다! (방어력 증가)");
+                }
+                Console.ResetColor();
+                Console.WriteLine();
+
+                // 행동 타입이 '공격'일 경우에만 데미지 정보를 표시
+                if (action.Type == EMonsterActionType.ATTACK)
+                {
+                    Console.WriteLine($"ID: Lv.{attacker.Level} {attacker.Name} 의 공격!");
+                    int damage = action.Value;
+                    Console.WriteLine($"{player.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
+                    Console.WriteLine();
+                    Console.WriteLine($"Lv.{player.Level} {player.Name}");
+                    // 공격 받기 전 체력과 후 체력을 함께 표시
+                    Console.Write($"HP {player.HP + damage} -> ");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(player.HP);
+                    Console.ResetColor();
+                }
+            }
+
+            DisplayOptions(menuOptions, selectedIndex);
+        }
 
 
 
@@ -378,10 +422,10 @@ namespace StillHungry.UI
             foreach (var m in Manager.Instance.Battle.MonsterController.ActiveMonsters) 
             {
                 // 몬스터의 점보를 출력
-                string id = (Manager.Instance.Battle.isFighting) ? m.Value.ID.ToString() : "";
+                string id = (Manager.Instance.Battle.isFighting) ? m.ID.ToString() : "";
                 Console.Write($"\u001b[94m{id}\u001b[0m " +
-                    $"Lv.\u001b[33m{m.Value.Level}\u001b[0m " +
-                    $"{m.Value.Name}\tHP \u001b[33m{m.Value.CurrentHp}\u001b[0m\n");
+                    $"Lv.\u001b[33m{m.Level}\u001b[0m " +
+                    $"{m.Name}\tHP \u001b[33m{m.CurrentHp}\u001b[0m\n");
             }
 
             // 게임매니저의 인스턴스를 통해서 플레이어의 정보를 얻어온다

@@ -294,7 +294,9 @@ namespace StillHungry.Commands
                 return;
             }
             Console.Clear();
+
             Manager.Instance.Scene.ChangeScene(ESceneType.BATTLE_SCENE);
+            //Manager.Instance.Scene.ChangeScene(ESceneType.MONSTER_PHASE_SCENE); // 테스트
         }
     }
     #endregion
@@ -440,6 +442,14 @@ namespace StillHungry.Commands
             Console.Clear();
             Manager.Instance.Battle.isFighting = true;
             Manager.Instance.Scene.ChangeScene(ESceneType.BATTLE_SCENE);
+        }
+    }
+
+    public class MonsterPhaseCommand : IExecutable
+    {
+        public void Execute()
+        {
+            Manager.Instance.Battle.NextMonsterAttack();
         }
     }
     #endregion

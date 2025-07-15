@@ -13,7 +13,8 @@ namespace StillHungry.Managers
         STORE_SCENE,
         DUNGEON_SCENE,
         CAMPSITE_SCENE,
-        BATTLE_SCENE
+        BATTLE_SCENE,
+        MONSTER_PHASE_SCENE,
     }
 
     class SceneManager
@@ -38,6 +39,7 @@ namespace StillHungry.Managers
             mSceneDict.Add(ESceneType.DUNGEON_SCENE, new DungeonScene());
             mSceneDict.Add(ESceneType.CAMPSITE_SCENE, new CampsiteScene());
             mSceneDict.Add(ESceneType.BATTLE_SCENE, new BattleScene());
+            mSceneDict.Add(ESceneType.MONSTER_PHASE_SCENE, new MonsterPhaseScene());
 
             // 타이틀 씬으로 초기화
             CurrentScene = mSceneDict[ESceneType.TITLE_SCENE];
@@ -61,9 +63,6 @@ namespace StillHungry.Managers
                 CurrentSceneType = scene;
                 CurrentScene.bNeedsRedraw = true; // 씬 전환 시 화면 강제 갱신
             }
-
-            // 씬이 전환될 때마다 유저 데이터 저장
-            //Manager.Instance.Game.SaveGame();
 
             // 씬 전환 후 입력 버퍼 비우기
             while (Console.KeyAvailable)
