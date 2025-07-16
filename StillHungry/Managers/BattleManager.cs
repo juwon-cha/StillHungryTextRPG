@@ -37,8 +37,12 @@ namespace StillHungry.Managers
             initialHP = Manager.Instance.Game.PlayerController.HP;
             totalDamageTaken = 0;
         }
+
+
+        // 수정
         public void EndBattle(bool isVictory, int initialHP, int damageTaken, int monsterKillCount)
         {
+            
             var player = Manager.Instance.Game.PlayerController;
 
             Console.Clear();
@@ -77,6 +81,11 @@ namespace StillHungry.Managers
                 }
             }
         }
+        // 수정
+
+
+
+
 
         public void StartMonsterPhase()
         {
