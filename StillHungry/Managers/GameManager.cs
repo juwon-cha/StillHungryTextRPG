@@ -34,7 +34,9 @@ namespace StillHungry.Managers
             userData.Level = PlayerController.Level;
             userData.Name = PlayerController.Name;
             userData.HP = PlayerController.HP;
+            userData.MaxHP = PlayerController.MaxHP;
             userData.Mana = PlayerController.Mana;
+            userData.MaxMana = PlayerController.MaxMana;
             userData.Attack = PlayerController.BaseAttack;
             userData.Defense = PlayerController.BaseDefense;
             userData.Gold = PlayerController.Gold;

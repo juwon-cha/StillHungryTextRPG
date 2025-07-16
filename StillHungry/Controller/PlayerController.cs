@@ -61,6 +61,7 @@ namespace StillHungry.Controller
                 Gold = stat.Gold;
                 BaseCriticalChance = stat.CriticalRate;
                 BaseEvasionChance = stat.EvadeRate;
+                Mana = stat.MaxMana;
                 MaxMana = stat.MaxMana;
                 Mana = stat.MaxMana;
                 
@@ -90,7 +91,9 @@ namespace StillHungry.Controller
             BaseAttack = userData.Attack;
             BaseDefense = userData.Defense;
             HP = userData.HP;
+            MaxHP = userData.MaxHP;
             Mana = userData.Mana;
+            MaxMana = userData.MaxMana;
             Gold = userData.Gold;
             BaseCriticalChance = userData.CriticalRate;
             BaseEvasionChance = userData.EvadeRate;
@@ -275,21 +278,6 @@ namespace StillHungry.Controller
                 if(HP < 0)
                 {
                     HP = 0;
-                }
-                if(HP == 0)
-                {
-                    Console.WriteLine("\n전투에서 패배했습니다.");
-                    Thread.Sleep(1000);
-
-                    var battleManager = Manager.Instance.Battle;
-
-                    battleManager.EndBattle
-                        (
-                        isVictory: false,
-                        initialHP: battleManager.initialHP,
-                        damageTaken: battleManager.totalDamageTaken,
-                        monsterKillCount: battleManager.monsterKillCount
-                        );
                 }
             }
         }

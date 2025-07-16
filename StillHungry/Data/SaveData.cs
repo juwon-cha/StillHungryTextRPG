@@ -26,7 +26,9 @@ namespace StillHungry.Data
         public int Level;
         public string Name;
         public int HP;
+        public int MaxHP;
         public int Mana;
+        public int MaxMana;
         public float Attack;
         public float Defense;
         public int Gold;
