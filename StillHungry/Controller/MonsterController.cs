@@ -101,6 +101,31 @@ namespace StillHungry.Controller
             monster.IsDead = true;
             monster.CurrentHp = 0;
             Console.WriteLine($"{monster.Name}을(를) 처치했습니다!");
+// HEAD
+            ActiveMonsters.Remove(monster);
+
+            // TODO: 경험치 획득, 아이템 드랍 로직 추가
+
+            // 모든 몬스터를 처치했는지 확인
+            if (ActiveMonsters.Count == 0)
+            {
+                Console.WriteLine("모든 몬스터를 처치했습니다! 전투에서 승리했습니다!");
+                
+                Thread.Sleep(1000); // 승리 메시지 후 잠시 대기
+
+                // 전투 종료 후 던전 씬으로 전환
+                Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
+            }
+        }
+
+        public Monster GetMonsterFromID(int monsterId)
+        {
+            
+
+            return ActiveMonsters.FirstOrDefault(m => m.ID == monsterId); 
+            // 해당 ID의 몬스터가 없으면 null을 반환합니다.
+
+// develop
         }
     }
 }
