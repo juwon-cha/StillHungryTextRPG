@@ -27,6 +27,7 @@ namespace StillHungry.Controller
         public int MaxMana { get; private set; } = 100;
         public float BaseCriticalChance { get; private set; } // 치명타 확률
         public float BaseEvasionChance { get; private set; } // 회피 확률
+        public float BonusEvasionChance { get; private set; }//장비,아이템으로 증가한 회피
 
         // 장비로 인한 추가 능력치
         public float BonusAttack { get; private set; }
@@ -37,7 +38,7 @@ namespace StillHungry.Controller
         public override float Attack => BaseAttack + BonusAttack;
         public override float Defense => BaseDefense + BonusDefense;
         public float CriticalChance => BaseCriticalChance;
-        public float EvasionChance => BaseEvasionChance;
+        public float EvasionChance => BaseEvasionChance + BonusEvasionChance;
         public int CurrentMana => Mana;
         public int MaximumMana => MaxMana;
 
@@ -94,6 +95,7 @@ namespace StillHungry.Controller
             Gold = userData.Gold;
             BaseCriticalChance = userData.CriticalRate;
             BaseEvasionChance = userData.EvadeRate;
+            BonusEvasionChance = userData.BonusEvadeRate;
 
             // 인벤토리 초기화 후 저장 데이터 세팅
             InventoryController.ClearInventory();
