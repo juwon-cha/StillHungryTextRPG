@@ -1,14 +1,17 @@
 {
   "UserData": [
     {
-      "SlotID": 1,
-      "ClassType": "NONE",
-      "Level": 0,
-      "Name": null,
+      "SlotID": 3,
+      "ClassType": "WARRIOR",
+      "Level": 1,
+      "Name": "as",
       "HP": 100,
-      "Attack": 0.0,
-      "Defense": 0.0,
-      "Gold": 9100,
+      "Mana": 100,
+      "Attack": 10.0,
+      "Defense": 5.0,
+      "Gold": 1500,
+      "CriticalRate": 0.45,
+      "EvadeRate": 0.25,
       "Items": null
     }
   ]
