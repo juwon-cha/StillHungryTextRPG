@@ -106,20 +106,28 @@ namespace StillHungry.Controller
 
             // TODO: 경험치 획득, 아이템 드랍 로직 추가
 
-
             Manager.Instance.Battle.monsterKillCount++;
-            // a
+
             // 모든 몬스터를 처치했는지 확인
             if (ActiveMonsters.Count == 0)
             {
                 Console.WriteLine("모든 몬스터를 처치했습니다! 전투에서 승리했습니다!");
-                
+
                 Thread.Sleep(1000); // 승리 메시지 후 잠시 대기
 
+                var battleManager = Manager.Instance.Battle;
+                battleManager.EndBattle
+                    (
+                    isVictory: true,
+                    initialHP: battleManager.initialHP,
+                    damageTaken: battleManager.totalDamageTaken,
+                    monsterKillCount: battleManager.monsterKillCount
+                    );
+
                 // 전투 종료 후 던전 씬으로 전환
-                Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
+                //Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
             }
-            // a
+
         }
 
 
