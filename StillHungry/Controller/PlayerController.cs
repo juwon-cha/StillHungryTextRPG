@@ -61,9 +61,8 @@ namespace StillHungry.Controller
                 Gold = stat.Gold;
                 BaseCriticalChance = stat.CriticalRate;
                 BaseEvasionChance = stat.EvadeRate;
+                Mana = stat.MaxMana;
                 MaxMana = stat.MaxMana;
-                Mana = stat.Mana;
-                
             }
             else
             {
@@ -90,7 +89,9 @@ namespace StillHungry.Controller
             BaseAttack = userData.Attack;
             BaseDefense = userData.Defense;
             HP = userData.HP;
+            MaxHP = userData.MaxHP;
             Mana = userData.Mana;
+            MaxMana = userData.MaxMana;
             Gold = userData.Gold;
             BaseCriticalChance = userData.CriticalRate;
             BaseEvasionChance = userData.EvadeRate;
