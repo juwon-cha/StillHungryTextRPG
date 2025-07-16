@@ -6,7 +6,7 @@ namespace StillHungry.Scene
 {
     public class InventoryScene : BaseScene
     {
-        private readonly string[] mMenuItems = { "1. 장비 창고","2. 소모품 창고","기타 창고", "0. 나가기" };
+        private readonly string[] mMenuItems = { "1. 장비 창고","2. 소모품 창고","3. 기타 창고", "0. 나가기" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
@@ -17,7 +17,7 @@ namespace StillHungry.Scene
             {
                 new EquipManageCommand(RequestRedraw),// 장비 창고
                 new ConsumableManageCommand(RequestRedraw), // 소모품 창고
-
+                new ChangeSceneCommand(ESceneType.TOWN_SCENE), // 이거 기타창고임  
                 new ChangeSceneCommand(ESceneType.TOWN_SCENE) // 나가기
             };
         }

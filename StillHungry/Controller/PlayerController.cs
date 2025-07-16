@@ -340,7 +340,30 @@ namespace StillHungry.Controller
             {
                 Console.WriteLine("해당 아이템을 사용할 수 없습니다.");
             }
-        } 
+        }
+
+        public void UseMPRecovery(ConsumableMP consumableMP)
+        {
+            if (InventoryController.ConsumableInventory.ContainsKey(consumableMP.ID))
+            {
+                // 아이템 사용
+                Mana += consumableMP.MPRecovery;
+                if (Mana > MaxMana)
+                {
+                    Mana = MaxMana; // 최대 체력 초과 방지
+                }
+                // 인벤토리에서 아이템 제거
+                InventoryController.RemoveItem(consumableMP);
+
+                Console.WriteLine($"{consumableMP.Name}을 사용하여 마나를 {consumableMP.MPRecovery}회복했습니다.");
+            }
+            else
+            {
+                Console.WriteLine("해당 아이템을 사용할 수 없습니다.");
+            }
+        }
+
+
 
         public bool IsDead()
         {

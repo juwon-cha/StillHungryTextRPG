@@ -564,8 +564,8 @@ namespace StillHungry.Commands
                     Console.WriteLine($"{itemToEquip.Name}을(를) 사용했습니다.");
                     if (itemToEquip.ID >= 200 && itemToEquip.ID < 300)
                         player.UseHPRecovery((ConsumableHP)itemToEquip); // 아이템 사용 시 HP 회복
-                   // else (itemToEquip.ID >= 300 && itemToEquip.ID < 400)
-                       // player.UseMPRecovery((ConsumableMP)itemToEquip); // 아이템 사용 시 MP 회복
+                    else if(itemToEquip.ID >= 300 && itemToEquip.ID < 400)
+                        player.UseMPRecovery((ConsumableMP)itemToEquip); // 아이템 사용 시 MP 회복
                     else
                         Console.WriteLine("해당 아이템은 사용할 수 없습니다.");
                 }
