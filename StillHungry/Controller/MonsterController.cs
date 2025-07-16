@@ -101,8 +101,8 @@ namespace StillHungry.Controller
             monster.IsDead = true;
             monster.CurrentHp = 0;
             Console.WriteLine($"{monster.Name}을(를) 처치했습니다!");
-<<<<<<< HEAD
-            ActiveMonsters.Remove(monster.ID);
+// HEAD
+            ActiveMonsters.Remove(monster);
 
             // TODO: 경험치 획득, 아이템 드랍 로직 추가
 
@@ -120,14 +120,12 @@ namespace StillHungry.Controller
 
         public Monster GetMonsterFromID(int monsterId)
         {
-            if(ActiveMonsters.TryGetValue(monsterId, out Monster monster))
-            {
-                return monster;
-            }
+            
 
-            return null; // 해당 ID의 몬스터가 없으면 null을 반환합니다.
-=======
->>>>>>> develop
+            return ActiveMonsters.FirstOrDefault(m => m.ID == monsterId); 
+            // 해당 ID의 몬스터가 없으면 null을 반환합니다.
+
+// develop
         }
     }
 }
