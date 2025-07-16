@@ -13,7 +13,12 @@ namespace StillHungry.Managers
         STORE_SCENE,
         DUNGEON_SCENE,
         CAMPSITE_SCENE,
-        BATTLE_SCENE
+        CONSUMABLE_STORE_SCENE,
+        GUILD_SCENE,
+        BATTLE_SCENE,
+        MONSTER_PHASE_SCENE,
+        ATTACK_SELECT_SCENE,
+        PLAYER_ATTACK_SCENE
     }
 
     class SceneManager
@@ -34,10 +39,15 @@ namespace StillHungry.Managers
             mSceneDict.Add(ESceneType.TOWN_SCENE, new TownScene());
             mSceneDict.Add(ESceneType.STATUS_SCENE, new StatusScene());
             mSceneDict.Add(ESceneType.INVENTORY_SCENE, new InventoryScene());
-            mSceneDict.Add(ESceneType.STORE_SCENE, new StoreScene());
+            mSceneDict.Add(ESceneType.STORE_SCENE, new EquipmentStoreScene());
             mSceneDict.Add(ESceneType.DUNGEON_SCENE, new DungeonScene());
             mSceneDict.Add(ESceneType.CAMPSITE_SCENE, new CampsiteScene());
+            mSceneDict.Add(ESceneType.CONSUMABLE_STORE_SCENE, new ConsumableStoreScene()); // 소모품 상점 씬
+            mSceneDict.Add(ESceneType.GUILD_SCENE, new GuildScene()); 
             mSceneDict.Add(ESceneType.BATTLE_SCENE, new BattleScene());
+            mSceneDict.Add(ESceneType.MONSTER_PHASE_SCENE, new MonsterPhaseScene());
+            mSceneDict.Add(ESceneType.ATTACK_SELECT_SCENE, new AttackSelectScene());
+            mSceneDict.Add(ESceneType.PLAYER_ATTACK_SCENE, new PlayerAttackScene());
 
             // 타이틀 씬으로 초기화
             CurrentScene = mSceneDict[ESceneType.TITLE_SCENE];
@@ -61,9 +71,6 @@ namespace StillHungry.Managers
                 CurrentSceneType = scene;
                 CurrentScene.bNeedsRedraw = true; // 씬 전환 시 화면 강제 갱신
             }
-
-            // 씬이 전환될 때마다 유저 데이터 저장
-            //Manager.Instance.Game.SaveGame();
 
             // 씬 전환 후 입력 버퍼 비우기
             while (Console.KeyAvailable)

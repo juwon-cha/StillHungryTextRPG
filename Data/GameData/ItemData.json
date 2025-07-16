@@ -78,5 +78,67 @@
             "Price": 2000,
             "Description": "스파르타의 전사들이 사용했다는 전설의 갑옷입니다."
         }
+    ],
+    "ConsumableHP": [
+        {
+            "ID": 200,
+            "Name": "초소형 체력 회복 물약",
+            "Price": 50,
+            "Description": "체력을 10 회복합니다.",
+            "HPRecovery": 10
+
+        },
+        {
+            "ID": 201,
+            "Name": "소형 체력 회복 물약",
+            "Price": 100,
+            "Description": "체력을 20 회복합니다.",
+            "HPRecovery": 20
+        },
+        {
+            "ID": 202,
+            "Name": "중형 체력 회복 물약",
+            "Price": 200,
+            "Description": "체력을 50 회복합니다.",
+            "HPRecovery": 50
+        },
+        {
+            "ID": 203,
+            "Name": "대형 체력 회복 물약",
+            "Price": 500,
+            "Description": "체력을 100 회복합니다.",
+            "HPRecovery": 100
+        }
+
+    ],
+    "ConsumableMP": [
+        {
+            "ID": 300,
+            "Name": "초소형 마나 회복 물약",
+            "Price": 50,
+            "Description": "마나를 10 회복합니다.",
+            "MPRecovery": 10
+        },
+        {
+            "ID": 301,
+            "Name": "소형 마나 회복 물약",
+            "Price": 100,
+            "Description": "마나를 20 회복합니다.",
+            "MPRecovery": 20
+        },
+        {
+            "ID": 302,
+            "Name": "중형 마나 회복 물약",
+            "Price": 200,
+            "Description": "마나를 50 회복합니다.",
+            "MPRecovery": 50
+        },
+        {
+            "ID": 303,
+            "Name": "대형 마나 회복 물약",
+            "Price": 500,
+            "Description": "마나를 100 회복합니다.",
+            "MPRecovery": 100
+        }
     ]
 }

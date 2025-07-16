@@ -4,6 +4,7 @@ using StillHungry.Managers;
 using StillHungry.Scene;
 using System;
 
+
 namespace StillHungry.Controller
 {
     public enum EClassType
@@ -15,7 +16,7 @@ namespace StillHungry.Controller
         THIEF,
     }
 
-    class PlayerController : CharacterController
+    public class PlayerController : CharacterController
     {
         public EClassType ClassType { get; private set; }
 
@@ -23,7 +24,7 @@ namespace StillHungry.Controller
         public float BaseAttack { get; private set; }
         public float BaseDefense { get; private set; }
         public int Mana {  get; private set; }
-        public int MaxMana {  get; private set; }
+        public int MaxMana { get; private set; } = 100;
         public float BaseCriticalChance { get; private set; } // 치명타 확률
         public float BaseEvasionChance { get; private set; } // 회피 확률
 
@@ -61,7 +62,7 @@ namespace StillHungry.Controller
                 BaseCriticalChance = stat.CriticalRate;
                 BaseEvasionChance = stat.EvadeRate;
                 MaxMana = stat.MaxMana;
-                Mana = stat.Mana;
+                Mana = stat.MaxMana;
                 
             }
             else
@@ -132,7 +133,7 @@ namespace StillHungry.Controller
                 return;
             }
 
-            foreach (KeyValuePair<int, Item> pair in InventoryController.Inventory)
+            foreach (KeyValuePair<int, Item> pair in InventoryController.EquipInventory)
             {
                 // 중복 장착 처리
                 // 장착된 아이템이 있는지 확인 후 아이템 타입을 판별해서 같은 타입이면 장착 상태 바꿈
@@ -156,7 +157,10 @@ namespace StillHungry.Controller
             }
 
             // 아이템 장착 상태 반전
-            item.HasEquipped = !item.HasEquipped;
+            if(item.HasEquipped)
+            {
+                item.HasEquipped = !item.HasEquipped;
+            }
 
             // 모든 장비의 보너스 능력치를 다시 계산하여 플레이어에게 적용
             RecalculateStats();
@@ -170,7 +174,7 @@ namespace StillHungry.Controller
             BonusDefense = 0;
 
             // 인벤토리의 모든 아이템을 확인
-            foreach (var item in InventoryController.Inventory.Values)
+            foreach (var item in InventoryController.EquipInventory.Values)
             {
                 // 장착된 아이템일 경우에만 보너스 스탯을 더함
                 if (item.HasEquipped)
@@ -332,10 +336,50 @@ namespace StillHungry.Controller
 
         }
 
-        public void UseItem()
+        public void UseHPRecovery(ConsumableHP consumableHP)
         {
+            if (InventoryController.ConsumableInventory.ContainsKey(consumableHP.ID))
+            {
+                // 아이템 사용
+                HP += consumableHP.HPRecovery;
+                if (HP > MaxHP)
+                {
+                    HP = MaxHP; // 최대 체력 초과 방지
+                }
+                // 인벤토리에서 아이템 제거
+                InventoryController.RemoveItem(consumableHP);
 
+                Console.WriteLine($"{consumableHP.Name}을 사용하여 체력을 {consumableHP.HPRecovery}회복했습니다.");
+            }
+            else
+            {
+                Console.WriteLine("해당 아이템을 사용할 수 없습니다.");
+            }
         }
+
+        public void UseMPRecovery(ConsumableMP consumableMP)
+        {
+            if (InventoryController.ConsumableInventory.ContainsKey(consumableMP.ID))
+            {
+                Console.WriteLine($"현재 마나 : {Mana}, 최대 마나 : {MaxMana}");
+                // 아이템 사용
+                Mana += consumableMP.MPRecovery;
+                if (Mana > MaxMana)
+                {
+                    Mana = MaxMana; // 최대 체력 초과 방지
+                }
+                // 인벤토리에서 아이템 제거
+                InventoryController.RemoveItem(consumableMP);
+
+                Console.WriteLine($"{consumableMP.Name}을 사용하여 마나를 {consumableMP.MPRecovery}회복했습니다.\n 현재 마나 : {Mana}");
+            }
+            else
+            {
+                Console.WriteLine("해당 아이템을 사용할 수 없습니다.");
+            }
+        }
+
+
 
         public bool IsDead()
         {

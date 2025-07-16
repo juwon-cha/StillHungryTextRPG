@@ -12,7 +12,8 @@ namespace StillHungry.Monsters
         public int CurrentHp { get; set; }
         public float AttackPower { get; set; }
         public float DefensePower { get; set; }
-        public bool mbIsDefending { get; set; } = false;
+        public bool IsDefending { get; set; } = false;
+        public bool IsDead { get; set; }
 
         public Monster(int id)
         {

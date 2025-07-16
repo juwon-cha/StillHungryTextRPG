@@ -1,7 +1,10 @@
+using StillHungry.Controller;
 using StillHungry.Data;
 using StillHungry.Items;
 using StillHungry.Managers;
+using StillHungry.Monsters;
 using StillHungry.Utils;
+using System.Threading;
 
 namespace StillHungry.UI
 {
@@ -51,8 +54,9 @@ namespace StillHungry.UI
             if (player.BonusDefense > 0) defenseStat += $" (+{player.BonusDefense})";
             Console.WriteLine(defenseStat);
 
-            Console.WriteLine($"체 력 : {player.HP}");
-            Console.WriteLine($"마 나 : {player.Mana}");
+            Console.WriteLine($"체 력 : {player.HP} / {player.MaxHP}");
+            Console.WriteLine($"마 나 : {player.Mana} / {player.MaxMana}");
+
             Console.WriteLine($"Gold : {player.Gold} G");
             Console.WriteLine($"치명타 확률 : {player.CriticalChance * 100:F1} %");
             Console.WriteLine($"회피 확률 : {player.EvasionChance * 100:F1} %\n");
@@ -167,7 +171,7 @@ namespace StillHungry.UI
         #endregion
 
         #region 아이템 리스트 출력 및 상호작용 UI
-        public void ShowStoreScreen(string[] menuOptions, int selectedIndex)
+        public void EquipmentStoreScreen(string[] menuOptions, int selectedIndex)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("상점");
@@ -175,37 +179,65 @@ namespace StillHungry.UI
             Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.\n");
             Console.WriteLine("[보유 골드]");
             Console.WriteLine($"{Manager.Instance.Game.PlayerController.Gold} G\n");
-            PrintStoreItemList();
+            PrintStoreItemList(Manager.Instance.Item.EquipmentItems);
             DisplayOptions(menuOptions, selectedIndex);
         }
 
+        public void ConsumableStoreScreen(string[] menuOptions, int selectedIndex)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("상점");
+            Console.ResetColor();
+            Console.WriteLine("길.\n");
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{Manager.Instance.Game.PlayerController.Gold} G\n");
+            PrintStoreItemList(Manager.Instance.Item.ConsumableItems);
+            DisplayOptions(menuOptions, selectedIndex);
+        }
+        public void GuildScreen(string[] menuOptions, int selectedIndex)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("길드");
+            Console.ResetColor();
+            Console.WriteLine("길드에서 다양한 활동을 할 수 있습니다.\n");
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{Manager.Instance.Game.PlayerController.Gold} G\n");
+            DisplayOptions(menuOptions, selectedIndex);
+        }
         public void ShowInventoryScreen(string[] menuOptions, int selectedIndex)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("인벤토리");
             Console.ResetColor();
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.\n");
-            PrintInventoryList();
             DisplayOptions(menuOptions, selectedIndex);
         }
 
-        public void PrintStoreItemList()
+        public void PrintStoreItemList(Dictionary<int, Item> items)
         {
             Console.WriteLine("[아이템 목록]");
-            PrintItemList(Manager.Instance.Item.Items, false);
+            PrintItemList(items, false);
         }
 
-        public void PrintInventoryList(bool isSellingContext = false)
+        public void PrintInventoryList(bool isSellingContext = false, bool isSellConsumable = false)
         {
             Console.WriteLine("[내 아이템]");
-            PrintItemList(Manager.Instance.Game.PlayerController.InventoryController.Inventory, isSellingContext);
+            if (!isSellConsumable)
+            {
+                PrintItemList(Manager.Instance.Game.PlayerController.InventoryController.EquipInventory, isSellingContext);
+            }
+            else 
+            {
+                PrintItemList(Manager.Instance.Game.PlayerController.InventoryController.ConsumableInventory, isSellingContext);
+            }
+
         }
 
         private void PrintItemList(Dictionary<int, Item> items, bool isSellingContext)
         {
             // 문자열 포맷 폭 설정
-            const int nameWidth = 20;
-            const int statWidth = 15;
+            const int nameWidth = 22;
+            const int statWidth = 16;
             const int descWidth = 55;
 
             // 헤더를 포맷팅 함수를 적용하여 정렬
@@ -234,15 +266,35 @@ namespace StillHungry.UI
                 {
                     statDisplay = $"방어력 +{armor.Defense}";
                 }
+                else if (item is ConsumableHP consumable)
+                {
+                    statDisplay = $"체력 회복량 +{consumable.HPRecovery}";
+                }
+                else if (item is ConsumableMP consumableMP)
+                {
+                    statDisplay = $"마나 회복량 +{consumableMP.MPRecovery}";
+                }
 
                 string priceDisplay;
                 if (isSellingContext)
                 {
-                    priceDisplay = $"{item.SellingPrice} G";
+                    if (item is ConsumableHP consumable || item is ConsumableMP consumableMP)
+                    {
+                        priceDisplay = $"{item.SellingPrice}G" + $" x {item.Quantity}";
+                    }
+                    else
+                    {
+                        priceDisplay = $"{item.SellingPrice}G";
+                    }
                 }
                 else
                 {
-                    priceDisplay = item.HasPurchased ? "구매완료" : $"{item.Price} G";
+                    if (item is ConsumableHP consumable || item is ConsumableMP consumableMP)
+                    {
+                        priceDisplay = $"{item.Price}G" + $" x {item.Quantity}";
+                    }
+                    else
+                        priceDisplay = item.HasPurchased ? "구매완료" : $"{item.Price}G";
                 }
 
                 // 각 부분을 유틸 함수를 이용해 정렬된 문자열로 만든다.
@@ -280,9 +332,48 @@ namespace StillHungry.UI
         }
 
 
+        public void ShowMonsterPhaseScreen(string[] menuOptions, int selectedIndex, Monster attacker, MonsterAction action, PlayerController player)
+        {
+            Console.WriteLine("\u001b[33mBattle!!\u001b[0m\n");
 
+            // 공격자나 행동 정보가 없을 경우의 예외 처리
+            if (attacker == null || action == null || action.Type == EMonsterActionType.NONE)
+            {
+                Console.WriteLine("몬스터들이 다음 행동을 준비합니다...");
+            }
+            else
+            {
+                // MonsterAction에 담긴 메시지를 출력
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                if(action.Type == EMonsterActionType.ATTACK)
+                {
+                    Console.WriteLine($"{attacker.Name}이(가) 공격 자세를 취합니다!");
+                }
+                else
+                {
+                    Console.WriteLine($"{attacker.Name}이(가) 방어 자세를 취합니다! (방어력 증가)");
+                }
+                Console.ResetColor();
+                Console.WriteLine();
 
+                // 행동 타입이 '공격'일 경우에만 데미지 정보를 표시
+                if (action.Type == EMonsterActionType.ATTACK)
+                {
+                    Console.WriteLine($"ID: Lv.{attacker.Level} {attacker.Name} 의 공격!");
+                    int damage = action.Value;
+                    Console.WriteLine($"{player.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
+                    Console.WriteLine();
+                    Console.WriteLine($"Lv.{player.Level} {player.Name}");
+                    // 공격 받기 전 체력과 후 체력을 함께 표시
+                    Console.Write($"HP {player.HP + damage} -> ");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(player.HP);
+                    Console.ResetColor();
+                }
+            }
 
+            DisplayOptions(menuOptions, selectedIndex);
+        }
 
 
 
@@ -364,10 +455,43 @@ namespace StillHungry.UI
 
 
 
+        #region 박용규 추가 메소드
+        public void ShowAttackSelect(string[] menuOptions, int selectedIndex) 
+        {
+            Console.WriteLine("\u001b[33mAttack Select!!\u001b[0m");
 
+            // 게임매니저의 인스턴스를 통해서 몬스터의 정보를 얻어온다.
+            List<string> monsters = new List<string>();
+            int index = 0;
+            foreach (var m in Manager.Instance.Battle.MonsterController.ActiveMonsters)
+            {
+                // 몬스터의 정보를 출력
+                if (m.CurrentHp <= 0)
+                {
+                    monsters.Add(
+                    $"\u001b[90mLv.{m.Level} " +
+                    $"{m.Name,-5}\tDEAD\u001b[0m");
+                    index++;
+                }
+                else 
+                {
+                    monsters.Add(
+                    $"Lv.\u001b[33m{m.Level}\u001b[0m " +
+                    $"{m.Name,-5}\tHP \u001b[33m{m.CurrentHp}\u001b[0m");
+                    index++;
+                }
+                
+            }
+            monsters.Add("돌아가기");
+            DisplayOptions(monsters.ToArray(), selectedIndex, "\n공격 대상을 선택해 주세요");
 
-
-
+            // 게임매니저의 인스턴스를 통해서 플레이어의 정보를 얻어온다
+            Console.WriteLine("\n\n[내정보]");
+            var player = Manager.Instance.Game.PlayerController;
+            Console.Write($"Lv. \u001b[33m{player.Level}\u001b[0m\t");
+            Console.WriteLine($"{player.Name} ({StringConverter.ClassTypeToString(player.ClassType)})");
+            Console.WriteLine($"HP : \u001b[33m{player.HP}/{player.MaxHP}\u001b[0m");
+        }
 
         public void ShowBattleScreen(string[] menuOptions, int selectedIndex)
         {
@@ -378,20 +502,66 @@ namespace StillHungry.UI
             foreach (var m in Manager.Instance.Battle.MonsterController.ActiveMonsters) 
             {
                 // 몬스터의 점보를 출력
-                string id = (Manager.Instance.Battle.isFighting) ? m.Value.ID.ToString() : "";
-                Console.Write($"\u001b[94m{id}\u001b[0m " +
-                    $"Lv.\u001b[33m{m.Value.Level}\u001b[0m " +
-                    $"{m.Value.Name}\tHP \u001b[33m{m.Value.CurrentHp}\u001b[0m\n");
+                if (m.CurrentHp <= 0)
+                {
+                    Console.Write(
+                            $"\u001b[90mLv.{m.Level} " +
+                            $"{m.Name}\tDEAD\u001b[0m\n");
+                }
+                else 
+                {
+                    Console.Write(
+                        $"Lv.\u001b[33m{m.Level}\u001b[0m " +
+                        $"{m.Name}\tHP \u001b[33m{m.CurrentHp}\u001b[0m\n");
+                }
             }
 
             // 게임매니저의 인스턴스를 통해서 플레이어의 정보를 얻어온다
             Console.WriteLine("\n\n[내정보]");
             var player = Manager.Instance.Game.PlayerController;
             Console.Write($"Lv. \u001b[33m{player.Level}\u001b[0m\t");
-            Console.WriteLine($"Chad ({StringConverter.ClassTypeToString(player.ClassType)})");
+            Console.WriteLine($"{player.Name} ({StringConverter.ClassTypeToString(player.ClassType)})");
 
             Console.WriteLine($"HP : \u001b[33m{player.HP}/{player.MaxHP}\u001b[0m");
             DisplayOptions(menuOptions, selectedIndex);
         }
+        public void PlayerTurnScreen(string[] menuOptions, int selectedIndex)
+        {
+            Console.WriteLine("\u001b[33mPlayer Attack Turn!!\u001b[0m");
+
+            // 게임매니저의 인스턴스를 통해서 플레이어의 정보를 얻어온다
+            var player = Manager.Instance.Game.PlayerController;
+            Console.WriteLine($"{player.Name} 의 공격!");
+            if (Manager.Instance.Battle.MonsterController.ActiveMonsters[0].CurrentHp <= 0) 
+            {
+                Console.WriteLine($"그만해! {Manager.Instance.Battle.MonsterController.ActiveMonsters[0].Name}의 HP는 이미 0 이야!");
+            }
+            Manager.Instance.Battle.MonsterController.TakeDamage(selectedIndex, 10);
+            Console.WriteLine($"");
+            DisplayOptions(menuOptions, selectedIndex);
+        }
+        private void DisplayOptions(string[] options, int selectedIndex, string message)
+        {
+            Console.WriteLine();
+            for (int i = 0; i < options.Length; i++)
+            {
+                if (i == selectedIndex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"> {options[i]}");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.WriteLine($"  {options[i]}");
+                    Console.ResetColor();
+                }
+            }
+            Console.WriteLine(message);
+            Console.WriteLine("(↑, ↓ 방향키로 이동, Enter로 선택)");
+        }
+        #endregion
     }
 }
+    

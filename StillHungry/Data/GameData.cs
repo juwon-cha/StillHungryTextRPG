@@ -60,10 +60,21 @@ namespace StillHungry.Data
         public int Defense;
     }
 
+    public class ConsumableHPData : ItemData
+    {
+        public int HPRecovery;
+    }
+
+    public class ConsumableMPData : ItemData
+    {
+        public int MPRecovery;
+    }
     public class ItemLoader : ILoader<int, ItemData>
     {
         public List<WeaponData> Weapons = new List<WeaponData>();
         public List<ArmorData> Armors = new List<ArmorData>();
+        public List<ConsumableHPData> ConsumableHP = new List<ConsumableHPData>();
+        public List<ConsumableMPData> ConsumableMP = new List<ConsumableMPData>();
 
         public Dictionary<int, ItemData> MakeData()
         {
@@ -78,6 +89,17 @@ namespace StillHungry.Data
             {
                 item.ItemType = EItemType.ITEM_ARMOR;
                 dict.Add(item.ID, item);
+            }
+
+            foreach (ItemData itemData in ConsumableHP)
+            {
+                itemData.ItemType = EItemType.ITEM_CONSUMABLEHP;
+                dict.Add(itemData.ID, itemData);
+            }
+            foreach (ItemData itemData in ConsumableMP)
+            {
+                itemData.ItemType = EItemType.ITEM_CONSUMABLEMP;
+                dict.Add(itemData.ID, itemData);
             }
 
             return dict;

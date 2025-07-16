@@ -1,7 +1,46 @@
 {
   "UserData": [
     {
-
+      "SlotID": 3,
+      "ClassType": "WARRIOR",
+      "Level": 1,
+      "Name": "1",
+      "HP": 100,
+      "Mana": 10,
+      "Attack": 10.0,
+      "Defense": 5.0,
+      "Gold": 1500,
+      "CriticalRate": 0.45,
+      "EvadeRate": 0.25,
+      "Items": null
+    },
+    {
+      "SlotID": 2,
+      "ClassType": "THIEF",
+      "Level": 1,
+      "Name": "1",
+      "HP": 100,
+      "Mana": 100,
+      "Attack": 9.0,
+      "Defense": 7.0,
+      "Gold": 1500,
+      "CriticalRate": 0.3,
+      "EvadeRate": 0.4,
+      "Items": null
+    },
+    {
+      "SlotID": 1,
+      "ClassType": "ARCHER",
+      "Level": 1,
+      "Name": "1",
+      "HP": 100,
+      "Mana": 100,
+      "Attack": 12.0,
+      "Defense": 3.0,
+      "Gold": 1500,
+      "CriticalRate": 0.25,
+      "EvadeRate": 0.45,
+      "Items": null
     }
   ]
 }

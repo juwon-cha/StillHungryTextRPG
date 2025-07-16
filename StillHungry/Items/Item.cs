@@ -1,5 +1,6 @@
-﻿using StillHungry.Data;
+using StillHungry.Data;
 using StillHungry.Managers;
+using StillHungry.Controller;
 
 namespace StillHungry.Items
 {
@@ -8,6 +9,8 @@ namespace StillHungry.Items
         ITEM_NONE = 0,
         ITEM_WEAPON,
         ITEM_ARMOR,
+        ITEM_CONSUMABLEHP,
+        ITEM_CONSUMABLEMP
     }
 
     public enum EWeaponType
@@ -33,6 +36,7 @@ namespace StillHungry.Items
         public bool HasEquipped { get; set; }
         public bool HasPurchased { get; set; }
 
+        public int Quantity { get; set; } // 소모품 아이템의 개수
         public Item(EItemType type)
         {
             ItemType = type;
@@ -57,6 +61,12 @@ namespace StillHungry.Items
                     break;
                 case EItemType.ITEM_ARMOR:
                     item = new Armor(itemId);
+                    break;
+                case EItemType.ITEM_CONSUMABLEHP:
+                    item = new ConsumableHP(itemId);
+                    break;
+                case EItemType.ITEM_CONSUMABLEMP:
+                    item = new ConsumableMP(itemId);
                     break;
                 case EItemType.ITEM_NONE:
                     break;
@@ -125,6 +135,58 @@ namespace StillHungry.Items
             Price = data.Price;
             Description = data.Description;
 
+            HasPurchased = false;
+            SellingPrice = (int)(Price * SELLING_PRICE_PERCENTAGE);
+        }
+    }
+
+    public class ConsumableHP : Item
+    {
+        public int HPRecovery { get; private set; }
+        public ConsumableHP(int id) : base(EItemType.ITEM_CONSUMABLEHP)
+        {
+            Init(id);
+        }
+        private void Init(int id)
+        {
+            ItemData itemData = null;
+            DataManager.ItemDict.TryGetValue(id, out itemData);
+            if (itemData.ItemType != EItemType.ITEM_CONSUMABLEHP)
+            {
+                return;
+            }
+            ConsumableHPData data = (ConsumableHPData)itemData;
+            ID = data.ID;
+            Name = data.Name;
+            HPRecovery = data.HPRecovery;
+            Price = data.Price;
+            Description = data.Description;
+            HasPurchased = false;
+            SellingPrice = (int)(Price * SELLING_PRICE_PERCENTAGE);
+        }
+    }
+
+    public class ConsumableMP : Item
+    {
+        public int MPRecovery { get; private set; }
+        public ConsumableMP(int id) : base(EItemType.ITEM_CONSUMABLEMP)
+        {
+            Init(id);
+        }
+        private void Init(int id)
+        {
+            ItemData itemData = null;
+            DataManager.ItemDict.TryGetValue(id, out itemData);
+            if (itemData.ItemType != EItemType.ITEM_CONSUMABLEMP)
+            {
+                return;
+            }
+            ConsumableMPData data = (ConsumableMPData)itemData;
+            ID = data.ID;
+            Name = data.Name;
+            MPRecovery = data.MPRecovery;
+            Price = data.Price;
+            Description = data.Description;
             HasPurchased = false;
             SellingPrice = (int)(Price * SELLING_PRICE_PERCENTAGE);
         }

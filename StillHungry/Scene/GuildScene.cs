@@ -4,37 +4,28 @@ using StillHungry.UI;
 
 namespace StillHungry.Scene
 {
-    public enum EPurchaseResult
-    {
-        SUCCESS,
-        NOT_ENOUGH_GOLD,
-        ALREADY_PURCHASED,
-        NONE,
-    }
 
-    public enum ESellResult
-    {
-        SUCCESS,
-        NOT_IN_INVENTORY
-    }
 
-    public class StoreScene : BaseScene
+    internal class GuildScene : BaseScene
     {
-        private readonly string[] mMenuItems = { "1. 아이템 구매", "2. 아이템 판매", "0. 나가기" };
+        private readonly string[] mMenuItems = { "1. 장비 상점", "2. 소모품 상점", "3. 요리 상점  ","4. 퀘스트 보드","5. 휴식하기", "0. 나가기" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
-        public StoreScene()
+        public GuildScene()
         {
             mNavigator = new MenuNavigator(mMenuItems.Length);
             mMenuCommands = new IExecutable[]
             {
-                new BuyItemCommand(RequestRedraw),
-                new SellItemCommand(RequestRedraw),
-                new ChangeSceneCommand(ESceneType.TOWN_SCENE)
+                new ChangeSceneCommand(ESceneType.STORE_SCENE),
+                new ChangeSceneCommand(ESceneType.CONSUMABLE_STORE_SCENE),
+                new BuyConsumableCommand(RequestRedraw), // 이거 요리 상점
+                new BuyConsumableCommand(RequestRedraw), // 이거 퀘스트
+                new ChangeSceneCommand(ESceneType.CAMPSITE_SCENE),
+                new ChangeSceneCommand(ESceneType.TOWN_SCENE),
+                
             };
         }
-
         public override void Display()
         {
             Update();
@@ -50,12 +41,14 @@ namespace StillHungry.Scene
             }
 
             Console.Clear();
-            Manager.Instance.UI.ShowStoreScreen(mMenuItems, mNavigator.SelectedIndex);
+            Manager.Instance.UI.GuildScreen(mMenuItems, mNavigator.SelectedIndex);
             bNeedsRedraw = false;
         }
 
         protected override void Update()
         {
+
         }
     }
+
 }

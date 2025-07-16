@@ -4,23 +4,34 @@ using StillHungry.UI;
 
 namespace StillHungry.Scene
 {
-    public class TownScene : BaseScene
+    public enum EPurchaseResult
     {
-        private readonly string[] mMenuItems = { "1. 상태 보기", "2. 인벤토리", "3. 길드", "4. 던전 입장","5. 저장하기", "0. 게임 종료" };
+        SUCCESS,
+        NOT_ENOUGH_GOLD,
+        ALREADY_PURCHASED,
+        NONE,
+    }
+
+    public enum ESellResult
+    {
+        SUCCESS,
+        NOT_IN_INVENTORY
+    }
+
+    public class EquipmentStoreScene : BaseScene
+    {
+        private readonly string[] mMenuItems = { "1. 아이템 구매", "2. 아이템 판매", "0. 나가기" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
-        public TownScene()
+        public EquipmentStoreScene()
         {
             mNavigator = new MenuNavigator(mMenuItems.Length);
             mMenuCommands = new IExecutable[]
             {
-                new ChangeSceneCommand(ESceneType.STATUS_SCENE),
-                new ChangeSceneCommand(ESceneType.INVENTORY_SCENE),
-                new ChangeSceneCommand(ESceneType.GUILD_SCENE),
-                new ChangeSceneCommand(ESceneType.DUNGEON_SCENE),
-                new SaveGameCommand(),
-                new ExitGameCommand()
+                new BuyEquipmentCommand(RequestRedraw),
+                new SellItemCommand(RequestRedraw),
+                new ChangeSceneCommand(ESceneType.GUILD_SCENE)
             };
         }
 
@@ -39,7 +50,7 @@ namespace StillHungry.Scene
             }
 
             Console.Clear();
-            Manager.Instance.UI.ShowTownScreen(mMenuItems, mNavigator.SelectedIndex);
+            Manager.Instance.UI.EquipmentStoreScreen(mMenuItems, mNavigator.SelectedIndex);
             bNeedsRedraw = false;
         }
 

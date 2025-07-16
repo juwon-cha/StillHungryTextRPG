@@ -1,30 +1,38 @@
 using StillHungry.Commands;
-using StillHungry.Controller;
 using StillHungry.Managers;
 using StillHungry.UI;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static StillHungry.Scene.CharacterSettingScene;
 
 namespace StillHungry.Scene
 {
-    internal class BattleScene : BaseScene
+    internal class AttackSelectScene : BaseScene
     {
-        private readonly string[] mMenuItems = { 
-            "1. 공격", "0. 도망가기" };
+        private readonly List<string> mMenuItems = new List<string>();
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
-        public BattleScene()
+        public AttackSelectScene()
         {
-            mNavigator = new MenuNavigator(mMenuItems.Length);
+            int idx = 0;
+            foreach (var m in Manager.Instance.Battle.MonsterController.ActiveMonsters)
+            {
+                mMenuItems.Add($"");
+                    idx++;
+            }
+            mMenuItems.Add($"");
+            mNavigator = new MenuNavigator(mMenuItems.Count);
+
             mMenuCommands = new IExecutable[]
             {
-                new BattleStartCommand(),
-                new ChangeSceneCommand(ESceneType.DUNGEON_SCENE),
+                new PlayerTurnCommand(),
+                new PlayerTurnCommand(),
+                new PlayerTurnCommand(),
+                new EnterDungeonCommand(),
             };
         }
         public override void Display()
@@ -41,7 +49,7 @@ namespace StillHungry.Scene
                 return;
             }
             Console.Clear();
-            Manager.Instance.UI.ShowBattleScreen(mMenuItems, mNavigator.SelectedIndex);
+            Manager.Instance.UI.ShowAttackSelect(mMenuItems.ToArray(), mNavigator.SelectedIndex);
             bNeedsRedraw = false;
         }
 
@@ -49,4 +57,4 @@ namespace StillHungry.Scene
         {
         }
     }
-}
+ }
