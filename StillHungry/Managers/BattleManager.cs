@@ -7,6 +7,8 @@ namespace StillHungry.Managers
 {
     public class BattleManager
     {
+        public int monsterKillCount = 0;
+
         //public PlayerController PlayerController = new PlayerController();
         public MonsterController MonsterController = new MonsterController();
         public bool isFighting = false;
@@ -14,7 +16,7 @@ namespace StillHungry.Managers
 
         public int initialHP; //전투 시작 시의 플레이어 체력
         public int totalDamageTaken = 0; //전투 중 받은 누적 피해
-        
+
 
         private int mCurrentMonsterIndex = -1; // 몬스터 인덱스
 
