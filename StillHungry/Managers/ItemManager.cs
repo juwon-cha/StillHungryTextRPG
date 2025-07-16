@@ -6,8 +6,9 @@ namespace StillHungry.Managers
 {
     class ItemManager
     {
-        public Dictionary<int, Item> EquipmentItems = new Dictionary<int, Item>();
-        public Dictionary<int, Item> ConsumableItems = new Dictionary<int, Item>();
+        public Dictionary<int, Item> EquipmentItems = new Dictionary<int, Item>();   // 장착 아이템 
+        public Dictionary<int, Item> ConsumableItems = new Dictionary<int, Item>();  // 소모품 아이템
+        public Dictionary<int, Item> EtcItems = new Dictionary<int, Item>();         // 기타 아이템 
 
         public void Init()
         {
@@ -32,7 +33,11 @@ namespace StillHungry.Managers
             {
                 ConsumableItems.Add(item.ID, item);
             }
-           
+            else if(item.ID < 500)
+            {
+                EtcItems.Add(item.ID, item);
+            }
+
         }
 
         // 아이템 아이디로 아이템 가져옴
@@ -43,6 +48,8 @@ namespace StillHungry.Managers
                 EquipmentItems.TryGetValue(itemId, out item);
             else if (itemId < 400)
                 ConsumableItems.TryGetValue(itemId, out item);
+            else if (itemId < 500)
+                EtcItems.TryGetValue(itemId, out item);
 
             return item;
         }

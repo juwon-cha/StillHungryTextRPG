@@ -4,13 +4,13 @@ namespace StillHungry.Controller
 {
     public class InventoryController
     {
-        public Dictionary<int, Item> EquipInventory = new Dictionary<int, Item>();
-        public Dictionary<int, Item> ConsumableInventory = new Dictionary<int, Item>();
-
+        public Dictionary<int, Item> EquipInventory = new Dictionary<int, Item>();       // 장비 아이템 인벤토리
+        public Dictionary<int, Item> ConsumableInventory = new Dictionary<int, Item>();  // 소모품 아이템 인벤토리
+        public Dictionary<int, Item> EtcItemInventory = new Dictionary<int, Item>();     // 기타 아이템 인벤토리
 
         public void AddItem(Item item)
         {
-            if(item == null)
+            if (item == null)
             {
                 return;
             }
@@ -32,13 +32,25 @@ namespace StillHungry.Controller
                     ConsumableInventory.Add(item.ID, item);
                 }
             }
+            else if (item.ID < 500)
+            {
+                if (EtcItemInventory.TryGetValue(item.ID, out var existItem))
+                {
+                    existItem.Quantity += 1;
+                }
+                else
+                {
+                    item.Quantity = 1;
+                    EtcItemInventory.Add(item.ID, item);
+                }
+            }
 
-                
+
         }
 
         public bool RemoveItem(Item item)
         {
-            if(item == null)
+            if (item == null)
             {
                 return false;
             }
@@ -60,6 +72,19 @@ namespace StillHungry.Controller
                     return true;
                 }
             }
+            else if (item.ID < 500)
+            {
+                if (EtcItemInventory.TryGetValue(item.ID, out var existItem))
+                {
+                    existItem.Quantity -= 1;
+                    if (existItem.Quantity <= 0)
+                    {
+                        return EtcItemInventory.Remove(item.ID);
+                    }
+                    return true;
+                }
+            }
+
             return false;
         }
 
@@ -85,6 +110,7 @@ namespace StillHungry.Controller
         {
             EquipInventory.Clear();
             ConsumableInventory.Clear();
+            EtcItemInventory.Clear();
         }
     }
 }

@@ -226,7 +226,7 @@ namespace StillHungry.UI
             {
                 PrintItemList(Manager.Instance.Game.PlayerController.InventoryController.EquipInventory, isSellingContext);
             }
-            else
+            else 
             {
                 PrintItemList(Manager.Instance.Game.PlayerController.InventoryController.ConsumableInventory, isSellingContext);
             }

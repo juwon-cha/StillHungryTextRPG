@@ -17,7 +17,7 @@ namespace StillHungry.Scene
             {
                 new EquipManageCommand(RequestRedraw),// 장비 창고
                 new ConsumableManageCommand(RequestRedraw), // 소모품 창고
-                new ChangeSceneCommand(ESceneType.TOWN_SCENE), // 이거 기타창고임  
+                new EtcManageCommand(RequestRedraw), // 이거 기타창고임  
                 new ChangeSceneCommand(ESceneType.TOWN_SCENE) // 나가기
             };
         }

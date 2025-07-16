@@ -532,7 +532,7 @@ namespace StillHungry.Commands
         }
     }
     #endregion
-
+    //소모품 창고
     public class ConsumableManageCommand : IExecutable
     {
         private readonly Action mRequestRedrawCallback;
@@ -578,7 +578,41 @@ namespace StillHungry.Commands
             mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
         }
     }
+    //기타 창고
+    public class EtcManageCommand : IExecutable
+    {
+        private readonly Action mRequestRedrawCallback;
 
+        public EtcManageCommand(Action requestRedrawCallback)
+        {
+            mRequestRedrawCallback = requestRedrawCallback;
+        }
+
+        public void Execute()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("인벤토리 - 기타 아이템");
+            Console.ResetColor();
+            Console.WriteLine("보유 중인 아이템을 확인할 수 있습니다.\n");
+
+            Manager.Instance.UI.PrintInventoryList(false, true);
+
+            Console.Write("\n사용할 아이템의 번호를 입력해주세요 (0: 나가기) >> ");
+            string input = Console.ReadLine();
+            var player = Manager.Instance.Game.PlayerController;
+            if (int.TryParse(input, out int choice) && choice == 0)
+            {
+                Console.WriteLine("창고를 나갑니다.");
+            }
+            else if (choice != 0)
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+            }
+            Thread.Sleep(1000);
+            mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
+        }
+    }
     #region  전투커맨드
     public class BattleStartCommand : IExecutable
     {
