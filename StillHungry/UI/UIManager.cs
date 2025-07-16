@@ -54,8 +54,9 @@ namespace StillHungry.UI
             if (player.BonusDefense > 0) defenseStat += $" (+{player.BonusDefense})";
             Console.WriteLine(defenseStat);
 
-            Console.WriteLine($"체 력 : {player.HP}");
-            Console.WriteLine($"마 나 : {player.Mana}");
+            Console.WriteLine($"체 력 : {player.HP} / {player.MaxHP}");
+            Console.WriteLine($"마 나 : {player.Mana} / {player.MaxMana}");
+
             Console.WriteLine($"Gold : {player.Gold} G");
             Console.WriteLine($"치명타 확률 : {player.CriticalChance * 100:F1} %");
             Console.WriteLine($"회피 확률 : {player.EvasionChance * 100:F1} %\n");

@@ -24,7 +24,7 @@ namespace StillHungry.Controller
         public float BaseAttack { get; private set; }
         public float BaseDefense { get; private set; }
         public int Mana {  get; private set; }
-        public int MaxMana {  get; private set; }
+        public int MaxMana { get; private set; } = 100;
         public float BaseCriticalChance { get; private set; } // 치명타 확률
         public float BaseEvasionChance { get; private set; } // 회피 확률
 
@@ -62,7 +62,7 @@ namespace StillHungry.Controller
                 BaseCriticalChance = stat.CriticalRate;
                 BaseEvasionChance = stat.EvadeRate;
                 MaxMana = stat.MaxMana;
-                Mana = stat.Mana;
+                Mana = stat.MaxMana;
                 
             }
             else
@@ -346,6 +346,7 @@ namespace StillHungry.Controller
         {
             if (InventoryController.ConsumableInventory.ContainsKey(consumableMP.ID))
             {
+                Console.WriteLine($"현재 마나 : {Mana}, 최대 마나 : {MaxMana}");
                 // 아이템 사용
                 Mana += consumableMP.MPRecovery;
                 if (Mana > MaxMana)
@@ -355,7 +356,7 @@ namespace StillHungry.Controller
                 // 인벤토리에서 아이템 제거
                 InventoryController.RemoveItem(consumableMP);
 
-                Console.WriteLine($"{consumableMP.Name}을 사용하여 마나를 {consumableMP.MPRecovery}회복했습니다.");
+                Console.WriteLine($"{consumableMP.Name}을 사용하여 마나를 {consumableMP.MPRecovery}회복했습니다.\n 현재 마나 : {Mana}");
             }
             else
             {
