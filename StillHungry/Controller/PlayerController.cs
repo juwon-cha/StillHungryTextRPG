@@ -267,7 +267,7 @@ namespace StillHungry.Controller
             return ERestResult.SUCCESS;
         }
 
-        // a
+        
         public void TakeDamage(int damage)
         {
             if(damage > 0)
@@ -277,7 +277,8 @@ namespace StillHungry.Controller
                 {
                     HP = 0;
                 }
-                if(HP == 0)
+                // a
+                if (HP == 0)
                 {
                     Console.WriteLine("\n전투에서 패배했습니다.");
                     Thread.Sleep(1000);
@@ -292,9 +293,10 @@ namespace StillHungry.Controller
                         monsterKillCount: battleManager.monsterKillCount
                         );
                 }
+                // a
             }
         }
-        // a
+        
 
         public void EarnGold(int goldAmount)
         {

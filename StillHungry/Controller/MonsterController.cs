@@ -96,7 +96,6 @@ namespace StillHungry.Controller
             }
         }
 
-        // a
         private void OnMonsterDeath(Monster monster)
         {
             monster.IsDead = true;
@@ -108,7 +107,7 @@ namespace StillHungry.Controller
             // TODO: 경험치 획득, 아이템 드랍 로직 추가
 
             Manager.Instance.Battle.monsterKillCount++;
-
+            // a
             // 모든 몬스터를 처치했는지 확인
             if (ActiveMonsters.Count == 0)
             {
@@ -128,8 +127,9 @@ namespace StillHungry.Controller
                 // 전투 종료 후 던전 씬으로 전환
                 //Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
             }
+            // a
         }
-        // a
+
 
         //public Monster GetMonsterFromID(int monsterId)
         //{
