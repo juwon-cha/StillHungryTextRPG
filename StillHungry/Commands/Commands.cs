@@ -283,12 +283,13 @@ namespace StillHungry.Commands
             mDungeonLevel = level;
             mRequestRedrawCallback = requestRedrawCallback;
         }
-        public EnterDungeonCommand()
-        {
-        }
 
         public void Execute()
         {
+            Manager.Instance.Battle.SpawnMonsters(); // 던전 입장 시 몬스터 소환
+            AttackSelectScene scene = Manager.Instance.Scene.GetScene(ESceneType.ATTACK_SELECT_SCENE) as AttackSelectScene;
+            scene.GenerateAttackSelectCommands(); // 공격 선택 커맨드 생성
+
             if (Manager.Instance.Game.PlayerController.HP <= 0)
             {
                 Console.WriteLine("던전에 입장할 힘이 남아 있지 않습니다.");
@@ -299,7 +300,6 @@ namespace StillHungry.Commands
             Console.Clear();
 
             Manager.Instance.Scene.ChangeScene(ESceneType.BATTLE_SCENE);
-            //Manager.Instance.Scene.ChangeScene(ESceneType.MONSTER_PHASE_SCENE); // 테스트
         }
     }
     #endregion
@@ -623,27 +623,28 @@ namespace StillHungry.Commands
         }
     }
 
-    public class PlayerTurnCommand : IExecutable
-    {
-        public void Execute()
-        {
-            Manager.Instance.Scene.ChangeScene(ESceneType.PLAYER_ATTACK_SCENE);
-        }
-    }
+    // 씬 전환만 담당하는 커맨드는 ChangeSceneCommand를 사용하면 되기 때문에 아래 커맨드들은 삭제해도 될 것 같아요.
+    //public class PlayerTurnCommand : IExecutable
+    //{
+    //    public void Execute()
+    //    {
+    //        Manager.Instance.Scene.ChangeScene(ESceneType.PLAYER_ATTACK_SCENE);
+    //    }
+    //}
 
-    public class EnemyTurnCommand : IExecutable 
-    {
-        public void Execute()
-        {
-            Manager.Instance.Scene.ChangeScene(ESceneType.MONSTER_PHASE_SCENE);
-        }
-    }
+    //public class EnemyTurnCommand : IExecutable 
+    //{
+    //    public void Execute()
+    //    {
+    //        Manager.Instance.Scene.ChangeScene(ESceneType.MONSTER_PHASE_SCENE);
+    //    }
+    //}
 
     public class MonsterPhaseCommand : IExecutable
     {
         public void Execute()
         {
-            Manager.Instance.Battle.NextMonsterAttack();
+            Manager.Instance.Battle.StartMonsterPhase();
         }
     }
     #endregion

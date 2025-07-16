@@ -26,14 +26,15 @@ namespace StillHungry.Controller
         public void SpawnMonstersForBattles()
         {
             ActiveMonsters.Clear();
-            // 1~3마리의 몬스터를 생성
-            int numberOfMonsters = mRand.Next(1, 4); 
 
+            // 1~3마리의 몬스터를 생성
+            int numberOfMonsters = mRand.Next(1, 4);
+
+            for (int i = 1; i <= numberOfMonsters; i++)
             {
                 // TODO: 랜덤 몬스터 스폰
                 ActiveMonsters.Add(Monster.SpawnMonster(i));
             }
-            Console.WriteLine($"\n{numberOfMonsters}마리의 몬스터가 나타났습니다!");
         }
 
         public void TakeDamage(int monsterIndex, int damage)
@@ -79,7 +80,7 @@ namespace StillHungry.Controller
             int actionChance = mRand.Next(1, 101); // 1~100
 
             // 70% 확률로 공격
-            if (actionChance <= 70)
+            if (actionChance <= 50)
             {
                 // 공격 실행 및 결과 반환
                 // 데미지는 BattleManager에서 플레이어에게 직접 적용

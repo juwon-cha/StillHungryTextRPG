@@ -25,7 +25,7 @@ namespace StillHungry.Managers
     {
         public ESceneType CurrentSceneType { get; private set; }
         public BaseScene CurrentScene { get; private set; }
-        private bool mbIsGameRunning = true;
+        //private bool mbIsGameRunning = true;
 
         // 씬들을 미리 생성해서 담아 놓을 딕셔너리
         private Dictionary<ESceneType, BaseScene> mSceneDict = new Dictionary<ESceneType, BaseScene>();

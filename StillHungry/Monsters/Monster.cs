@@ -44,7 +44,7 @@ namespace StillHungry.Monsters
             Monster monster = null;
             MonsterStat monsterStat;
 
-            // json 데이터에서 아이템 정보 가져옴
+            // json 데이터에서 몬스터 정보 가져옴
             if (DataManager.MonsterStatDict.TryGetValue(monsterId, out monsterStat))
             {
                 monster = new Monster(monsterId);

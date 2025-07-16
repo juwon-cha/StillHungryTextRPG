@@ -22,7 +22,7 @@ namespace StillHungry.Scene
             mNavigator = new MenuNavigator(mMenuItems.Count);
             mMenuCommands = new IExecutable[]
             {
-                new EnemyTurnCommand()
+                new ChangeSceneCommand(ESceneType.MONSTER_PHASE_SCENE)
             };
         }
         public override void Display()

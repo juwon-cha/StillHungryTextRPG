@@ -281,7 +281,6 @@ namespace StillHungry.Controller
                     HP = 0;
                 }
 
-                // a
                 if (HP == 0)
                 {
                     Console.WriteLine("\n전투에서 패배했습니다.");

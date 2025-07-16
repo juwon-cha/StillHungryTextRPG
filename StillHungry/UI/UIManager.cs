@@ -456,13 +456,12 @@ namespace StillHungry.UI
 
 
         #region 박용규 추가 메소드
-        public void ShowAttackSelect(string[] menuOptions, int selectedIndex) 
+        public void ShowAttackSelect(int selectedIndex) 
         {
             Console.WriteLine("\u001b[33mAttack Select!!\u001b[0m");
 
             // 게임매니저의 인스턴스를 통해서 몬스터의 정보를 얻어온다.
             List<string> monsters = new List<string>();
-            int index = 0;
             foreach (var m in Manager.Instance.Battle.MonsterController.ActiveMonsters)
             {
                 // 몬스터의 정보를 출력
@@ -471,16 +470,14 @@ namespace StillHungry.UI
                     monsters.Add(
                     $"\u001b[90mLv.{m.Level} " +
                     $"{m.Name,-5}\tDEAD\u001b[0m");
-                    index++;
                 }
-                else 
+                else
                 {
                     monsters.Add(
                     $"Lv.\u001b[33m{m.Level}\u001b[0m " +
                     $"{m.Name,-5}\tHP \u001b[33m{m.CurrentHp}\u001b[0m");
-                    index++;
                 }
-                
+
             }
             monsters.Add("돌아가기");
             DisplayOptions(monsters.ToArray(), selectedIndex, "\n공격 대상을 선택해 주세요");
@@ -533,7 +530,7 @@ namespace StillHungry.UI
             var player = Manager.Instance.Game.PlayerController;
             Console.WriteLine($"{player.Name} 의 공격!");
             int monsterId = Manager.Instance.Battle.selectedMonsterID;
-            if (Manager.Instance.Battle.MonsterController.ActiveMonsters[monsterId].CurrentHp <= 0) 
+            if (Manager.Instance.Battle.MonsterController.ActiveMonsters[monsterId].CurrentHp <= 0)
             {
                 Console.WriteLine($"그만해! {Manager.Instance.Battle.MonsterController.ActiveMonsters[monsterId].Name}의 HP는 이미 0 이야!");
             }
