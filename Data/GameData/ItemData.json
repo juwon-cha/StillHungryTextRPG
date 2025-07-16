@@ -140,5 +140,94 @@
             "Description": "마나를 100 회복합니다.",
             "MPRecovery": 100
         }
+    ],
+    "Etcs": [
+        {
+            "ID":400,
+            "Name": "박쥐의 오줌보",
+            "Price": 10,
+            "Description": "찰랑거리는 박쥐의 오줌이 담겨있습니다."
+        },
+        {
+            "ID": 401,
+            "Name": "풀푸푸의 찢겨진 머리카락",
+            "Price": 10,
+            "Description": "살아있을 때 뜯어버린 싱싱한 푸푸의 머리카락입니다."
+        },
+        {
+            "ID": 402,
+            "Name": "골렘의 묵직한 발가락",
+            "Price": 10,
+            "Description": "이로 깨물면 안될것 같습니다."
+        },
+        {
+            "ID": 403,
+            "Name": "피닉스의 알",
+            "Price": 10,
+            "Description": "일반 계란보다 몇배는 거대한 피닉스의 알입니다"
+        },
+        {
+            "ID": 404,
+            "Name": "드래곤의 육중한 꼬리",
+            "Price": 10,
+            "Description": "아직 움직이는 것 같습니다."
+        }
+    ],
+    "Foods": [
+        {
+            "ID": 500,
+            "Name": "박오맥",
+            "Price": 99,
+            "Description": "박쥐의 오줌으로 만든 특산품 맥주입니다.",
+            "Damage": 0,
+            "Defense": 0,
+            "Critical": 0,
+            "Evade": 0.1,
+            "Skill" : 0
+        },
+        {
+            "ID": 501,
+            "Name": "푸푸 겉절이",
+            "Price": 150,
+            "Description": "풀푸푸의 머리를 집어 뜯어 만든 겉절이입니다",
+            "Damage": 1,
+            "Defense": 0,
+            "Critical": 0,
+            "Evade": 0,
+            "Skill": 1
+        },
+        {
+            "ID": 502,
+            "Name": "단단한 돌사탕",
+            "Price": 200,
+            "Description": "스톤 골렘의 발가락을 설탕에 절여 만든 사탕입니다.",
+            "Damage": 0,
+            "Defense": 1,
+            "Critical": 0,
+            "Evade": 0.1,
+            "Skill": 2
+        },
+        {
+            "ID": 503,
+            "Name": "용암 계란찜",
+            "Price": 1000,
+            "Description": "피닉스의 알을 사용한 계란찜 입니다.",
+            "Damage": 0,
+            "Defense": 0,
+            "Critical": 0.1,
+            "Evade": 0,
+            "Skill": 3
+        },
+        {   "ID": 504,
+            "Name": "드래곤 꼬리구이",
+            "Price": 10000,
+            "Description": "드래곤의 쫀쫀한 꼬리는 먹으면 무슨맛이 날까?",
+            "Damage": 1,
+            "Defense": 1,
+            "Critical": 0.1,
+            "Evade": 0.1,
+            "Skill": 4
+
+        }
     ]
 }

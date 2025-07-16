@@ -1,6 +1,5 @@
 using StillHungry.Data;
 using StillHungry.Managers;
-using StillHungry.Controller;
 
 namespace StillHungry.Items
 {
@@ -10,7 +9,9 @@ namespace StillHungry.Items
         ITEM_WEAPON,
         ITEM_ARMOR,
         ITEM_CONSUMABLEHP,
-        ITEM_CONSUMABLEMP
+        ITEM_CONSUMABLEMP,
+        ITEM_ETC,
+        ITEM_FOOD
     }
 
     public enum EWeaponType
@@ -67,6 +68,9 @@ namespace StillHungry.Items
                     break;
                 case EItemType.ITEM_CONSUMABLEMP:
                     item = new ConsumableMP(itemId);
+                    break;
+                case EItemType.ITEM_FOOD:
+                    item = new Food(itemId);
                     break;
                 case EItemType.ITEM_NONE:
                     break;
@@ -191,4 +195,63 @@ namespace StillHungry.Items
             SellingPrice = (int)(Price * SELLING_PRICE_PERCENTAGE);
         }
     }
+
+    public class EtcItems : Item
+    {
+        public int Skill { get; private set; }
+
+
+        public EtcItems(int id) : base(EItemType.ITEM_ETC)
+        {
+            Init(id);
+        }
+        private void Init(int id)
+        {
+            ItemData itemData = null;
+            DataManager.ItemDict.TryGetValue(id, out itemData);
+            if (itemData.ItemType != EItemType.ITEM_ETC)
+            {
+                return;
+            }
+            FoodData data = (FoodData)itemData; // 고쳐야함 // FoodData로 변경 필요
+            ID = data.ID;
+            Name = data.Name;
+            Price = data.Price;
+            Description = data.Description;
+            HasPurchased = false;
+            SellingPrice = (int)(Price * SELLING_PRICE_PERCENTAGE);
+
+        }
+    }
+    public class Food : Item
+    {
+        public int Damage { get; private set; }
+        public int Defense { get; private set; }
+        public float Critical { get; private set; } // 치명타 확률
+        public float Evade { get; private set; }   // 회피 확률
+        public int Skill { get; private set; }
+
+
+        public Food(int id) : base(EItemType.ITEM_FOOD)
+        {
+            Init(id);
+        }
+        private void Init(int id)
+        {
+            ItemData itemData = null;
+            DataManager.ItemDict.TryGetValue(id, out itemData);
+            if (itemData.ItemType != EItemType.ITEM_FOOD)
+            {
+                return;
+            }
+            FoodData data = (FoodData)itemData; // 고쳐야함 // FoodData로 변경 필요
+            ID = data.ID;
+            Name = data.Name;
+            Price = data.Price;
+            Description = data.Description;
+            HasPurchased = false;
+            SellingPrice = (int)(Price * SELLING_PRICE_PERCENTAGE);
+        }
+    }
+
 }

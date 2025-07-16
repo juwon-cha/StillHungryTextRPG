@@ -491,6 +491,59 @@ namespace StillHungry.Commands
             mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
         }
     }
+
+    public class BuyFoodCommand : IExecutable
+    {
+        private readonly Action mRequestRedrawCallback;
+
+        public BuyFoodCommand(Action requestRedrawCallback)
+        {
+            mRequestRedrawCallback = requestRedrawCallback;
+        }
+
+
+        public void Execute()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("요리 상점 - 식사");
+            Console.ResetColor();
+            Console.WriteLine("해금된 요리를 구매하실 수 있습니다.\n");
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{Manager.Instance.Game.PlayerController.Gold} G\n");
+
+            //Manager.Instance.UI.PrintStoreItemList(Manager.Instance.Item.ConsumableItems);
+
+            Console.Write("\n구매할 요리의 번호를 입력해주세요 (0: 나가기) >> ");
+            string input = Console.ReadLine();
+            var storeItems = Manager.Instance.Item.FoodItems;
+            if (int.TryParse(input, out int choice) && choice > 0 && choice <= storeItems.Count)
+            {
+                Item itemToBuy = storeItems.Values.ElementAt(choice - 1);
+                if (itemToBuy != null)
+                {
+                    EPurchaseResult result = Manager.Instance.Game.PlayerController.BuyItem(itemToBuy);
+                    string message = result switch
+                    {
+                        EPurchaseResult.SUCCESS => "구매를 완료했습니다.",
+                        EPurchaseResult.NOT_ENOUGH_GOLD => "Gold가 부족합니다.",
+                        EPurchaseResult.ALREADY_PURCHASED => "현재 배부름 상태입니다.",
+                        _ => "구매에 실패했습니다."
+                    };
+                    itemToBuy.HasPurchased = false;
+                    Console.WriteLine(message);
+                }
+            }
+            else if (choice != 0)
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+            }
+
+            Thread.Sleep(1000);
+            mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
+        }
+    }
+
     // 장비 창고
     public class EquipManageCommand : IExecutable
     {
@@ -613,6 +666,8 @@ namespace StillHungry.Commands
             mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
         }
     }
+
+
     #region  전투커맨드
     public class BattleStartCommand : IExecutable
     {

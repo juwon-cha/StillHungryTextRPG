@@ -70,12 +70,28 @@ namespace StillHungry.Data
     {
         public int MPRecovery;
     }
+    
+    public class EtcItemData : ItemData
+    {
+        
+    }
+    public class FoodData : ItemData
+    {
+        public int Damage;
+        public int Defense;
+        public float Critical; // 치명타 확률
+        public float Evade;  // 회피 확률
+        public int Skill;
+    }
+
     public class ItemLoader : ILoader<int, ItemData>
     {
         public List<WeaponData> Weapons = new List<WeaponData>();
         public List<ArmorData> Armors = new List<ArmorData>();
         public List<ConsumableHPData> ConsumableHP = new List<ConsumableHPData>();
         public List<ConsumableMPData> ConsumableMP = new List<ConsumableMPData>();
+        public List<FoodData> EtcItems = new List<FoodData>();
+        public List<FoodData> Foods = new List<FoodData>();
 
         public Dictionary<int, ItemData> MakeData()
         {
@@ -97,9 +113,22 @@ namespace StillHungry.Data
                 itemData.ItemType = EItemType.ITEM_CONSUMABLEHP;
                 dict.Add(itemData.ID, itemData);
             }
+
             foreach (ItemData itemData in ConsumableMP)
             {
                 itemData.ItemType = EItemType.ITEM_CONSUMABLEMP;
+                dict.Add(itemData.ID, itemData);
+            }
+
+            foreach (ItemData itemData in EtcItems)
+            {
+                itemData.ItemType = EItemType.ITEM_ETC;
+                dict.Add(itemData.ID, itemData);
+            }
+
+            foreach (ItemData itemData in Foods)
+            {
+                itemData.ItemType = EItemType.ITEM_FOOD;
                 dict.Add(itemData.ID, itemData);
             }
 
