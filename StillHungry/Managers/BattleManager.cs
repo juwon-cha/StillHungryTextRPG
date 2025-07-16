@@ -12,7 +12,7 @@ namespace StillHungry.Managers
         //public PlayerController PlayerController = new PlayerController();
         public MonsterController MonsterController = new MonsterController();
         public bool isFighting = false;
-
+        public int selectedMonsterID { get; set; } = 0;
 
         public int initialHP; //전투 시작 시의 플레이어 체력
         public int totalDamageTaken = 0; //전투 중 받은 누적 피해
@@ -140,7 +140,7 @@ namespace StillHungry.Managers
             Thread.Sleep(1000); // 잠시 메시지를 보여줌
 
             // TODO: 플레이어 공격 턴으로 전환
-            //Manager.Instance.Scene.ChangeScene();
+            Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
         }
 
         public void MonsterAttack(int monsterID, int damage) 

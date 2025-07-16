@@ -631,6 +631,14 @@ namespace StillHungry.Commands
         }
     }
 
+    public class EnemyTurnCommand : IExecutable 
+    {
+        public void Execute()
+        {
+            Manager.Instance.Scene.ChangeScene(ESceneType.MONSTER_PHASE_SCENE);
+        }
+    }
+
     public class MonsterPhaseCommand : IExecutable
     {
         public void Execute()

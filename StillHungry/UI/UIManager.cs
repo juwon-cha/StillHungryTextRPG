@@ -466,7 +466,7 @@ namespace StillHungry.UI
             foreach (var m in Manager.Instance.Battle.MonsterController.ActiveMonsters)
             {
                 // 몬스터의 정보를 출력
-                if (m.CurrentHp <= 0)
+                if (m.IsDead)
                 {
                     monsters.Add(
                     $"\u001b[90mLv.{m.Level} " +
@@ -502,7 +502,7 @@ namespace StillHungry.UI
             foreach (var m in Manager.Instance.Battle.MonsterController.ActiveMonsters) 
             {
                 // 몬스터의 점보를 출력
-                if (m.CurrentHp <= 0)
+                if (m.IsDead)
                 {
                     Console.Write(
                             $"\u001b[90mLv.{m.Level} " +
@@ -532,11 +532,12 @@ namespace StillHungry.UI
             // 게임매니저의 인스턴스를 통해서 플레이어의 정보를 얻어온다
             var player = Manager.Instance.Game.PlayerController;
             Console.WriteLine($"{player.Name} 의 공격!");
-            if (Manager.Instance.Battle.MonsterController.ActiveMonsters[0].CurrentHp <= 0) 
+            int monsterId = Manager.Instance.Battle.selectedMonsterID;
+            if (Manager.Instance.Battle.MonsterController.ActiveMonsters[monsterId].CurrentHp <= 0) 
             {
-                Console.WriteLine($"그만해! {Manager.Instance.Battle.MonsterController.ActiveMonsters[0].Name}의 HP는 이미 0 이야!");
+                Console.WriteLine($"그만해! {Manager.Instance.Battle.MonsterController.ActiveMonsters[monsterId].Name}의 HP는 이미 0 이야!");
             }
-            Manager.Instance.Battle.MonsterController.TakeDamage(selectedIndex, 10);
+            Manager.Instance.Battle.MonsterController.TakeDamage(monsterId, (int)Manager.Instance.Game.PlayerController.Attack);
             Console.WriteLine($"");
             DisplayOptions(menuOptions, selectedIndex);
         }

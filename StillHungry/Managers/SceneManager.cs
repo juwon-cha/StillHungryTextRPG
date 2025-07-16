@@ -18,7 +18,7 @@ namespace StillHungry.Managers
         BATTLE_SCENE,
         MONSTER_PHASE_SCENE,
         ATTACK_SELECT_SCENE,
-        PLAYER_ATTACK_SCENE
+        PLAYER_ATTACK_SCENE,
     }
 
     class SceneManager
