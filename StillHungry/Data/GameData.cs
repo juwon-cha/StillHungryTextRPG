@@ -11,10 +11,14 @@ namespace StillHungry.Data
         public EClassType ClassType;
         public int Level;
         public int MaxHp;
+        public int MaxMana; //최대 마나
+        public int Mana;
         public int Attack;
         public int Defense;
         public int TotalExp;
         public int Gold;
+        public float CriticalRate;
+        public float EvadeRate;
     }
 
     public class PlayerStatLoader : ILoader<EClassType, PlayerStat>
@@ -122,6 +126,37 @@ namespace StillHungry.Data
             foreach (DungeonData dungeonData in Dungeons)
             {
                 dict.Add(dungeonData.Level.ToString(), dungeonData);
+            }
+
+            return dict;
+        }
+    }
+    #endregion
+
+    #region MonsterStat
+    public struct MonsterStat
+    {
+        public int ID;
+        public int Level;
+        public string Name;
+        public int MaxHp;
+        public int Attack;
+        public int Defense;
+        public int ExpReward;
+        public int GoldReward;
+    }
+
+    public class MonsterStatLoader : ILoader<int, MonsterStat>
+    {
+        public List<MonsterStat> MonsterStats = new List<MonsterStat>();
+
+        public Dictionary<int, MonsterStat> MakeData()
+        {
+            Dictionary<int, MonsterStat> dict = new Dictionary<int, MonsterStat>();
+
+            foreach (MonsterStat monster in MonsterStats)
+            {
+                dict.Add(monster.ID, monster);
             }
 
             return dict;

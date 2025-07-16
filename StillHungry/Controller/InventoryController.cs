@@ -2,7 +2,7 @@ using StillHungry.Items;
 
 namespace StillHungry.Controller
 {
-    class InventoryController
+    public class InventoryController
     {
         public Dictionary<int, Item> EquipInventory = new Dictionary<int, Item>();
         public Dictionary<int, Item> ConsumableInventory = new Dictionary<int, Item>();

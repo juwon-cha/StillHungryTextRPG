@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +14,9 @@ namespace StillHungry.Controller
         public virtual float Defense { get; protected set; }
         public int HP { get; protected set; }
         public int MaxHP { get; protected set; } = 100; // temp: 기본 최대 체력
+
+        public virtual float CriticalRate { get; protected set; } // 치명타
+        public virtual float DodgeRate { get; protected set; } // 회피
 
         public virtual void Init() { }
     }

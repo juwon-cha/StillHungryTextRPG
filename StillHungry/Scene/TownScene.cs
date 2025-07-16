@@ -20,6 +20,7 @@ namespace StillHungry.Scene
                 new ChangeSceneCommand(ESceneType.GUILD_SCENE),
                 new ChangeSceneCommand(ESceneType.DUNGEON_SCENE),
                 new ChangeSceneCommand(ESceneType.CAMPSITE_SCENE),
+                new SaveGameCommand(),
                 new ExitGameCommand()
             };
         }

@@ -1,6 +1,10 @@
+using StillHungry.Controller;
+using StillHungry.Data;
 using StillHungry.Items;
 using StillHungry.Managers;
+using StillHungry.Monsters;
 using StillHungry.Utils;
+using System.Threading;
 
 namespace StillHungry.UI
 {
@@ -51,7 +55,10 @@ namespace StillHungry.UI
             Console.WriteLine(defenseStat);
 
             Console.WriteLine($"체 력 : {player.HP}");
-            Console.WriteLine($"Gold : {player.Gold} G\n");
+            Console.WriteLine($"마 나 : {player.Mana}");
+            Console.WriteLine($"Gold : {player.Gold} G");
+            Console.WriteLine($"치명타 확률 : {player.CriticalChance * 100:F1} %");
+            Console.WriteLine($"회피 확률 : {player.EvasionChance * 100:F1} %\n");
 
             DisplayOptions(menuOptions, selectedIndex);
         }
@@ -77,6 +84,74 @@ namespace StillHungry.UI
             Console.WriteLine($"500 G 를 내면 체력을 회복할 수 있습니다. (보유 골드 : {player.Gold} G)\n");
             DisplayOptions(menuOptions, selectedIndex);
         }
+
+        public void ShowSaveLoadScreen(string[] menuOptions, int selectedIndex, bool isSavingMode)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(isSavingMode ? "## 저장하기 ##" : "## 불러오기 ##");
+            Console.ResetColor();
+            Console.WriteLine("데이터를 저장하거나 불러올 슬롯을 선택해주세요.");
+
+            // 모든 슬롯 데이터 불러오기
+            DataManager.LoadAllSlotsData();
+
+            Console.WriteLine();
+            for (int i = 0; i < menuOptions.Length; i++)
+            {
+                // menuOptions 배열의 마지막은 보통 '나가기'이므로, 슬롯 번호는 i + 1로 간주
+                // "슬롯" 이라는 텍스트를 포함하고 있을 때만 슬롯으로 간주
+                if (!menuOptions[i].Contains("슬롯"))
+                {
+                    if (i == selectedIndex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"> {menuOptions[i]}");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        Console.WriteLine($"  {menuOptions[i]}");
+                        Console.ResetColor();
+                    }
+                    continue;
+                }
+
+                int slotIndex = i + 1;
+                string optionText = menuOptions[i];
+                string playerInfo = "";
+
+                // 해당 슬롯에 저장된 데이터가 있는지 확인
+                if (DataManager.UserSlots.TryGetValue(slotIndex, out var userData))
+                {
+                    // 데이터가 있다면, 플레이어 정보를 문자열로 만든다.
+                    string className = StringConverter.ClassTypeToString(userData.ClassType);
+                    playerInfo = $" - {userData.Name} (Lv.{userData.Level} {className})";
+                }
+                else
+                {
+                    // 데이터가 없다면, 비어있음 표시
+                    playerInfo = " - (비어 있음)";
+                }
+
+                if (i == selectedIndex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    // 선택된 메뉴에 플레이어 정보를 합쳐서 출력
+                    Console.WriteLine($"> {optionText}{playerInfo}");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    // 선택되지 않은 메뉴에 플레이어 정보를 합쳐서 출력
+                    Console.WriteLine($"  {optionText}{playerInfo}");
+                    Console.ResetColor();
+                }
+            }
+            Console.WriteLine("\n(↑, ↓ 방향키로 이동, Enter로 선택)");
+        }
+
         #endregion
 
         #region 캐릭터 정보
@@ -254,5 +329,238 @@ namespace StillHungry.UI
             }
             Console.WriteLine("\n(↑, ↓ 방향키로 이동, Enter로 선택)");
         }
+
+
+        public void ShowMonsterPhaseScreen(string[] menuOptions, int selectedIndex, Monster attacker, MonsterAction action, PlayerController player)
+        {
+            Console.WriteLine("\u001b[33mBattle!!\u001b[0m\n");
+
+            // 공격자나 행동 정보가 없을 경우의 예외 처리
+            if (attacker == null || action == null || action.Type == EMonsterActionType.NONE)
+            {
+                Console.WriteLine("몬스터들이 다음 행동을 준비합니다...");
+            }
+            else
+            {
+                // MonsterAction에 담긴 메시지를 출력
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                if(action.Type == EMonsterActionType.ATTACK)
+                {
+                    Console.WriteLine($"{attacker.Name}이(가) 공격 자세를 취합니다!");
+                }
+                else
+                {
+                    Console.WriteLine($"{attacker.Name}이(가) 방어 자세를 취합니다! (방어력 증가)");
+                }
+                Console.ResetColor();
+                Console.WriteLine();
+
+                // 행동 타입이 '공격'일 경우에만 데미지 정보를 표시
+                if (action.Type == EMonsterActionType.ATTACK)
+                {
+                    Console.WriteLine($"ID: Lv.{attacker.Level} {attacker.Name} 의 공격!");
+                    int damage = action.Value;
+                    Console.WriteLine($"{player.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
+                    Console.WriteLine();
+                    Console.WriteLine($"Lv.{player.Level} {player.Name}");
+                    // 공격 받기 전 체력과 후 체력을 함께 표시
+                    Console.Write($"HP {player.HP + damage} -> ");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(player.HP);
+                    Console.ResetColor();
+                }
+            }
+
+            DisplayOptions(menuOptions, selectedIndex);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #region 박용규 추가 메소드
+        public void ShowAttackSelect(string[] menuOptions, int selectedIndex) 
+        {
+            Console.WriteLine("\u001b[33mAttack Select!!\u001b[0m");
+
+            // 게임매니저의 인스턴스를 통해서 몬스터의 정보를 얻어온다.
+            List<string> monsters = new List<string>();
+            int index = 0;
+            foreach (var m in Manager.Instance.Battle.MonsterController.ActiveMonsters)
+            {
+                // 몬스터의 정보를 출력
+                if (m.CurrentHp <= 0)
+                {
+                    monsters.Add(
+                    $"\u001b[90mLv.{m.Level} " +
+                    $"{m.Name,-5}\tDEAD\u001b[0m");
+                    index++;
+                }
+                else 
+                {
+                    monsters.Add(
+                    $"Lv.\u001b[33m{m.Level}\u001b[0m " +
+                    $"{m.Name,-5}\tHP \u001b[33m{m.CurrentHp}\u001b[0m");
+                    index++;
+                }
+                
+            }
+            monsters.Add("돌아가기");
+            DisplayOptions(monsters.ToArray(), selectedIndex, "\n공격 대상을 선택해 주세요");
+
+            // 게임매니저의 인스턴스를 통해서 플레이어의 정보를 얻어온다
+            Console.WriteLine("\n\n[내정보]");
+            var player = Manager.Instance.Game.PlayerController;
+            Console.Write($"Lv. \u001b[33m{player.Level}\u001b[0m\t");
+            Console.WriteLine($"{player.Name} ({StringConverter.ClassTypeToString(player.ClassType)})");
+            Console.WriteLine($"HP : \u001b[33m{player.HP}/{player.MaxHP}\u001b[0m");
+        }
+
+        public void ShowBattleScreen(string[] menuOptions, int selectedIndex)
+        {
+            Console.WriteLine("\u001b[33mBattle!!\u001b[0m");
+
+            // 게임매니저의 인스턴스를 통해서 몬스터의 정보를 얻어온다.
+            Console.WriteLine();
+            foreach (var m in Manager.Instance.Battle.MonsterController.ActiveMonsters) 
+            {
+                // 몬스터의 점보를 출력
+                if (m.CurrentHp <= 0)
+                {
+                    Console.Write(
+                            $"\u001b[90mLv.{m.Level} " +
+                            $"{m.Name}\tDEAD\u001b[0m\n");
+                }
+                else 
+                {
+                    Console.Write(
+                        $"Lv.\u001b[33m{m.Level}\u001b[0m " +
+                        $"{m.Name}\tHP \u001b[33m{m.CurrentHp}\u001b[0m\n");
+                }
+            }
+
+            // 게임매니저의 인스턴스를 통해서 플레이어의 정보를 얻어온다
+            Console.WriteLine("\n\n[내정보]");
+            var player = Manager.Instance.Game.PlayerController;
+            Console.Write($"Lv. \u001b[33m{player.Level}\u001b[0m\t");
+            Console.WriteLine($"{player.Name} ({StringConverter.ClassTypeToString(player.ClassType)})");
+
+            Console.WriteLine($"HP : \u001b[33m{player.HP}/{player.MaxHP}\u001b[0m");
+            DisplayOptions(menuOptions, selectedIndex);
+        }
+        public void PlayerTurnScreen(string[] menuOptions, int selectedIndex)
+        {
+            Console.WriteLine("\u001b[33mPlayer Attack Turn!!\u001b[0m");
+
+            // 게임매니저의 인스턴스를 통해서 플레이어의 정보를 얻어온다
+            var player = Manager.Instance.Game.PlayerController;
+            Console.WriteLine($"{player.Name} 의 공격!");
+            if (Manager.Instance.Battle.MonsterController.ActiveMonsters[0].CurrentHp <= 0) 
+            {
+                Console.WriteLine($"그만해! {Manager.Instance.Battle.MonsterController.ActiveMonsters[0].Name}의 HP는 이미 0 이야!");
+            }
+            Manager.Instance.Battle.MonsterController.TakeDamage(selectedIndex, 10);
+            Console.WriteLine($"");
+            DisplayOptions(menuOptions, selectedIndex);
+        }
+        private void DisplayOptions(string[] options, int selectedIndex, string message)
+        {
+            Console.WriteLine();
+            for (int i = 0; i < options.Length; i++)
+            {
+                if (i == selectedIndex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"> {options[i]}");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.WriteLine($"  {options[i]}");
+                    Console.ResetColor();
+                }
+            }
+            Console.WriteLine(message);
+            Console.WriteLine("(↑, ↓ 방향키로 이동, Enter로 선택)");
+        }
+        #endregion
     }
 }
+    

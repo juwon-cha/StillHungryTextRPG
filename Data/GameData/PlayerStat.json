@@ -4,37 +4,53 @@
         "ClassType": "WARRIOR",
         "Level": 1,
         "MaxHp": 100,
+        "MaxMana": 100,
+        "Mana": 100,
         "Attack": 10,
         "Defense": 5,
         "TotalExp": 10,
-        "Gold": 1500
+        "Gold": 1500,
+        "CriticalRate": 0.45,
+        "EvadeRate": 0.25
       },
       {
         "ClassType": "MAGICIAN",
         "Level": 1,
         "MaxHp": 100,
+        "MaxMana": 100,
+        "Mana": 100,
         "Attack": 11,
         "Defense": 4,
         "TotalExp": 10,
-        "Gold": 1500
+        "Gold": 1500,
+        "CriticalRate": 0.35,
+        "EvadeRate": 0.35
       },
       {
         "ClassType": "ARCHER",
         "Level": 1,
         "MaxHp": 100,
+        "MaxMana": 100,
+        "Mana": 100,
         "Attack": 12,
         "Defense": 3,
         "TotalExp": 10,
-        "Gold": 1500
+        "Gold": 1500,
+        "CriticalRate": 0.25,
+        "EvadeRate": 0.45
       },
       {
         "ClassType": "THIEF",
         "Level": 1,
         "MaxHp": 100,
+        "MaxMana": 100,
+        "Mana": 100,
         "Attack": 9,
         "Defense": 7,
         "TotalExp": 10,
-        "Gold": 1500
+        "Gold": 1500,
+        "CriticalRate": 0.3,
+        "EvadeRate": 0.4
       }
     ]
 }
