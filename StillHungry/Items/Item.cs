@@ -251,6 +251,12 @@ namespace StillHungry.Items
             Description = data.Description;
             HasPurchased = false;
             SellingPrice = (int)(Price * SELLING_PRICE_PERCENTAGE);
+
+            Damage = data.Damage;
+            Defense = data.Defense;
+            Critical = data.Critical; // 치명타 확률
+            Evade = data.Evade;   // 회피 확률
+            Skill = data.Skill; // 스킬
         }
     }
 

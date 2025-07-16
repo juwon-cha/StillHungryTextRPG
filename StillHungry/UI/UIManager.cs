@@ -48,18 +48,25 @@ namespace StillHungry.UI
 
             string attackStat = $"공격력 : {player.Attack}";
             if (player.BonusAttack > 0) attackStat += $" (+{player.BonusAttack})";
+            if (player.FoodAttack > 0) attackStat += $" (+{player.FoodAttack})";
             Console.WriteLine(attackStat);
 
             string defenseStat = $"방어력 : {player.Defense}";
             if (player.BonusDefense > 0) defenseStat += $" (+{player.BonusDefense})";
+            if (player.FoodDefense > 0) defenseStat += $" (+{player.FoodDefense})";
             Console.WriteLine(defenseStat);
 
             Console.WriteLine($"체 력 : {player.HP} / {player.MaxHP}");
             Console.WriteLine($"마 나 : {player.Mana} / {player.MaxMana}");
 
             Console.WriteLine($"Gold : {player.Gold} G");
-            Console.WriteLine($"치명타 확률 : {player.CriticalChance * 100:F1} %");
-            Console.WriteLine($"회피 확률 : {player.EvasionChance * 100:F1} %\n");
+
+            string criticalStat = $"치명타 확률 : {player.CriticalChance * 100:F1} %";
+            if (player.FoodCriticalChance > 0) criticalStat += $" (+{player.FoodCriticalChance * 100:F1})";
+            Console.WriteLine(criticalStat);
+            string evasionStat = $"회피 확률 : {player.EvasionChance * 100:F1} %";
+            if (player.FoodEvasionChance > 0) evasionStat += $" (+{player.FoodEvasionChance * 100:F1})";
+            Console.WriteLine(evasionStat + "\n");
 
             DisplayOptions(menuOptions, selectedIndex);
         }
@@ -296,6 +303,69 @@ namespace StillHungry.UI
                     else
                         priceDisplay = item.HasPurchased ? "구매완료" : $"{item.Price}G";
                 }
+
+                // 각 부분을 유틸 함수를 이용해 정렬된 문자열로 만든다.
+                string countStr = StringFormatting.PadRightForMixedText($"- {count}", 4);
+                string nameStr = StringFormatting.PadRightForMixedText(name, nameWidth);
+                string statStr = StringFormatting.PadRightForMixedText(statDisplay, statWidth);
+                string descStr = StringFormatting.PadRightForMixedText(item.Description, descWidth);
+
+                // 정렬된 문자열들을 조합하여 최종 출력
+                Console.WriteLine($"{countStr}{nameStr} | {statStr} | {descStr} | {priceDisplay}");
+                count++;
+            }
+        }
+
+        // 요리 프린트
+        public void PrintFoodItemList(Dictionary<int, Item> items)
+        {
+            // 문자열 포맷 폭 설정
+            const int nameWidth = 15;
+            const int statWidth = 20;
+            const int descWidth = 55;
+
+            // 헤더를 포맷팅 함수를 적용하여 정렬
+            Console.WriteLine(
+                StringFormatting.PadRightForMixedText("-", 4) +
+                StringFormatting.PadRightForMixedText("아이템 이름", nameWidth) + " | " +
+                StringFormatting.PadRightForMixedText("능력치", statWidth) + " | " +
+                StringFormatting.PadRightForMixedText("설명", descWidth) + " | " +
+                "가격"
+            );
+            Console.WriteLine(new string('-', 120)); // 구분선
+
+            int count = 1;
+            foreach (var itemPair in items)
+            {
+                var item = (Food)itemPair.Value;
+                string name = $"{item.Name}";
+
+                string statDisplay = "";
+
+                if (item.Damage != 0)
+                {
+                    statDisplay += $"공격력 +{item.Damage} ";
+                }
+                if (item.Defense != 0)
+                {
+                    statDisplay += $"방어력 +{item.Defense} ";
+                }
+                if (item.Critical != 0)
+                {
+                    statDisplay += $"크리티컬 확률 +{item.Critical*100}% ";
+                }
+                if (item.Evade != 0)
+                {
+                    statDisplay += $"회피 확률 +{item.Evade*100}% ";
+                }
+                if(item.ID == 504)
+                {
+                    statDisplay = "???";
+                }
+
+                string priceDisplay;
+                priceDisplay = $"{item.Price}G";
+              
 
                 // 각 부분을 유틸 함수를 이용해 정렬된 문자열로 만든다.
                 string countStr = StringFormatting.PadRightForMixedText($"- {count}", 4);

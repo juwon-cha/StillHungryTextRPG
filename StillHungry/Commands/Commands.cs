@@ -512,7 +512,7 @@ namespace StillHungry.Commands
             Console.WriteLine("[보유 골드]");
             Console.WriteLine($"{Manager.Instance.Game.PlayerController.Gold} G\n");
 
-            //Manager.Instance.UI.PrintStoreItemList(Manager.Instance.Item.ConsumableItems);
+            Manager.Instance.UI.PrintFoodItemList(Manager.Instance.Item.FoodItems);
 
             Console.Write("\n구매할 요리의 번호를 입력해주세요 (0: 나가기) >> ");
             string input = Console.ReadLine();
@@ -522,14 +522,19 @@ namespace StillHungry.Commands
                 Item itemToBuy = storeItems.Values.ElementAt(choice - 1);
                 if (itemToBuy != null)
                 {
-                    EPurchaseResult result = Manager.Instance.Game.PlayerController.BuyItem(itemToBuy);
+                    EPurchaseResult result = Manager.Instance.Game.PlayerController.BuyFood(itemToBuy);
                     string message = result switch
                     {
                         EPurchaseResult.SUCCESS => "구매를 완료했습니다.",
                         EPurchaseResult.NOT_ENOUGH_GOLD => "Gold가 부족합니다.",
-                        EPurchaseResult.ALREADY_PURCHASED => "현재 배부름 상태입니다.",
+                        EPurchaseResult.ALREADY_PURCHASED => $"이미 {Manager.Instance.Game.PlayerController.EatFood.Name}을 먹었습니다.",
                         _ => "구매에 실패했습니다."
                     };
+                    if(result == EPurchaseResult.SUCCESS)
+                    {
+                        Manager.Instance.Game.PlayerController.EatFood = (Food)itemToBuy;
+                        Manager.Instance.Game.PlayerController.RecalculateFoodStats();
+                    }
                     itemToBuy.HasPurchased = false;
                     Console.WriteLine(message);
                 }

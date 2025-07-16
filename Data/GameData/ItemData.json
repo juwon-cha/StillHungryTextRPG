@@ -204,7 +204,7 @@
             "Damage": 0,
             "Defense": 1,
             "Critical": 0,
-            "Evade": 0.1,
+            "Evade": 0,
             "Skill": 2
         },
         {

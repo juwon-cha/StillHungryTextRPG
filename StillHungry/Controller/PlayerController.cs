@@ -2,7 +2,6 @@ using StillHungry.Data;
 using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Scene;
-using System;
 
 
 namespace StillHungry.Controller
@@ -23,7 +22,7 @@ namespace StillHungry.Controller
         // 기본 능력치!!
         public float BaseAttack { get; private set; }
         public float BaseDefense { get; private set; }
-        public int Mana {  get; private set; }
+        public int Mana { get; private set; }
         public int MaxMana { get; private set; } = 100;
         public float BaseCriticalChance { get; private set; } // 치명타 확률
         public float BaseEvasionChance { get; private set; } // 회피 확률
@@ -32,24 +31,36 @@ namespace StillHungry.Controller
         public float BonusAttack { get; private set; }
         public float BonusDefense { get; private set; }
 
+
+        public float FoodAttack { get; private set; }
+        public float FoodDefense { get; private set; }
+        public float FoodCriticalChance { get; private set; } // 치명타 확률
+        public float FoodEvasionChance { get; private set; } // 회피 확률
+
+
         // 최종 능력치는 기본 능력치와 추가 능력치의 합
         // 외부에서는 이 프로퍼티를 통해 최종 값만 읽을 수 있음
-        public override float Attack => BaseAttack + BonusAttack;
-        public override float Defense => BaseDefense + BonusDefense;
-        public float CriticalChance => BaseCriticalChance;
-        public float EvasionChance => BaseEvasionChance;
+        public override float Attack => BaseAttack + BonusAttack + FoodAttack;
+        public override float Defense => BaseDefense + BonusDefense + FoodDefense;
+        public float CriticalChance => BaseCriticalChance + FoodCriticalChance;
+        public float EvasionChance => BaseEvasionChance + FoodEvasionChance;
         public int CurrentMana => Mana;
         public int MaximumMana => MaxMana;
 
         public int Gold { get; private set; }
         public InventoryController InventoryController { get; private set; } = new InventoryController();
 
+        public Food? EatFood { get; set; } = null;// 플레이어가 먹을 음식
+
+        // 던전 종료 후 음식 삭제
+        // EatFood = null;  RecalculateFoodStats();
+
         // 새 게임 시작할 때 플레이어 데이터 설정
         public virtual void Init(string name, EClassType classType)
         {
             PlayerStat stat;
             // json 데이터 로드
-            if(DataManager.PlayerStatDict.TryGetValue(classType, out stat))
+            if (DataManager.PlayerStatDict.TryGetValue(classType, out stat))
             {
                 ClassType = stat.ClassType;
                 Level = stat.Level;
@@ -64,7 +75,7 @@ namespace StillHungry.Controller
                 Mana = stat.MaxMana;
                 MaxMana = stat.MaxMana;
                 Mana = stat.MaxMana;
-                
+
             }
             else
             {
@@ -102,13 +113,13 @@ namespace StillHungry.Controller
             InventoryController.ClearInventory();
 
             // 로드한 유저 데이터로부터 아이템 세팅
-            if(userData.Items != null)
+            if (userData.Items != null)
             {
                 foreach (UserItemData savedItem in userData.Items)
                 {
                     // 아이템 정보를 아이템 매니저에서 가져오기
                     Item item = Manager.Instance.Item.GetItemFromID(savedItem.ID);
-                    if(item != null)
+                    if (item != null)
                     {
                         // 상점 구매기록 복원
                         item.HasPurchased = true;
@@ -154,13 +165,13 @@ namespace StillHungry.Controller
 
         public void ToggleEquipItem(Item item)
         {
-            if(item == null)
+            if (item == null)
             {
                 return;
             }
 
             // 아이템 장착 상태 반전
-            if(item.HasEquipped)
+            if (item.HasEquipped)
             {
                 item.HasEquipped = !item.HasEquipped;
             }
@@ -194,6 +205,27 @@ namespace StillHungry.Controller
             }
         }
 
+        public void RecalculateFoodStats()
+        {
+            // 요리 스탯을 0으로 초기화
+            FoodAttack = 0;
+            FoodDefense = 0;
+            FoodCriticalChance = 0;
+            FoodEvasionChance = 0;
+            // 경험치 추가
+
+
+            if(EatFood != null)
+            {
+                FoodAttack = EatFood.Damage;
+                FoodDefense = EatFood.Defense;
+                FoodCriticalChance = EatFood.Critical;
+                FoodEvasionChance = EatFood.Evade;
+                // 경험치 추가
+            }
+        }
+
+
         public EPurchaseResult BuyItem(Item item)
         {
             if (item == null)
@@ -225,6 +257,31 @@ namespace StillHungry.Controller
             return EPurchaseResult.SUCCESS;
         }
 
+        // 요리 구매
+        public EPurchaseResult BuyFood(Item item)
+        {
+            if (item == null)
+            {
+                return EPurchaseResult.NONE;
+            }
+
+            //골드 부족
+            if (Gold < item.Price)
+            {
+                return EPurchaseResult.NOT_ENOUGH_GOLD;
+            }
+
+            // 이미 구매한 경우
+            if (EatFood != null)
+            {
+                return EPurchaseResult.ALREADY_PURCHASED;
+            }
+
+            // 플레이어 골드 소비
+            Gold -= item.Price;
+
+            return EPurchaseResult.SUCCESS;
+        }
         public ESellResult SellItem(Item item)
         {
             if (item == null)
@@ -270,15 +327,16 @@ namespace StillHungry.Controller
             return ERestResult.SUCCESS;
         }
 
-        
+
         public void TakeDamage(int damage)
         {
-            if(damage > 0)
+            if (damage > 0)
             {
                 HP -= damage;
-                if(HP < 0)
+                if (HP < 0)
                 {
                     HP = 0;
+
                 }
 
                 // a
@@ -299,11 +357,11 @@ namespace StillHungry.Controller
                 }
             }
         }
-        
+
 
         public void EarnGold(int goldAmount)
         {
-            if(goldAmount > 0)
+            if (goldAmount > 0)
             {
                 Gold += goldAmount;
             }
@@ -321,11 +379,11 @@ namespace StillHungry.Controller
 
         public bool UseMana(int amount)
         {
-            if(amount <= 0)
+            if (amount <= 0)
             {
                 return false;
             }
-            if(Mana >= amount)
+            if (Mana >= amount)
             {
                 Mana -= amount;
                 return true;

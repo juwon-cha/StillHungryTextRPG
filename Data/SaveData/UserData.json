@@ -11,7 +11,7 @@
       "MaxMana": 100,
       "Attack": 9.0,
       "Defense": 7.0,
-      "Gold": 1500,
+      "Gold": 1500000,
       "CriticalRate": 0.3,
       "EvadeRate": 0.4,
       "Items": null
