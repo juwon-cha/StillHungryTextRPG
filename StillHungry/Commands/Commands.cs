@@ -283,6 +283,9 @@ namespace StillHungry.Commands
             mDungeonLevel = level;
             mRequestRedrawCallback = requestRedrawCallback;
         }
+        public EnterDungeonCommand()
+        {
+        }
 
         public void Execute()
         {
@@ -439,9 +442,16 @@ namespace StillHungry.Commands
     {
         public void Execute()
         {
-            Console.Clear();
             Manager.Instance.Battle.isFighting = true;
-            Manager.Instance.Scene.ChangeScene(ESceneType.BATTLE_SCENE);
+            Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
+        }
+    }
+
+    public class PlayerTurnCommand : IExecutable
+    {
+        public void Execute()
+        {
+            Manager.Instance.Scene.ChangeScene(ESceneType.PLAYER_ATTACK_SCENE);
         }
     }
 

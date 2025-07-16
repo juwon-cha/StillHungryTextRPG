@@ -15,6 +15,8 @@ namespace StillHungry.Managers
         CAMPSITE_SCENE,
         BATTLE_SCENE,
         MONSTER_PHASE_SCENE,
+        ATTACK_SELECT_SCENE,
+        PLAYER_ATTACK_SCENE,
     }
 
     class SceneManager
@@ -40,6 +42,8 @@ namespace StillHungry.Managers
             mSceneDict.Add(ESceneType.CAMPSITE_SCENE, new CampsiteScene());
             mSceneDict.Add(ESceneType.BATTLE_SCENE, new BattleScene());
             mSceneDict.Add(ESceneType.MONSTER_PHASE_SCENE, new MonsterPhaseScene());
+            mSceneDict.Add(ESceneType.ATTACK_SELECT_SCENE, new AttackSelectScene());
+            mSceneDict.Add(ESceneType.PLAYER_ATTACK_SCENE, new PlayerAttackScene());
 
             // 타이틀 씬으로 초기화
             CurrentScene = mSceneDict[ESceneType.TITLE_SCENE];

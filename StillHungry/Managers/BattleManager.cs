@@ -79,5 +79,10 @@ namespace StillHungry.Managers
             // TODO: 플레이어 공격 턴으로 전환
             //Manager.Instance.Scene.ChangeScene();
         }
+
+        public void MonsterAttack(int monsterID, int damage) 
+        {
+            MonsterController.TakeDamage(monsterID, damage);
+        }
     }
 }

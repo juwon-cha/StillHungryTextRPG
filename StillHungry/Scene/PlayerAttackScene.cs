@@ -1,5 +1,4 @@
 using StillHungry.Commands;
-using StillHungry.Controller;
 using StillHungry.Managers;
 using StillHungry.UI;
 using System;
@@ -7,24 +6,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static StillHungry.Scene.CharacterSettingScene;
 
 namespace StillHungry.Scene
 {
-    internal class BattleScene : BaseScene
+    internal class PlayerAttackScene : BaseScene
     {
-        private readonly string[] mMenuItems = { 
-            "1. 공격", "0. 도망가기" };
+        private readonly List<string> mMenuItems = new List<string>();
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
-        public BattleScene()
+        public PlayerAttackScene()
         {
-            mNavigator = new MenuNavigator(mMenuItems.Length);
+            mMenuItems.Add("0. 돌아가기");
+            mNavigator = new MenuNavigator(mMenuItems.Count);
             mMenuCommands = new IExecutable[]
             {
-                new BattleStartCommand(),
-                new ChangeSceneCommand(ESceneType.DUNGEON_SCENE),
+                new BattleStartCommand()
             };
         }
         public override void Display()
@@ -41,7 +38,7 @@ namespace StillHungry.Scene
                 return;
             }
             Console.Clear();
-            Manager.Instance.UI.ShowBattleScreen(mMenuItems, mNavigator.SelectedIndex);
+            Manager.Instance.UI.PlayerTurnScreen(mMenuItems.ToArray(), mNavigator.SelectedIndex);
             bNeedsRedraw = false;
         }
 
