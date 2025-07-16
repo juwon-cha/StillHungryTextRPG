@@ -270,6 +270,7 @@ namespace StillHungry.Controller
             return ERestResult.SUCCESS;
         }
 
+        // a
         public void TakeDamage(int damage)
         {
             if(damage > 0)
@@ -281,6 +282,7 @@ namespace StillHungry.Controller
                 }
             }
         }
+        // a
 
         public void EarnGold(int goldAmount)
         {

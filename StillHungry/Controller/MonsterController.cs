@@ -96,6 +96,7 @@ namespace StillHungry.Controller
             }
         }
 
+        // a
         private void OnMonsterDeath(Monster monster)
         {
             monster.IsDead = true;
@@ -117,6 +118,7 @@ namespace StillHungry.Controller
                 Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
             }
         }
+        // a
 
         //public Monster GetMonsterFromID(int monsterId)
         //{
