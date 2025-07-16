@@ -113,7 +113,7 @@ namespace StillHungry.Controller
             {
                 Console.WriteLine("모든 몬스터를 처치했습니다! 전투에서 승리했습니다!");
                 
-                Thread.Sleep(1000); // 승리 메시지 후 잠시 대기
+                Thread.Sleep(3000); // 승리 메시지 후 잠시 대기
 
                 var battleManager = Manager.Instance.Battle;
                 battleManager.EndBattle
@@ -124,8 +124,6 @@ namespace StillHungry.Controller
                     monsterKillCount: battleManager.monsterKillCount
                     );
 
-                // 전투 종료 후 던전 씬으로 전환
-                //Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
             }
             // a
         }

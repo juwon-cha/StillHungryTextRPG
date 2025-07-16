@@ -55,13 +55,14 @@ namespace StillHungry.Managers
                 Console.WriteLine($"Lv.{player.Level} {player.Name}");
                 Console.WriteLine($"HP {initialHP} -> {player.HP}\n");
                 Console.WriteLine("0. 다음");
-                Console.Write("\n>>");
+                Thread.Sleep(100);
+                Console.Write("\n>> ");
                 string input = Console.ReadLine();
 
                 if (input == "0")
                 {
                     isFighting = false;
-                    Manager.Instance.Scene.ChangeScene(ESceneType.TOWN_SCENE);
+                    Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
                 }
             }
             else
