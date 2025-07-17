@@ -66,6 +66,10 @@ namespace StillHungry.Controller
             }
         }
 
+        // 몬스터 턴에서 공격 또는 방어 자세 선택
+        // 공격이면 BattleManager의 StartMonsterPhase메서드에서 플레이어 바로 공격
+        // 방어라면 방어력 올라가고 턴 종료 -> 다음 플레이어가 몬스터 공격 시 몬스터가 받는 데미지 반감
+        // 몬스터 턴이 다시 시작되면 방어 상태 초기화
         public MonsterAction DecideAndExecuteAction(Monster monster)
         {
             if (monster.IsDead) return new MonsterAction { Type = EMonsterActionType.NONE };
