@@ -32,6 +32,7 @@ namespace StillHungry.Controller
         // 장비로 인한 추가 능력치
         public float BonusAttack { get; private set; }
         public float BonusDefense { get; private set; }
+        public float BonusExpRate { get; private set; } // 경험치 버프효과 배율(1.5, 2.0 등등)
 
         // 최종 능력치는 기본 능력치와 추가 능력치의 합
         // 외부에서는 이 프로퍼티를 통해 최종 값만 읽을 수 있음
@@ -43,6 +44,7 @@ namespace StillHungry.Controller
         public int MaximumMana => MaxMana;
 
         public int TotalExp { get; private set; } // 총 경험치
+        private int LevelUplExpRate; // 레벨업에 필요한 경험치
         public int Gold { get; private set; }
         public InventoryController InventoryController { get; private set; } = new InventoryController();
 
@@ -394,5 +396,53 @@ namespace StillHungry.Controller
         {
             return false;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #region 박용규 추가 메소드
+        public void SetExp(int plusValue) 
+        {
+            plusValue += plusValue * 100;   // ***** 디버그용 코드  
+            BonusExpRate = 1.0f;            // ***** 디버그용 코드
+
+            TotalExp += (int)(plusValue * BonusExpRate);
+
+            // 레벨업 요구치는 현재레벨의 제곱에서 10을 곱한값(레벨이 올라갈 수록 요구 경험치 늘어남) - **** 사양문제 *****
+            LevelUplExpRate = (Manager.Instance.Game.PlayerController.Level * 2) * 10;
+
+            // 플레이어의 현재 경험치 값이 현재 레벨에서 다음 레벨로 요구 경험치 값에 도달하면
+            if (TotalExp >= LevelUplExpRate) 
+            {
+                // 플레이어 컨트롤러의 레벨업 메소드를 실행
+                LevelUp();
+                Console.WriteLine($"\u001b[33m*경*\u001b[0m   레벨이 올랐습니다!!! \u001b[33m*축*\u001b[0m", -20);
+                Console.WriteLine($"\u001b[33m*경* {Level}\u001b[0m 레벨이 되었습니다!!! \u001b[33m*축*\u001b[0m\n", -20);
+            }
+        }
+        #endregion
     }
 }

@@ -53,7 +53,9 @@ namespace StillHungry.Managers
                 Console.WriteLine($"던전에서 몬스터 {monsterKillCount}마리를 잡았습니다.");
                 Console.WriteLine($"Lv.{player.Level} {player.Name}");
                 Console.WriteLine($"HP {initialHP} -> {player.HP}\n");
-
+                
+                GetPlayerExp();
+                
                 Console.WriteLine("던전 입구로 돌아가려면 아무 키나 누르세요.");
                 Console.ReadKey();
 
@@ -151,11 +153,15 @@ namespace StillHungry.Managers
         // 플레이어의 경험치 획득 처리 메소드
         public void GetPlayerExp()
         {
-            // 몬스터별 획득 경험치를 불러와서 합산
-            // 플레이어의 경험치 버프상황 불러와서
-            // 플레이어의 현재 경험치에 몬스터별 획득 경험치의 합에 경험치 버프를 곱해서 +대입
-            // 플레이어의 현재 경험치 값이 현재 레벨에서 다음 레벨로 요구 경험치 값에 도달하면
-            // 플레이어 컨트롤러의 레벨업 메소드를 실행
+            int rewardExp = 0;
+            foreach (var m in Manager.Instance.Battle.MonsterController.ActiveMonsters) 
+            {
+                // 몬스터별 획득 경험치를 불러와서 합산
+                rewardExp += m.ExpReward;
+            }
+            Console.WriteLine($"경험치를 \u001b[33m{rewardExp}\u001b[0m 획득 했습니다.\n");
+            // 플레이어 컨트롤러에 있는 경험치 컨트롤 메서드에 값을 넘겨줌
+            Manager.Instance.Game.PlayerController.SetExp(rewardExp);
         }
         #endregion
     }
