@@ -1,13 +1,12 @@
 using StillHungry.Controller;
 using StillHungry.Monsters;
 using StillHungry.Scene;
-using System.Numerics;
 
 namespace StillHungry.Managers
 {
     public class BattleManager
     {
-        public int monsterKillCount = 0;
+        public int MonsterKillCount = 0;
 
         public MonsterController MonsterController = new MonsterController();
         public bool IsFighting = false;
@@ -32,7 +31,7 @@ namespace StillHungry.Managers
             IsFighting = true;
             InitialHP = Manager.Instance.Game.PlayerController.HP;
             TotalDamageTaken = 0;
-            monsterKillCount = 0; //전투 시작될때 다시 0으로 출력
+            MonsterKillCount = 0; //전투 시작될때 다시 0으로 출력
             mCurrentMonsterIndex = 0;
         }
 
@@ -78,8 +77,6 @@ namespace StillHungry.Managers
 
         public void StartMonsterPhase()
         {
-            Console.Clear(); // 이전 결과 지우기
-
             // 다음 살아있는 몬스터 찾기
             for (int i = mCurrentMonsterIndex; i < MonsterController.ActiveMonsters.Count; i++)
             {
@@ -96,15 +93,15 @@ namespace StillHungry.Managers
                     if (LastAction.Type == EMonsterActionType.ATTACK)
                     {
                         Manager.Instance.Game.PlayerController.TakeDamage(LastAction.Value);
-                    
-                        // 씬 갱신
-                        if (Manager.Instance.Scene.CurrentScene is MonsterPhaseScene scene)
-                        {
-                            scene.RequestRedraw();
-                        }
-
-                        return; // 한 몬스터의 행동 후 정지
                     }
+
+                    // 씬 갱신
+                    if (Manager.Instance.Scene.CurrentScene is MonsterPhaseScene scene)
+                    {
+                        scene.RequestRedraw();
+                    }
+
+                    return; // 한 몬스터의 행동 후 정지
                 }
             }
 
@@ -127,11 +124,11 @@ namespace StillHungry.Managers
             Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
         }
 
+        // 필요 없으면 나중에 삭제
         public void MonsterAttack(int monsterID, int damage) 
         {
             MonsterController.TakeDamage(monsterID, damage);
         }
-
 
         #region 박용규 추가 메소드
         // 몬스터에게 데미지를 주는 메소드

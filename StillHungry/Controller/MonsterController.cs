@@ -108,7 +108,7 @@ namespace StillHungry.Controller
 
             // TODO: 경험치 획득, 아이템 드랍 로직 추가?
 
-            Manager.Instance.Battle.monsterKillCount++;
+            Manager.Instance.Battle.MonsterKillCount++;
             bool isAllMonsterDead = true;
             foreach (Monster m in ActiveMonsters) 
             {
@@ -130,7 +130,7 @@ namespace StillHungry.Controller
                     isVictory: true,
                     initialHP: battleManager.InitialHP,
                     damageTaken: battleManager.TotalDamageTaken,
-                    monsterKillCount: battleManager.monsterKillCount
+                    monsterKillCount: battleManager.MonsterKillCount
                     );
 
                 // 전투 종료 후 던전 씬으로 전환

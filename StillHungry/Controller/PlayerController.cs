@@ -361,7 +361,7 @@ namespace StillHungry.Controller
                         isVictory: false,
                         initialHP: battleManager.InitialHP,
                         damageTaken: battleManager.TotalDamageTaken,
-                        monsterKillCount: battleManager.monsterKillCount
+                        monsterKillCount: battleManager.MonsterKillCount
                         );
                 }
             }
