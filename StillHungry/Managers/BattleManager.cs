@@ -95,18 +95,8 @@ namespace StillHungry.Managers
                     // 행동 결과에 따라 플레이어에게 데미지 적용
                     if (LastAction.Type == EMonsterActionType.ATTACK)
                     {
-                        var player = Manager.Instance.Game.PlayerController;
-                        Random rand = new Random();
-
-                        if (rand.NextDouble() < player.EvasionChance)
-                        {
-                            Console.WriteLine("공격을 회피했습니다!");
-                        }
-                        else
-                        {
-                            player.TakeDamage(LastAction.Value);
-                            Console.WriteLine($"{LastAction.Value}의 피해를 입었습니다!");
-                        }
+                        Manager.Instance.Game.PlayerController.TakeDamage(LastAction.Value);
+                    
                         // 씬 갱신
                         if (Manager.Instance.Scene.CurrentScene is MonsterPhaseScene scene)
                         {
