@@ -200,6 +200,7 @@ namespace StillHungry.Data
         public int ID;
         public string Name;
         public string Speech;
+        public string Clear;
         public string Target;
         public int Detail;
         public int PayID;

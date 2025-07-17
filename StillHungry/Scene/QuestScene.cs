@@ -12,7 +12,7 @@ namespace StillHungry.Scene
 {
     internal class QuestScene : BaseScene
     {
-        private readonly string[] mMenuItems;// = { "1. 깃털 없는 불청객", "2. 움직이는 채소를 잡아라!", "3. 요리 상점  ", "4. 퀘스트 보드", "5. 휴식하기", "0. 나가기" };
+        private readonly string[] mMenuItems;
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
