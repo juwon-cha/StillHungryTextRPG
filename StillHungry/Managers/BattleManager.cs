@@ -10,11 +10,11 @@ namespace StillHungry.Managers
         public int monsterKillCount = 0;
 
         public MonsterController MonsterController = new MonsterController();
-        public bool isFighting = false;
-        public int selectedMonsterID { get; set; } = 0;
+        public bool IsFighting = false;
+        public int SelectedMonsterID { get; set; } = 0;
 
-        public int initialHP; //전투 시작 시의 플레이어 체력
-        public int totalDamageTaken = 0; //전투 중 받은 누적 피해
+        public int InitialHP; //전투 시작 시의 플레이어 체력
+        public int TotalDamageTaken = 0; //전투 중 받은 누적 피해
 
         private int mCurrentMonsterIndex; // 몬스터 인덱스
 
@@ -27,52 +27,48 @@ namespace StillHungry.Managers
             MonsterController.SpawnMonstersForBattles(); 
         }
 
-        public void startBattle() //전투 시작 시 호출될 함수
+        public void StartBattle() //전투 시작 시 호출될 함수
         {
-            isFighting = true;
-            initialHP = Manager.Instance.Game.PlayerController.HP;
-            totalDamageTaken = 0;
+            IsFighting = true;
+            InitialHP = Manager.Instance.Game.PlayerController.HP;
+            TotalDamageTaken = 0;
         }
 
         public void EndBattle(bool isVictory, int initialHP, int damageTaken, int monsterKillCount)
         {
-            
             var player = Manager.Instance.Game.PlayerController;
+            IsFighting = false;
 
             Console.Clear();
             Console.WriteLine("Battle!! - Result\n");
 
             if (isVictory)
             {
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Victory\n");
+                Console.ResetColor();
+
                 Console.WriteLine($"던전에서 몬스터 {monsterKillCount}마리를 잡았습니다.");
                 Console.WriteLine($"Lv.{player.Level} {player.Name}");
                 Console.WriteLine($"HP {initialHP} -> {player.HP}\n");
-                Console.WriteLine("0. 다음");
-                Console.Write("\n>>");
-                string input = Console.ReadLine();
 
-                if (input == "0")
-                {
-                    isFighting = false;
-                    Manager.Instance.Scene.ChangeScene(ESceneType.TOWN_SCENE);
-                }
+                Console.WriteLine("던전 입구로 돌아가려면 아무 키나 누르세요.");
+                Console.ReadKey();
+
+                Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("You Lose\n");
+                Console.ResetColor();
+
                 Console.WriteLine($"Lv.{player.Level} {player.Name}");
                 Console.WriteLine($"HP {initialHP} -> {player.HP}\n");
-                Console.WriteLine("0. 다음");
-                Console.Write("\n>>");
-                string input = Console.ReadLine();
+                Console.WriteLine("던전 입구로 돌아가려면 아무 키나 누르세요.");
+                Console.ReadKey();
 
-                if (input == "0")
-                {
-                    Console.WriteLine("\n게임 종료");
-                    Thread.Sleep(1000);
-                    Environment.Exit(0);
-                }
+                Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
             }
         }
 
@@ -120,8 +116,8 @@ namespace StillHungry.Managers
             LastAction = null;
 
             Console.WriteLine("\n모든 몬스터의 턴이 끝났습니다. 당신의 차례입니다.");
-
-            Thread.Sleep(1000); // 잠시 메시지를 보여줌
+            Console.WriteLine("계속 하려면 아무 키나 누르세요.");
+            Console.ReadKey();
 
             // 플레이어 공격 턴으로 전환
             Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);

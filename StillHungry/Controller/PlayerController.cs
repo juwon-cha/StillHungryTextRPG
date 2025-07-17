@@ -291,8 +291,8 @@ namespace StillHungry.Controller
                     battleManager.EndBattle
                         (
                         isVictory: false,
-                        initialHP: battleManager.initialHP,
-                        damageTaken: battleManager.totalDamageTaken,
+                        initialHP: battleManager.InitialHP,
+                        damageTaken: battleManager.TotalDamageTaken,
                         monsterKillCount: battleManager.monsterKillCount
                         );
                 }

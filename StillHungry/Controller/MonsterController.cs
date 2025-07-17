@@ -80,7 +80,7 @@ namespace StillHungry.Controller
             int actionChance = mRand.Next(1, 101); // 1~100
 
             // 70% 확률로 공격
-            if (actionChance <= 50)
+            if (actionChance <= 70)
             {
                 // 공격 실행 및 결과 반환
                 // 데미지는 BattleManager에서 플레이어에게 직접 적용
@@ -102,7 +102,7 @@ namespace StillHungry.Controller
             monster.CurrentHp = 0;
             Console.WriteLine($"{monster.Name}을(를) 처치했습니다!");
 
-            // TODO: 경험치 획득, 아이템 드랍 로직 추가
+            // TODO: 경험치 획득, 아이템 드랍 로직 추가?
 
             Manager.Instance.Battle.monsterKillCount++;
             bool isAllMonsterDead = true;
@@ -117,15 +117,15 @@ namespace StillHungry.Controller
             if (isAllMonsterDead)
             {
                 Console.WriteLine("모든 몬스터를 처치했습니다! 전투에서 승리했습니다!");
-
-                Thread.Sleep(1000); // 승리 메시지 후 잠시 대기
+                Console.WriteLine("결과를 보려면 아무 키나 누르세요.");
+                Console.ReadKey();
 
                 var battleManager = Manager.Instance.Battle;
                 battleManager.EndBattle
                     (
                     isVictory: true,
-                    initialHP: battleManager.initialHP,
-                    damageTaken: battleManager.totalDamageTaken,
+                    initialHP: battleManager.InitialHP,
+                    damageTaken: battleManager.TotalDamageTaken,
                     monsterKillCount: battleManager.monsterKillCount
                     );
 

@@ -618,7 +618,7 @@ namespace StillHungry.Commands
     {
         public void Execute()
         {
-            Manager.Instance.Battle.isFighting = true;
+            Manager.Instance.Battle.StartBattle(); // 전투 시작 시 세팅
             Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
         }
     }

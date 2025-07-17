@@ -529,7 +529,7 @@ namespace StillHungry.UI
             // 게임매니저의 인스턴스를 통해서 플레이어의 정보를 얻어온다
             var player = Manager.Instance.Game.PlayerController;
             Console.WriteLine($"{player.Name} 의 공격!");
-            int monsterId = Manager.Instance.Battle.selectedMonsterID;
+            int monsterId = Manager.Instance.Battle.SelectedMonsterID;
             if (Manager.Instance.Battle.MonsterController.ActiveMonsters[monsterId].CurrentHp <= 0)
             {
                 Console.WriteLine($"그만해! {Manager.Instance.Battle.MonsterController.ActiveMonsters[monsterId].Name}의 HP는 이미 0 이야!");

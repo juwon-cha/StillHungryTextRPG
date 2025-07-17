@@ -66,7 +66,7 @@ namespace StillHungry.Scene
                 if (navigator.SelectedIndex < Manager.Instance.Battle.MonsterController.ActiveMonsters.Count)
                 {
                     // 배틀매니저의 선택된몬스터 ID를 선택된 몬스터의 인덱스값으로 설정
-                    Manager.Instance.Battle.selectedMonsterID = navigator.SelectedIndex;
+                    Manager.Instance.Battle.SelectedMonsterID = navigator.SelectedIndex;
                 }
 
                 // Enter가 눌리면, 네비게이터의 현재 인덱스에 맞는 커맨드 실행
