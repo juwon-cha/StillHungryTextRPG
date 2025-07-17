@@ -32,6 +32,8 @@ namespace StillHungry.Managers
             IsFighting = true;
             InitialHP = Manager.Instance.Game.PlayerController.HP;
             TotalDamageTaken = 0;
+            monsterKillCount = 0; //전투 시작될때 다시 0으로 출력
+            mCurrentMonsterIndex = 0;
         }
 
         public void EndBattle(bool isVictory, int initialHP, int damageTaken, int monsterKillCount)
