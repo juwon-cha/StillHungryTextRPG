@@ -171,9 +171,12 @@ namespace StillHungry.Controller
             }
 
             // 아이템 장착 상태 반전
-            if (item.HasEquipped)
+            item.HasEquipped = !item.HasEquipped;
+
+            if (item.HasSold)
             {
-                item.HasEquipped = !item.HasEquipped;
+                item.HasEquipped = false;
+
             }
 
             // 모든 장비의 보너스 능력치를 다시 계산하여 플레이어에게 적용
@@ -336,7 +339,7 @@ namespace StillHungry.Controller
                 if (HP < 0)
                 {
                     HP = 0;
-
+                    // 스킬
                 }
 
                 // a

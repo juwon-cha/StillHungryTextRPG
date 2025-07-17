@@ -12,7 +12,7 @@ namespace StillHungry.Controller
         public string Name { get; protected set; }
         public virtual float Attack { get; protected set; }
         public virtual float Defense { get; protected set; }
-        public int HP { get; protected set; }
+        public int HP { get; set; }
         public int MaxHP { get; protected set; }
 
         public virtual float CriticalRate { get; protected set; } // 치명타

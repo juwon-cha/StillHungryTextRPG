@@ -618,7 +618,7 @@ namespace StillHungry.Commands
                 Item itemToEquip = player.InventoryController.ConsumableInventory.Values.ElementAt(choice - 1);
                 if (itemToEquip != null)
                 {
-                    player.EquipItem(itemToEquip);
+                    //player.EquipItem(itemToEquip);
                     Console.WriteLine($"{itemToEquip.Name}을(를) 사용했습니다.");
                     if (itemToEquip.ID >= 200 && itemToEquip.ID < 300)
                         player.UseHPRecovery((ConsumableHP)itemToEquip); // 아이템 사용 시 HP 회복
