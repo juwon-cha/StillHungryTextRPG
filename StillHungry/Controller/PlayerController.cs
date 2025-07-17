@@ -26,10 +26,12 @@ namespace StillHungry.Controller
         public int MaxMana { get; private set; } = 100;
         public float BaseCriticalChance { get; private set; } // 치명타 확률
         public float BaseEvasionChance { get; private set; } // 회피 확률
+        public float BonusEvasionChance { get; private set; }//장비,아이템으로 증가한 회피
 
         // 장비로 인한 추가 능력치
         public float BonusAttack { get; private set; }
         public float BonusDefense { get; private set; }
+        public float BonusExpRate { get; private set; } // 경험치 버프효과 배율(1.5, 2.0 등등)
 
 
         public float FoodAttack { get; private set; }
@@ -43,10 +45,13 @@ namespace StillHungry.Controller
         public override float Attack => BaseAttack + BonusAttack + FoodAttack;
         public override float Defense => BaseDefense + BonusDefense + FoodDefense;
         public float CriticalChance => BaseCriticalChance + FoodCriticalChance;
-        public float EvasionChance => BaseEvasionChance + FoodEvasionChance;
+        public float EvasionChance => BaseEvasionChance + FoodEvasionChance + BonusEvasionChance;
+
         public int CurrentMana => Mana;
         public int MaximumMana => MaxMana;
 
+        public int TotalExp { get; private set; } // 총 경험치
+        private int LevelUplExpRate; // 레벨업에 필요한 경험치
         public int Gold { get; private set; }
         public InventoryController InventoryController { get; private set; } = new InventoryController();
 
@@ -76,6 +81,7 @@ namespace StillHungry.Controller
                 MaxMana = stat.MaxMana;
                 Mana = stat.MaxMana;
 
+                TotalExp = stat.TotalExp;
             }
             else
             {
@@ -108,6 +114,7 @@ namespace StillHungry.Controller
             Gold = userData.Gold;
             BaseCriticalChance = userData.CriticalRate;
             BaseEvasionChance = userData.EvadeRate;
+            BonusEvasionChance = userData.BonusEvadeRate;
 
             // 인벤토리 초기화 후 저장 데이터 세팅
             InventoryController.ClearInventory();
@@ -342,7 +349,6 @@ namespace StillHungry.Controller
                     // 스킬
                 }
 
-                // a
                 if (HP == 0)
                 {
                     Console.WriteLine("\n전투에서 패배했습니다.");
@@ -353,8 +359,8 @@ namespace StillHungry.Controller
                     battleManager.EndBattle
                         (
                         isVictory: false,
-                        initialHP: battleManager.initialHP,
-                        damageTaken: battleManager.totalDamageTaken,
+                        initialHP: battleManager.InitialHP,
+                        damageTaken: battleManager.TotalDamageTaken,
                         monsterKillCount: battleManager.monsterKillCount
                         );
                 }
@@ -453,5 +459,53 @@ namespace StillHungry.Controller
         {
             return false;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #region 박용규 추가 메소드
+        public void SetExp(int plusValue) 
+        {
+            plusValue += plusValue * 100;   // ***** 디버그용 코드  
+            BonusExpRate = 1.0f;            // ***** 디버그용 코드
+
+            TotalExp += (int)(plusValue * BonusExpRate);
+
+            // 레벨업 요구치는 현재레벨의 제곱에서 10을 곱한값(레벨이 올라갈 수록 요구 경험치 늘어남) - **** 사양문제 *****
+            LevelUplExpRate = (Manager.Instance.Game.PlayerController.Level * 2) * 10;
+
+            // 플레이어의 현재 경험치 값이 현재 레벨에서 다음 레벨로 요구 경험치 값에 도달하면
+            if (TotalExp >= LevelUplExpRate) 
+            {
+                // 플레이어 컨트롤러의 레벨업 메소드를 실행
+                LevelUp();
+                Console.WriteLine($"\u001b[33m*경*\u001b[0m   레벨이 올랐습니다!!! \u001b[33m*축*\u001b[0m", -20);
+                Console.WriteLine($"\u001b[33m*경* {Level}\u001b[0m 레벨이 되었습니다!!! \u001b[33m*축*\u001b[0m\n", -20);
+            }
+        }
+        #endregion
     }
 }

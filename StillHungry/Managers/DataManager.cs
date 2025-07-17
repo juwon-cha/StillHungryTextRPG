@@ -19,7 +19,6 @@ namespace StillHungry.Managers
         public static Dictionary<int, QuestData> QuestDataDict { get; private set; } = new Dictionary<int, QuestData>();
         public static Dictionary<int, ItemData> ItemDict { get; private set; } = new Dictionary<int, ItemData>();
         public static Dictionary<string, DungeonData> DungeonDataDict { get; private set; } = new Dictionary<string, DungeonData>();
-        public static Dictionary<int, UserData> SaveDataDict { get; private set; } = new Dictionary<int, UserData>();
 
         // 현재 플레이 중인 유저의 데이터
         public static UserData CurrentUser { get; set; }

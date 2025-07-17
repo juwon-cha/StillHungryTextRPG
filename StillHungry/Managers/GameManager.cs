@@ -40,8 +40,10 @@ namespace StillHungry.Managers
             userData.Attack = PlayerController.BaseAttack;
             userData.Defense = PlayerController.BaseDefense;
             userData.Gold = PlayerController.Gold;
+            userData.TotalExp = PlayerController.TotalExp;
             userData.CriticalRate = PlayerController.CriticalChance;
-            userData.EvadeRate = PlayerController.EvasionChance;
+            userData.EvadeRate = PlayerController.BaseEvasionChance;
+            userData.BonusEvadeRate = PlayerController.BonusEvasionChance;//보너스 회피확률 저장
 
             // 유저가 소유하고 있는 아이템 정보(아이디, 장착여부) 저장
             var inventory = PlayerController.InventoryController.EquipInventory;

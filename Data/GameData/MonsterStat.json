@@ -7,7 +7,7 @@
         "MaxHp": 10,
         "Attack": 5,
         "Defense": 3,
-        "ExpReward": 1,
+        "ExpReward": 10,
         "GoldReward": 100
       },
       {
@@ -17,8 +17,8 @@
         "MaxHp": 20,
         "Attack": 7,
         "Defense": 4,
-        "TotalExp": 2,
-        "Gold": 300
+        "ExpReward": 30,
+        "GoldReward": 300
       },
       {
         "ID": "3",
@@ -27,8 +27,8 @@
         "MaxHp": 30,
         "Attack": 10,
         "Defense": 5,
-        "TotalExp": 5,
-        "Gold": 500
+        "ExpReward": 50,
+        "GoldReward": 500
       }
     ]
 }

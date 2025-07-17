@@ -3,6 +3,7 @@ using StillHungry.Managers;
 using StillHungry.UI;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,11 +18,11 @@ namespace StillHungry.Scene
 
         public PlayerAttackScene()
         {
-            mMenuItems.Add("0. 돌아가기");
+            mMenuItems.Add("몬스터 턴으로 넘기기");
             mNavigator = new MenuNavigator(mMenuItems.Count);
             mMenuCommands = new IExecutable[]
             {
-                new BattleStartCommand()
+                new ChangeSceneCommand(ESceneType.MONSTER_PHASE_SCENE)
             };
         }
         public override void Display()
@@ -45,5 +46,7 @@ namespace StillHungry.Scene
         protected override void Update()
         {
         }
+
+        
     }
 }

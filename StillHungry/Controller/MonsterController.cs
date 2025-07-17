@@ -26,15 +26,15 @@ namespace StillHungry.Controller
         public void SpawnMonstersForBattles()
         {
             ActiveMonsters.Clear();
+
             // 1~3마리의 몬스터를 생성
-            int numberOfMonsters = mRand.Next(1, 4); 
+            int numberOfMonsters = mRand.Next(1, 4);
 
             for (int i = 1; i <= numberOfMonsters; i++)
             {
                 // TODO: 랜덤 몬스터 스폰
                 ActiveMonsters.Add(Monster.SpawnMonster(i));
             }
-            Console.WriteLine($"\n{numberOfMonsters}마리의 몬스터가 나타났습니다!");
         }
 
         public void TakeDamage(int monsterIndex, int damage)
@@ -66,6 +66,10 @@ namespace StillHungry.Controller
             }
         }
 
+        // 몬스터 턴에서 공격 또는 방어 자세 선택
+        // 공격이면 BattleManager의 StartMonsterPhase메서드에서 플레이어 바로 공격
+        // 방어라면 방어력 올라가고 턴 종료 -> 다음 플레이어가 몬스터 공격 시 몬스터가 받는 데미지 반감
+        // 몬스터 턴이 다시 시작되면 방어 상태 초기화
         public MonsterAction DecideAndExecuteAction(Monster monster)
         {
             if (monster.IsDead) return new MonsterAction { Type = EMonsterActionType.NONE };
@@ -102,25 +106,30 @@ namespace StillHungry.Controller
             monster.CurrentHp = 0;
             Console.WriteLine($"{monster.Name}을(를) 처치했습니다!");
 
-            ActiveMonsters.Remove(monster);
-
-            // TODO: 경험치 획득, 아이템 드랍 로직 추가
+            // TODO: 경험치 획득, 아이템 드랍 로직 추가?
 
             Manager.Instance.Battle.monsterKillCount++;
-
+            bool isAllMonsterDead = true;
+            foreach (Monster m in ActiveMonsters) 
+            {
+                if (!m.IsDead) {
+                    isAllMonsterDead = false;
+                    break;
+                }
+            }
             // 모든 몬스터를 처치했는지 확인
-            if (ActiveMonsters.Count == 0)
+            if (isAllMonsterDead)
             {
                 Console.WriteLine("모든 몬스터를 처치했습니다! 전투에서 승리했습니다!");
-
-                Thread.Sleep(1000); // 승리 메시지 후 잠시 대기
+                Console.WriteLine("결과를 보려면 아무 키나 누르세요.");
+                Console.ReadKey();
 
                 var battleManager = Manager.Instance.Battle;
                 battleManager.EndBattle
                     (
                     isVictory: true,
-                    initialHP: battleManager.initialHP,
-                    damageTaken: battleManager.totalDamageTaken,
+                    initialHP: battleManager.InitialHP,
+                    damageTaken: battleManager.TotalDamageTaken,
                     monsterKillCount: battleManager.monsterKillCount
                     );
 
