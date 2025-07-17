@@ -20,7 +20,7 @@ namespace StillHungry.Scene
                 new ChangeSceneCommand(ESceneType.STORE_SCENE),
                 new ChangeSceneCommand(ESceneType.CONSUMABLE_STORE_SCENE),
                 new BuyFoodCommand(RequestRedraw), // 이거 요리 상점
-                new BuyConsumableCommand(RequestRedraw), // 이거 퀘스트
+                new ChangeSceneCommand(ESceneType.QUEST_SCENE),
                 new ChangeSceneCommand(ESceneType.CAMPSITE_SCENE),
                 new ChangeSceneCommand(ESceneType.TOWN_SCENE),
                 

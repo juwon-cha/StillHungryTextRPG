@@ -1,7 +1,9 @@
 using StillHungry.Controller;
+using StillHungry.Data;
 using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Scene;
+using StillHungry.UI;
 using StillHungry.Utils;
 
 namespace StillHungry.Commands
@@ -136,6 +138,8 @@ namespace StillHungry.Commands
         }
     }
     #endregion
+
+
 
     #region 캐릭터 설정
     public class InputNameCommand : IExecutable
@@ -499,6 +503,7 @@ namespace StillHungry.Commands
         public BuyFoodCommand(Action requestRedrawCallback)
         {
             mRequestRedrawCallback = requestRedrawCallback;
+            
         }
 
 
@@ -511,6 +516,7 @@ namespace StillHungry.Commands
             Console.WriteLine("해금된 요리를 구매하실 수 있습니다.\n");
             Console.WriteLine("[보유 골드]");
             Console.WriteLine($"{Manager.Instance.Game.PlayerController.Gold} G\n");
+
 
             Manager.Instance.UI.PrintFoodItemList(Manager.Instance.Item.FoodItems);
 
@@ -590,6 +596,54 @@ namespace StillHungry.Commands
         }
     }
     #endregion
+ 
+
+
+    public class QuestSceneCommand : IExecutable
+    {
+        private readonly Action mRequestRedrawCallback;
+        private readonly QuestData focusQuest;
+
+        public QuestSceneCommand(Action requestRedrawCallback, int key)
+        {
+            mRequestRedrawCallback = requestRedrawCallback;
+            focusQuest = DataManager.QuestDataDict[key];
+        }
+
+
+        public void Execute()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"퀘스트 - {focusQuest.Name}");
+            Console.ResetColor();
+
+            Console.WriteLine("\n" + focusQuest.Speech);
+            Console.WriteLine();
+            Console.WriteLine("목표");
+            Console.WriteLine($"{focusQuest.Target} {(true ? 0 : 1)} / {focusQuest.Detail}");
+
+            Console.Write("\n1. 수락하기\n2. 거절하기 ");
+            Console.Write("\n번호를 입력해주세요 >> ");
+            string input = Console.ReadLine();
+            if (int.TryParse(input, out int choice) && choice == 1)
+            {
+                Console.WriteLine($"고맙네 역시 자네 뿐이야.");
+            }
+            else if (choice == 2)
+            {
+                Console.WriteLine("생각이 바뀌면 다시 찾아오게.");
+            }
+            else
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+            }
+
+            Thread.Sleep(1000);
+            mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
+        }
+    }
+
     //소모품 창고
     public class ConsumableManageCommand : IExecutable
     {

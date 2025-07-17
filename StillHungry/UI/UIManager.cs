@@ -24,6 +24,7 @@ namespace StillHungry.UI
             Console.WriteLine(@"| |_| | |_| | | | | (_| |  __/ (_) | | | |");
             Console.WriteLine(@"|____/ \__,_|_| |_|\__, |\___|\___/|_| |_|");
             Console.WriteLine(@"                   |___/                  ");
+
             Console.ResetColor();
             DisplayOptions(menuOptions, selectedIndex);
         }
@@ -219,7 +220,7 @@ namespace StillHungry.UI
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.\n");
             DisplayOptions(menuOptions, selectedIndex);
         }
-
+        
         public void PrintStoreItemList(Dictionary<int, Item> items)
         {
             Console.WriteLine("[아이템 목록]");
@@ -377,6 +378,19 @@ namespace StillHungry.UI
                 Console.WriteLine($"{countStr}{nameStr} | {statStr} | {descStr} | {priceDisplay}");
                 count++;
             }
+        }
+        #endregion
+
+        #region 퀘스트 
+        public void QuestScreen(string[] menuOptions, int selectedIndex)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("길드 - 퀘스트");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine("\"아, 자네구먼! 오늘도 변함없네.\n이렇게 매일 보니 참 반갑기 그지없다네.\n일도 무탈하게 잘 하고 있지? 힘들 땐 언제든 말하라고.\n여기 길드가 자네의 든든한 집이니까 말일세.\"\n");
+
+            DisplayOptions(menuOptions, selectedIndex);
         }
         #endregion
 

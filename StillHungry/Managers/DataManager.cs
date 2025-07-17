@@ -16,6 +16,7 @@ namespace StillHungry.Managers
         // json 데이터를 담고있는 딕셔너리는 프로그램 전역에서 접근 가능
         public static Dictionary<EClassType, PlayerStat> PlayerStatDict { get; private set; } = new Dictionary<EClassType, PlayerStat>();
         public static Dictionary<int, MonsterStat> MonsterStatDict { get; private set; } = new Dictionary<int, MonsterStat>();
+        public static Dictionary<int, QuestData> QuestDataDict { get; private set; } = new Dictionary<int, QuestData>();
         public static Dictionary<int, ItemData> ItemDict { get; private set; } = new Dictionary<int, ItemData>();
         public static Dictionary<string, DungeonData> DungeonDataDict { get; private set; } = new Dictionary<string, DungeonData>();
         public static Dictionary<int, UserData> SaveDataDict { get; private set; } = new Dictionary<int, UserData>();
@@ -81,6 +82,7 @@ namespace StillHungry.Managers
         {
             PlayerStatDict = LoadJson<PlayerStatLoader, EClassType, PlayerStat>("GameData/PlayerStat").MakeData();
             MonsterStatDict = LoadJson<MonsterStatLoader, int, MonsterStat>("GameData/MonsterStat").MakeData();
+            QuestDataDict = LoadJson<QuestDataLoader, int, QuestData>("GameData/QuestData").MakeData();
             ItemDict = LoadJson<ItemLoader, int, ItemData>("GameData/ItemData").MakeData();
             DungeonDataDict = LoadJson<DungeonDataLoader, string, DungeonData>("GameData/DungeonData").MakeData();
         }
