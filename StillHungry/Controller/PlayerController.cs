@@ -42,6 +42,7 @@ namespace StillHungry.Controller
         public int CurrentMana => Mana;
         public int MaximumMana => MaxMana;
 
+        public int TotalExp { get; private set; } // 총 경험치
         public int Gold { get; private set; }
         public InventoryController InventoryController { get; private set; } = new InventoryController();
 
@@ -65,7 +66,7 @@ namespace StillHungry.Controller
                 Mana = stat.MaxMana;
                 MaxMana = stat.MaxMana;
                 Mana = stat.MaxMana;
-                
+                TotalExp = stat.TotalExp;
             }
             else
             {

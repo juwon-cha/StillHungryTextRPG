@@ -12,6 +12,8 @@ namespace StillHungry.Monsters
         public int CurrentHp { get; set; }
         public float AttackPower { get; set; }
         public float DefensePower { get; set; }
+        public int ExpReward { get; set; } // 몬스터 처치 시 주는 경험치
+        public int GoldReward { get; set; } // 몬스터 처치 시 주는 경험치
         public bool IsDefending { get; set; } = false;
         public bool IsDead { get; set; }
 
@@ -32,6 +34,8 @@ namespace StillHungry.Monsters
                 CurrentHp = MaxHp; // 초기 체력은 최대 체력으로 설정
                 AttackPower = monsterData.Attack;
                 DefensePower = monsterData.Defense;
+                ExpReward = monsterData.ExpReward;
+                GoldReward = monsterData.GoldReward;
             }
             else
             {
