@@ -338,16 +338,21 @@ namespace StillHungry.Controller
         }
 
 
-        public void TakeDamage(int damage)
+        public bool TakeDamage(int damage)
         {
+            Random rand = new Random();
+            float roll = (float)rand.NextDouble();
+
+            if (roll < EvasionChance)
+            {
+                return true; // 회피 성공
+            }
+
             if (damage > 0)
             {
                 HP -= damage;
-                if (HP < 0)
-                {
-                    HP = 0;
-                    // 스킬
-                }
+                if (HP < 0) HP = 0;
+                
 
                 if (HP == 0)
                 {
@@ -365,6 +370,7 @@ namespace StillHungry.Controller
                         );
                 }
             }
+            return false;  // 데미지 적용
         }
 
 

@@ -49,7 +49,7 @@ namespace StillHungry.Managers
                 Console.WriteLine("Victory\n");
                 Console.ResetColor();
 
-                Console.WriteLine($"던전에서 몬스터 {monsterKillCount}마리를 잡았습니다.");
+                Console.WriteLine($"던전에서 몬스터 {monsterKillCount}마리를 잡았습니다.\n");
                 Console.WriteLine($"Lv.{player.Level} {player.Name}");
                 Console.WriteLine($"HP {initialHP} -> {player.HP}\n");
                 
@@ -92,7 +92,13 @@ namespace StillHungry.Managers
                     // 행동 결과에 따라 플레이어에게 데미지 적용
                     if (LastAction.Type == EMonsterActionType.ATTACK)
                     {
-                        Manager.Instance.Game.PlayerController.TakeDamage(LastAction.Value);
+                        //Manager.Instance.Game.PlayerController.TakeDamage(LastAction.Value);
+                        bool evaded = Manager.Instance.Game.PlayerController.TakeDamage(LastAction.Value);
+
+                        if (!evaded) //회피 빼고 누적 피해량 증가
+                        {
+                            TotalDamageTaken += LastAction.Value;
+                        }
                     }
 
                     // 씬 갱신
@@ -148,7 +154,7 @@ namespace StillHungry.Managers
             if (isCritical)
             {
                 finalDamage *= 2.0f; //치명타 데미지 2배
-                Console.WriteLine("급소에 맞췄습니다. 데미지 2배!");
+                Console.WriteLine("급소를 맞췄습니다. 데미지 2배!");
             }
             //몬스터에게 데미지 적용
             Manager.Instance.Battle.MonsterController.TakeDamage(monsterId, (int)finalDamage, isCritical);
