@@ -32,6 +32,8 @@ namespace StillHungry.Managers
             IsFighting = true;
             InitialHP = Manager.Instance.Game.PlayerController.HP;
             TotalDamageTaken = 0;
+            monsterKillCount = 0; //전투 시작될때 다시 0으로 출력
+            mCurrentMonsterIndex = 0;
         }
 
         public void EndBattle(bool isVictory, int initialHP, int damageTaken, int monsterKillCount)
@@ -91,16 +93,26 @@ namespace StillHungry.Managers
                     // 행동 결과에 따라 플레이어에게 데미지 적용
                     if (LastAction.Type == EMonsterActionType.ATTACK)
                     {
-                        Manager.Instance.Game.PlayerController.TakeDamage(LastAction.Value);
-                    }
+                        var player = Manager.Instance.Game.PlayerController;
+                        Random rand = new Random();
 
-                    // 씬 갱신
-                    if (Manager.Instance.Scene.CurrentScene is MonsterPhaseScene scene)
-                    {
-                        scene.RequestRedraw();
-                    }
+                        if (rand.NextDouble() < player.EvasionChance)
+                        {
+                            Console.WriteLine("공격을 회피했습니다!");
+                        }
+                        else
+                        {
+                            player.TakeDamage(LastAction.Value);
+                            Console.WriteLine($"{LastAction.Value}의 피해를 입었습니다!");
+                        }
+                        // 씬 갱신
+                        if (Manager.Instance.Scene.CurrentScene is MonsterPhaseScene scene)
+                        {
+                            scene.RequestRedraw();
+                        }
 
-                    return; // 한 몬스터의 행동 후 정지
+                        return; // 한 몬스터의 행동 후 정지
+                    }
                 }
             }
 
