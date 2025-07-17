@@ -37,7 +37,7 @@ namespace StillHungry.Controller
             }
         }
 
-        public void TakeDamage(int monsterIndex, int damage)
+        public void TakeDamage(int monsterIndex, int damage, bool isCritical)
         {
             if (monsterIndex < 0 || monsterIndex >= ActiveMonsters.Count)
             {
@@ -58,7 +58,14 @@ namespace StillHungry.Controller
 
             targetMonster.CurrentHp -= finalDamage;
 
-            Console.WriteLine($"{targetMonster.Name}에게 {finalDamage}의 데미지를 입혔습니다!");
+            if(isCritical)
+            {
+                Console.WriteLine($"{targetMonster.Name}에게 급소로 {finalDamage}의 데미지를 입혔습니다!");
+            }
+            else
+            {
+                Console.WriteLine($"{targetMonster.Name}에게 {finalDamage}의 데미지를 입혔습니다!");
+            }
 
             if (targetMonster.CurrentHp <= 0)
             {

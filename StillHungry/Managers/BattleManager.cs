@@ -125,17 +125,33 @@ namespace StillHungry.Managers
         }
 
         // 필요 없으면 나중에 삭제
-        public void MonsterAttack(int monsterID, int damage) 
+       /* public void MonsterAttack(int monsterID, int damage) 
         {
             MonsterController.TakeDamage(monsterID, damage);
         }
+       */
 
         #region 박용규 추가 메소드
         // 몬스터에게 데미지를 주는 메소드
         public void AttackEnemy(int monsterId) 
         {
-            // 몬스터 컨트롤러에 정의 되어있는 TakeDamage를 그대로 재사용
-            Manager.Instance.Battle.MonsterController.TakeDamage(monsterId, (int)Manager.Instance.Game.PlayerController.Attack);
+            var player = Manager.Instance.Game.PlayerController;
+         
+            float baseDamage = player.Attack;
+            float criticalChance = player.CriticalChance;
+            float finalDamage = baseDamage;
+
+            Random random = new Random(); //랜덤값 생성
+            float roll = (float)random.NextDouble();
+
+            bool isCritical = roll < criticalChance;
+            if (isCritical)
+            {
+                finalDamage *= 2.0f; //치명타 데미지 2배
+                Console.WriteLine("급소에 맞췄습니다. 데미지 2배!");
+            }
+            //몬스터에게 데미지 적용
+            Manager.Instance.Battle.MonsterController.TakeDamage(monsterId, (int)finalDamage, isCritical);
         }
         // 플레이어의 경험치 획득 처리 메소드
         public void GetPlayerExp()
