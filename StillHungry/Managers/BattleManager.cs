@@ -127,5 +127,24 @@ namespace StillHungry.Managers
         {
             MonsterController.TakeDamage(monsterID, damage);
         }
+
+
+        #region 박용규 추가 메소드
+        // 몬스터에게 데미지를 주는 메소드
+        public void AttackEnemy(int monsterId) 
+        {
+            // 몬스터 컨트롤러에 정의 되어있는 TakeDamage를 그대로 재사용
+            Manager.Instance.Battle.MonsterController.TakeDamage(monsterId, (int)Manager.Instance.Game.PlayerController.Attack);
+        }
+        // 플레이어의 경험치 획득 처리 메소드
+        public void GetPlayerExp()
+        {
+            // 몬스터별 획득 경험치를 불러와서 합산
+            // 플레이어의 경험치 버프상황 불러와서
+            // 플레이어의 현재 경험치에 몬스터별 획득 경험치의 합에 경험치 버프를 곱해서 +대입
+            // 플레이어의 현재 경험치 값이 현재 레벨에서 다음 레벨로 요구 경험치 값에 도달하면
+            // 플레이어 컨트롤러의 레벨업 메소드를 실행
+        }
+        #endregion
     }
 }

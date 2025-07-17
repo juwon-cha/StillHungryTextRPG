@@ -534,7 +534,10 @@ namespace StillHungry.UI
             {
                 Console.WriteLine($"그만해! {Manager.Instance.Battle.MonsterController.ActiveMonsters[monsterId].Name}의 HP는 이미 0 이야!");
             }
-            Manager.Instance.Battle.MonsterController.TakeDamage(monsterId, (int)Manager.Instance.Game.PlayerController.Attack);
+            else 
+            {
+                Manager.Instance.Battle.AttackEnemy(monsterId);
+            }
             Console.WriteLine($"");
             DisplayOptions(menuOptions, selectedIndex);
         }

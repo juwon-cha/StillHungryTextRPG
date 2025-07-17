@@ -14,7 +14,7 @@ namespace StillHungry.Scene
     internal class BattleScene : BaseScene
     {
         private readonly string[] mMenuItems = { 
-            "1. 공격", "0. 도망가기" };
+            "싸우다", "스킬", "아이템", "던전 나가기" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
@@ -23,6 +23,8 @@ namespace StillHungry.Scene
             mNavigator = new MenuNavigator(mMenuItems.Length);
             mMenuCommands = new IExecutable[]
             {
+                new BattleStartCommand(),
+                new BattleStartCommand(),
                 new BattleStartCommand(),
                 new ChangeSceneCommand(ESceneType.DUNGEON_SCENE),
             };
