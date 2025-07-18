@@ -12,7 +12,7 @@ namespace StillHungry.Scene
 {
     internal class QuestScene : BaseScene
     {
-        private readonly string[] mMenuItems;// = { "1. 깃털 없는 불청객", "2. 움직이는 채소를 잡아라!", "3. 요리 상점  ", "4. 퀘스트 보드", "5. 휴식하기", "0. 나가기" };
+        private readonly string[] mMenuItems;
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
@@ -31,9 +31,9 @@ namespace StillHungry.Scene
             mMenuCommands = new IExecutable[mMenuItems.Length];
             for(int j = 0; j < mMenuItems.Length - 1; j++)
             {
-                mMenuCommands[j] = new QuestSceneCommand(RequestRedraw, i);
+                mMenuCommands[j] = new QuestSceneCommand(RequestRedraw, j+1);
             }
-            mMenuCommands[mMenuCommands.Length - 1] = new ChangeSceneCommand(ESceneType.TOWN_SCENE);
+            mMenuCommands[mMenuCommands.Length - 1] = new ChangeSceneCommand(ESceneType.GUILD_SCENE);
             
         }
         public override void Display()

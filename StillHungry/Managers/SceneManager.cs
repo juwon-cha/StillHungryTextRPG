@@ -21,6 +21,7 @@ namespace StillHungry.Managers
         PLAYER_ATTACK_SCENE,
         QUEST_SCENE,
         SKILL_SELECT_SCENE,
+        VOID_SCENE
     }
 
     class SceneManager
@@ -52,6 +53,7 @@ namespace StillHungry.Managers
             mSceneDict.Add(ESceneType.PLAYER_ATTACK_SCENE, new PlayerAttackScene());
             mSceneDict.Add(ESceneType.QUEST_SCENE, new QuestScene());
             mSceneDict.Add(ESceneType.SKILL_SELECT_SCENE, new SkillSelectScene());
+            //mSceneDict.Add(ESceneType.VOID_SCENE, new VoidScene());
 
             // 타이틀 씬으로 초기화
             CurrentScene = mSceneDict[ESceneType.TITLE_SCENE];
@@ -62,6 +64,7 @@ namespace StillHungry.Managers
         {
             if (CurrentScene != null)
             {
+                Manager.Instance.Game.PlayerController.UpdateActiveQuestProgress();
                 CurrentScene.Display();
             }
         }

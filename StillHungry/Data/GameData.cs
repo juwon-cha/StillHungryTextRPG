@@ -195,26 +195,30 @@ namespace StillHungry.Data
     #endregion
 
     #region 퀘스트
-    public struct QuestData
+    public class QuestData
     {
         public int ID;
         public string Name;
         public string Speech;
+        public string Clear;
         public string Target;
         public int Detail;
         public int PayID;
+        public bool isAchievement = false; // 목표 달성 여부
+        public bool isClear = false; // 퀘스트 완료 여부
     }
 
     public class QuestDataLoader : ILoader<int, QuestData>
     {
         public List<QuestData> Quest = new List<QuestData>();
-
+        
         public Dictionary<int, QuestData> MakeData()
         {
             Dictionary<int, QuestData> dict = new Dictionary<int, QuestData>();
 
             foreach (QuestData quest in Quest)
             {
+                
                 dict.Add(quest.ID, quest);
             }
 

@@ -28,7 +28,7 @@ namespace StillHungry.Controller
         public int MaxMana { get; private set; } = 100;
         public float BaseCriticalChance { get; private set; } // 치명타 확률
         public float BaseEvasionChance { get; private set; } // 회피 확률
-       
+
 
         // 장비로 인한 추가 능력치
         public float BonusAttack { get; private set; }
@@ -59,11 +59,16 @@ namespace StillHungry.Controller
 
         public Food? EatFood { get; set; } = null;// 플레이어가 먹을 음식
 
-        // 보유 스킬
         public List<Skill> ActiveSkills = new List<Skill>();
+        public QuestData? LiveQuest { get; set; } = null; // 현재 진행 중인 퀘스트 데이터
+        public int currentQuestKillCount { get; private set; } = 0; // 현재 퀘스트에서 처치한 몬스터 수
 
         // 던전 종료 후 음식 삭제
-        // EatFood = null;  RecalculateFoodStats();
+        // EatFood = null;  Manager.Instance.Game.PlayerController.RecalculateFoodStats();
+
+        // 몬스터 죽었을 때
+        // Manager.Instance.Game.PlayerController.QuestKillCountUp(몬스터 이름)
+
 
         // 새 게임 시작할 때 플레이어 데이터 설정
         public virtual void Init(string name, EClassType classType)
@@ -161,7 +166,7 @@ namespace StillHungry.Controller
             Gold = userData.Gold;
             BaseCriticalChance = userData.CriticalRate;
             BaseEvasionChance = userData.EvadeRate;
-            
+
 
             // 인벤토리 초기화 후 저장 데이터 세팅
             InventoryController.ClearInventory();
@@ -272,7 +277,7 @@ namespace StillHungry.Controller
             // 경험치 추가
 
 
-            if(EatFood != null)
+            if (EatFood != null)
             {
                 FoodAttack = EatFood.Damage;
                 FoodDefense = EatFood.Defense;
@@ -283,7 +288,7 @@ namespace StillHungry.Controller
         }
 
 
-        public EPurchaseResult BuyItem(Item item)
+        public EPurchaseResult BuyItem(Item item, int itemNum = 1)
         {
             if (item == null)
             {
@@ -291,7 +296,7 @@ namespace StillHungry.Controller
             }
 
             //골드 부족
-            if (Gold < item.Price)
+            if (Gold < item.Price * itemNum)
             {
                 return EPurchaseResult.NOT_ENOUGH_GOLD;
             }
@@ -303,10 +308,14 @@ namespace StillHungry.Controller
             }
 
             // 플레이어 골드 소비
-            Gold -= item.Price;
+            Gold -= item.Price * itemNum;
 
-            // 인벤토리에 아이템 추가
-            InventoryController.AddItem(item);
+            for(int i = 0; i < itemNum; i++)
+            {
+                // 인벤토리에 아이템 추가
+                InventoryController.AddItem(item);
+            }
+
 
             item.HasPurchased = true;
             item.HasSold = false;
@@ -399,7 +408,7 @@ namespace StillHungry.Controller
             {
                 HP -= damage;
                 if (HP < 0) HP = 0;
-                
+
 
                 if (HP == 0)
                 {
@@ -592,10 +601,58 @@ namespace StillHungry.Controller
             return false;
         }
 
+        #region 퀘스트
+        // 활성된 퀘스트 진행 상황
+        public void UpdateActiveQuestProgress()
+        {
+            if (LiveQuest != null)
+            {
+                int width = Console.WindowWidth - 30;
+                int height = 2;
+                Console.SetCursorPosition(width, height++);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Quset!!");
+                Console.ResetColor();
+
+                if (currentQuestKillCount >= LiveQuest.Detail)
+                {
+                    LiveQuest.isAchievement = true;
+                }
+
+                string str;
+                Console.SetCursorPosition(width, height++);
+
+                if (LiveQuest.isAchievement)
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("Mission complete!!");
+                    Console.ResetColor();
+                    currentQuestKillCount = 0;
+                }
+                else
+                {
+                    Console.WriteLine($"{LiveQuest.Name}");
+                    Console.SetCursorPosition(width, height++);
+                    Console.WriteLine($"{LiveQuest.Target}  {currentQuestKillCount} / {LiveQuest.Detail}");
+                }
+            }
+        }
+        // 몬스터가 죽었을 때 퀘스트 카운트 증가
+        public void QuestKillCountUp(string name)
+        {
+            if(LiveQuest == null)
+            {
+                return; // 활성화된 퀘스트가 없으면 아무것도 하지 않음
+            }
 
 
+            if (name == LiveQuest.Target && !LiveQuest.isAchievement)
+            {
+                currentQuestKillCount++;
+            }
+        }
 
-
+        #endregion
 
 
 
@@ -619,7 +676,7 @@ namespace StillHungry.Controller
 
 
         #region 박용규 추가 메소드
-        public void SetExp(int plusValue) 
+        public void SetExp(int plusValue)
         {
             plusValue += plusValue * 100;   // ***** 디버그용 코드  
             BonusExpRate = 1.0f;            // ***** 디버그용 코드
@@ -630,7 +687,7 @@ namespace StillHungry.Controller
             LevelUplExpRate = (Manager.Instance.Game.PlayerController.Level * 2) * 10;
 
             // 플레이어의 현재 경험치 값이 현재 레벨에서 다음 레벨로 요구 경험치 값에 도달하면
-            if (TotalExp >= LevelUplExpRate) 
+            if (TotalExp >= LevelUplExpRate)
             {
                 // 플레이어 컨트롤러의 레벨업 메소드를 실행
                 LevelUp();
