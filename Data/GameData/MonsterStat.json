@@ -1,34 +1,134 @@
 {
     "MonsterStats": [
-      {
-        "ID": "1",
-        "Level": "1",
-        "Name": "슬라임",
-        "MaxHp": 10,
-        "Attack": 5,
-        "Defense": 3,
-        "ExpReward": 10,
-        "GoldReward": 100
-      },
-      {
-        "ID": "2",
-        "Level": "2",
-        "Name": "고블린",
-        "MaxHp": 20,
-        "Attack": 7,
-        "Defense": 4,
-        "ExpReward": 30,
-        "GoldReward": 300
-      },
-      {
-        "ID": "3",
-        "Level": "3",
-        "Name": "미믹",
-        "MaxHp": 30,
-        "Attack": 10,
-        "Defense": 5,
-        "ExpReward": 50,
-        "GoldReward": 500
-      }
+        {
+            "ID": "1",
+            "Level": "1",
+            "Name": "박쥐",
+            "MaxHp": 10,
+            "Attack": 5,
+            "Defense": 3,
+            "ExpReward": 10,
+            "GoldReward": 100
+        },
+        {
+            "ID": "2",
+            "Level": "2",
+            "Name": "슬라임",
+            "MaxHp": 20,
+            "Attack": 7,
+            "Defense": 4,
+            "ExpReward": 20,
+            "GoldReward": 200
+        },
+        {
+            "ID": "3",
+            "Level": "3",
+            "Name": "미믹",
+            "MaxHp": 30,
+            "Attack": 10,
+            "Defense": 5,
+            "ExpReward": 30,
+            "GoldReward": 300
+        },
+        {
+            "ID": "4",
+            "Level": "4",
+            "Name": "풀푸푸",
+            "MaxHp": 40,
+            "Attack": 15,
+            "Defense": 13,
+            "ExpReward": 40,
+            "GoldReward": 400
+        },
+        {
+            "ID": "5",
+            "Level": "5",
+            "Name": "꽃벌",
+            "MaxHp": 50,
+            "Attack": 17,
+            "Defense": 14,
+            "ExpReward": 50,
+            "GoldReward": 500
+        },
+        {
+            "ID": "6",
+            "Level": "6",
+            "Name": "나무지기",
+            "MaxHp": 60,
+            "Attack": 20,
+            "Defense": 15,
+            "ExpReward": 60,
+            "GoldReward": 600
+        },
+        {
+            "ID": "7",
+            "Level": "7",
+            "Name": "스톤골렘",
+            "MaxHp": 70,
+            "Attack": 25,
+            "Defense": 23,
+            "ExpReward": 70,
+            "GoldReward": 700
+        },
+        {
+            "ID": "8",
+            "Level": "8",
+            "Name": "바위새",
+            "MaxHp": 80,
+            "Attack": 27,
+            "Defense": 24,
+            "ExpReward": 80,
+            "GoldReward": 800
+        },
+        {
+            "ID": "9",
+            "Level": "9",
+            "Name": "딱딱이",
+            "MaxHp": 90,
+            "Attack": 30,
+            "Defense": 25,
+            "ExpReward": 90,
+            "GoldReward": 900
+        },
+        {
+            "ID": "10",
+            "Level": "10",
+            "Name": "베이비피닉스",
+            "MaxHp": 100,
+            "Attack": 35,
+            "Defense": 33,
+            "ExpReward": 100,
+            "GoldReward": 1000
+        },
+        {
+            "ID": "11",
+            "Level": "11",
+            "Name": "용암슬라임",
+            "MaxHp": 110,
+            "Attack": 37,
+            "Defense": 34,
+            "ExpReward": 110,
+            "GoldReward": 1100
+        },
+        {
+            "ID": "12",
+            "Level": "12",
+            "Name": "용암기사",
+            "MaxHp": 120,
+            "Attack": 40,
+            "Defense": 35,
+            "ExpReward": 120,
+            "GoldReward": 1200
+        },
+        {
+            "ID": "100",
+            "Level": "99",
+            "Name": "레드드래곤",
+            "MaxHp": 9999,
+            "Attack": 999,
+            "Defense": 999,
+            "ExpReward": 9999,
+            "GoldReward": 99999
+        }
     ]
 }
