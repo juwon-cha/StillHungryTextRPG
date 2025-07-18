@@ -232,7 +232,7 @@ namespace StillHungry.Commands
 
                 Console.WriteLine($"\n{name}({className})님, 스파르타 마을로 여정을 시작합니다!");
                 Thread.Sleep(2000);
-                Manager.Instance.Scene.ChangeScene(ESceneType.TOWN_SCENE);
+                Manager.Instance.Scene.ChangeScene(ESceneType.STORY_SCENE);
             }
             else if (choice == "2")
             {
@@ -807,7 +807,12 @@ namespace StillHungry.Commands
         }
         public void Execute()
         {
+
             Manager.Instance.Battle.StartBattle(mDungeonLevel); // 전투 시작 시 세팅
+
+            // TODO: 던전레벨에 따라 전투 시작 세팅
+           // Manager.Instance.Battle.StartBattle(EDungeonLevel.EASY);
+
             Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
         }
     }
@@ -823,7 +828,14 @@ namespace StillHungry.Commands
 
         public void Execute()
         {
-            Manager.Instance.Battle.AttackMonster(mSelectedIndex);
+            Monster monster = Manager.Instance.Battle.MonsterController.GetMonsterFromList(mSelectedIndex);
+            Manager.Instance.Battle.AttackMonster(monster);
+            if(!Manager.Instance.Battle.IsFighting)
+            {
+                // 전투 종료 후 던전 입구로 돌아가기
+                Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
+                return;
+            }
 
             Manager.Instance.Scene.ChangeScene(ESceneType.PLAYER_ATTACK_SCENE);
         }
@@ -872,6 +884,7 @@ namespace StillHungry.Commands
             else // 단일 공격
             {
                 // 몬스터 공격 선택 씬으로 전환해서 단일 스킬 적용 몬스터 선택
+
                 scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
             }
         }
