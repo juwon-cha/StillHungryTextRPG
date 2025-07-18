@@ -1,15 +1,64 @@
 {
   "UserData": [
     {
+      "SlotID": 2,
+      "ClassType": "THIEF",
+      "Level": 1,
+      "Name": "cc",
+      "HP": 100,
+      "MaxHP": 100,
+      "Mana": 100,
+      "MaxMana": 100,
+      "Attack": 9.0,
+      "Defense": 7.0,
+      "Gold": 1500,
+      "TotalExp": 0,
+      "CriticalRate": 0.3,
+      "EvadeRate": 0.4,
+      "Items": null
+    },
+    {
+      "SlotID": 3,
+      "ClassType": "THIEF",
+      "Level": 1,
+      "Name": "cc",
+      "HP": 100,
+      "MaxHP": 100,
+      "Mana": 100,
+      "MaxMana": 100,
+      "Attack": 9.0,
+      "Defense": 7.0,
+      "Gold": 1500,
+      "TotalExp": 0,
+      "CriticalRate": 0.3,
+      "EvadeRate": 0.4,
+      "Items": null
+    },
+    {
       "SlotID": 1,
       "ClassType": "ARCHER",
       "Level": 1,
-      "Name": "chacha",
+      "Name": "dragonk",
       "HP": 100,
+      "MaxHP": 100,
+      "Mana": 100,
+      "MaxMana": 100,
       "Attack": 12.0,
       "Defense": 3.0,
-      "Gold": 1500,
-      "Items": null
+      "Gold": 1300,
+      "TotalExp": 10,
+      "CriticalRate": 0.25,
+      "EvadeRate": 0.45,
+      "Items": [
+        {
+          "ID": 3,
+          "HasEquipped": true
+        },
+        {
+          "ID": 102,
+          "HasEquipped": true
+        }
+      ]
     }
   ]
 }

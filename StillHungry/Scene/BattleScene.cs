@@ -1,29 +1,34 @@
 using StillHungry.Commands;
+using StillHungry.Controller;
 using StillHungry.Managers;
 using StillHungry.UI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static StillHungry.Scene.CharacterSettingScene;
 
 namespace StillHungry.Scene
 {
-    public class TownScene : BaseScene
+    internal class BattleScene : BaseScene
     {
-        private readonly string[] mMenuItems = { "1. 상태 보기", "2. 인벤토리", "3. 길드", "4. 던전 입장","5. 저장하기", "0. 게임 종료" };
+        private readonly string[] mMenuItems = { 
+            "싸우다", "스킬", "아이템", "던전 나가기" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
-        public TownScene()
+        public BattleScene()
         {
             mNavigator = new MenuNavigator(mMenuItems.Length);
             mMenuCommands = new IExecutable[]
             {
-                new ChangeSceneCommand(ESceneType.STATUS_SCENE),
-                new ChangeSceneCommand(ESceneType.INVENTORY_SCENE),
-                new ChangeSceneCommand(ESceneType.GUILD_SCENE),
+                new BattleStartCommand(),
+                new BattleStartCommand(),
+                new ConsumableManageCommand(RequestRedraw),
                 new ChangeSceneCommand(ESceneType.DUNGEON_SCENE),
-                new SaveGameCommand(),
-                new ExitGameCommand()
             };
         }
-
         public override void Display()
         {
             Update();
@@ -37,9 +42,8 @@ namespace StillHungry.Scene
             {
                 return;
             }
-
             Console.Clear();
-            Manager.Instance.UI.ShowTownScreen(mMenuItems, mNavigator.SelectedIndex);
+            Manager.Instance.UI.ShowBattleScreen(mMenuItems, mNavigator.SelectedIndex);
             bNeedsRedraw = false;
         }
 

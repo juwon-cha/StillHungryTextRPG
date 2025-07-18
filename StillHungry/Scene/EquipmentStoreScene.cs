@@ -18,20 +18,20 @@ namespace StillHungry.Scene
         NOT_IN_INVENTORY
     }
 
-    public class StoreScene : BaseScene
+    public class EquipmentStoreScene : BaseScene
     {
         private readonly string[] mMenuItems = { "1. 아이템 구매", "2. 아이템 판매", "0. 나가기" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
-        public StoreScene()
+        public EquipmentStoreScene()
         {
             mNavigator = new MenuNavigator(mMenuItems.Length);
             mMenuCommands = new IExecutable[]
             {
-                new BuyItemCommand(RequestRedraw),
+                new BuyEquipmentCommand(RequestRedraw),
                 new SellItemCommand(RequestRedraw),
-                new ChangeSceneCommand(ESceneType.TOWN_SCENE)
+                new ChangeSceneCommand(ESceneType.GUILD_SCENE)
             };
         }
 
@@ -50,7 +50,7 @@ namespace StillHungry.Scene
             }
 
             Console.Clear();
-            Manager.Instance.UI.ShowStoreScreen(mMenuItems, mNavigator.SelectedIndex);
+            Manager.Instance.UI.EquipmentStoreScreen(mMenuItems, mNavigator.SelectedIndex);
             bNeedsRedraw = false;
         }
 

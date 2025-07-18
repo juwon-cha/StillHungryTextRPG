@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using StillHungry.Controller;
 using StillHungry.Managers;
@@ -26,9 +26,15 @@ namespace StillHungry.Data
         public int Level;
         public string Name;
         public int HP;
+        public int MaxHP;
+        public int Mana;
+        public int MaxMana;
         public float Attack;
         public float Defense;
         public int Gold;
+        public int TotalExp;
+        public float CriticalRate; //기본 치명타 확률
+        public float EvadeRate; //기본 회피 확률
         public List<UserItemData> Items; // 아이템 정보 배열
     }
 

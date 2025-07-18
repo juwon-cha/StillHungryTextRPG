@@ -1,4 +1,4 @@
-﻿using StillHungry.Data;
+using StillHungry.Data;
 using StillHungry.Managers;
 
 namespace StillHungry.Items
@@ -8,6 +8,10 @@ namespace StillHungry.Items
         ITEM_NONE = 0,
         ITEM_WEAPON,
         ITEM_ARMOR,
+        ITEM_CONSUMABLEHP,
+        ITEM_CONSUMABLEMP,
+        ITEM_ETC,
+        ITEM_FOOD
     }
 
     public enum EWeaponType
@@ -33,6 +37,7 @@ namespace StillHungry.Items
         public bool HasEquipped { get; set; }
         public bool HasPurchased { get; set; }
 
+        public int Quantity { get; set; } // 소모품 아이템의 개수
         public Item(EItemType type)
         {
             ItemType = type;
@@ -57,6 +62,15 @@ namespace StillHungry.Items
                     break;
                 case EItemType.ITEM_ARMOR:
                     item = new Armor(itemId);
+                    break;
+                case EItemType.ITEM_CONSUMABLEHP:
+                    item = new ConsumableHP(itemId);
+                    break;
+                case EItemType.ITEM_CONSUMABLEMP:
+                    item = new ConsumableMP(itemId);
+                    break;
+                case EItemType.ITEM_FOOD:
+                    item = new Food(itemId);
                     break;
                 case EItemType.ITEM_NONE:
                     break;
@@ -129,4 +143,121 @@ namespace StillHungry.Items
             SellingPrice = (int)(Price * SELLING_PRICE_PERCENTAGE);
         }
     }
+
+    public class ConsumableHP : Item
+    {
+        public int HPRecovery { get; private set; }
+        public ConsumableHP(int id) : base(EItemType.ITEM_CONSUMABLEHP)
+        {
+            Init(id);
+        }
+        private void Init(int id)
+        {
+            ItemData itemData = null;
+            DataManager.ItemDict.TryGetValue(id, out itemData);
+            if (itemData.ItemType != EItemType.ITEM_CONSUMABLEHP)
+            {
+                return;
+            }
+            ConsumableHPData data = (ConsumableHPData)itemData;
+            ID = data.ID;
+            Name = data.Name;
+            HPRecovery = data.HPRecovery;
+            Price = data.Price;
+            Description = data.Description;
+            HasPurchased = false;
+            SellingPrice = (int)(Price * SELLING_PRICE_PERCENTAGE);
+        }
+    }
+
+    public class ConsumableMP : Item
+    {
+        public int MPRecovery { get; private set; }
+        public ConsumableMP(int id) : base(EItemType.ITEM_CONSUMABLEMP)
+        {
+            Init(id);
+        }
+        private void Init(int id)
+        {
+            ItemData itemData = null;
+            DataManager.ItemDict.TryGetValue(id, out itemData);
+            if (itemData.ItemType != EItemType.ITEM_CONSUMABLEMP)
+            {
+                return;
+            }
+            ConsumableMPData data = (ConsumableMPData)itemData;
+            ID = data.ID;
+            Name = data.Name;
+            MPRecovery = data.MPRecovery;
+            Price = data.Price;
+            Description = data.Description;
+            HasPurchased = false;
+            SellingPrice = (int)(Price * SELLING_PRICE_PERCENTAGE);
+        }
+    }
+
+    public class EtcItems : Item
+    {
+        public int Skill { get; private set; }
+
+
+        public EtcItems(int id) : base(EItemType.ITEM_ETC)
+        {
+            Init(id);
+        }
+        private void Init(int id)
+        {
+            ItemData itemData = null;
+            DataManager.ItemDict.TryGetValue(id, out itemData);
+            if (itemData.ItemType != EItemType.ITEM_ETC)
+            {
+                return;
+            }
+            FoodData data = (FoodData)itemData; // 고쳐야함 // FoodData로 변경 필요
+            ID = data.ID;
+            Name = data.Name;
+            Price = data.Price;
+            Description = data.Description;
+            HasPurchased = false;
+            SellingPrice = (int)(Price * SELLING_PRICE_PERCENTAGE);
+
+        }
+    }
+    public class Food : Item
+    {
+        public int Damage { get; private set; }
+        public int Defense { get; private set; }
+        public float Critical { get; private set; } // 치명타 확률
+        public float Evade { get; private set; }   // 회피 확률
+        public int Skill { get; private set; }
+
+
+        public Food(int id) : base(EItemType.ITEM_FOOD)
+        {
+            Init(id);
+        }
+        private void Init(int id)
+        {
+            ItemData itemData = null;
+            DataManager.ItemDict.TryGetValue(id, out itemData);
+            if (itemData.ItemType != EItemType.ITEM_FOOD)
+            {
+                return;
+            }
+            FoodData data = (FoodData)itemData; // 고쳐야함 // FoodData로 변경 필요
+            ID = data.ID;
+            Name = data.Name;
+            Price = data.Price;
+            Description = data.Description;
+            HasPurchased = false;
+            SellingPrice = (int)(Price * SELLING_PRICE_PERCENTAGE);
+
+            Damage = data.Damage;
+            Defense = data.Defense;
+            Critical = data.Critical; // 치명타 확률
+            Evade = data.Evade;   // 회피 확률
+            Skill = data.Skill; // 스킬
+        }
+    }
+
 }

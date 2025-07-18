@@ -34,7 +34,7 @@ namespace StillHungry.Scene
                 }
             }
         }
-
+        
         public void RequestRedraw()
         {
             bNeedsRedraw = true;

@@ -3,137 +3,168 @@ using StillHungry.Monsters;
 
 namespace StillHungry.Controller
 {
+    public enum EMonsterActionType
+    {   
+        NONE, 
+        ATTACK, 
+        DEFEND 
+    }
+
+    public class MonsterAction
+    {
+        public EMonsterActionType Type { get; set; }
+        public int Value { get; set; } // 공격 시: 데미지, 방어 시: 방어력
+    }
+
     public class MonsterController
     {
         private Random mRand = new Random();
 
-        public Dictionary<int, Monster> ActiveMonsters = new Dictionary<int, Monster>();
+        public List<Monster> ActiveMonsters = new List<Monster>();
 
         // 전투를 위한 몬스터 스폰
         public void SpawnMonstersForBattles()
         {
             ActiveMonsters.Clear();
-            // 1~3마리의 몬스터를 생성
-            int numberOfMonsters = mRand.Next(1, 4); 
 
-            for (int i = 0; i < numberOfMonsters; i++)
+            // 1~3마리의 몬스터를 생성
+            int numberOfMonsters = mRand.Next(1, 4);
+
+            for (int i = 1; i <= numberOfMonsters; i++)
             {
                 // TODO: 랜덤 몬스터 스폰
-                ActiveMonsters.Add(i, Monster.SpawnMonster(i));
-            }
-            Console.WriteLine($"\n{numberOfMonsters}마리의 몬스터가 나타났습니다!");
-        }
-
-        public void TakeDamage(int monsterId, int damage)
-        {
-            Monster targetMonster = null;
-            if (ActiveMonsters.TryGetValue(monsterId, out targetMonster) && targetMonster.CurrentHp > 0)
-            {
-                // 방어력을 고려한 데미지 계산
-                int finalDamage = damage - (int)targetMonster.DefensePower;
-                if (finalDamage < 1) finalDamage = 1; // 최소 1의 데미지는 보장
-
-                targetMonster.CurrentHp -= finalDamage;
-
-                Console.WriteLine($"{targetMonster.Name}에게 {finalDamage}의 데미지를 입혔습니다! (남은 체력: {targetMonster.CurrentHp})\n");
-
-                if (targetMonster.CurrentHp <= 0)
-                {
-                    OnMonsterDeath(targetMonster);
-                }
+                ActiveMonsters.Add(Monster.SpawnMonster(i));
             }
         }
 
-        // 몬스터 턴 실행
-        public void ExecuteMonsterTurn()
+        public void TakeDamage(int monsterIndex, int damage, bool isCritical)
         {
-            if (ActiveMonsters.Count == 0)
+            if (monsterIndex < 0 || monsterIndex >= ActiveMonsters.Count)
             {
-                // 모든 몬스터가 이미 처치된 경우 턴을 종료
                 return;
             }
 
-            Console.WriteLine("\n[몬스터 턴]");
-            
-            // TODO: 활성화된 모든 몬스터의 턴 처리?
-            foreach (var monster in ActiveMonsters)
+            Monster targetMonster = ActiveMonsters[monsterIndex];
+            if (targetMonster.IsDead)
             {
-                if (monster.Value.CurrentHp > 0) // 몬스터가 살아있는 경우에만 행동
-                {
-                    ProcessMonsterTrun(monster.Key);
-                }
+                return;
+            }
+
+            int finalDamage = damage - (int)targetMonster.DefensePower;
+            if (finalDamage < 1)
+            {
+                finalDamage = 1;
+            }
+
+            targetMonster.CurrentHp -= finalDamage;
+
+            if(isCritical)
+            {
+                Console.WriteLine($"{targetMonster.Name}에게 {finalDamage}의 데미지를 입혔습니다!");
+            }
+            else
+            {
+                Console.WriteLine($"{targetMonster.Name}에게 {finalDamage}의 데미지를 입혔습니다!");
+            }
+
+            if (targetMonster.CurrentHp <= 0)
+            {
+                OnMonsterDeath(targetMonster);
             }
         }
 
-        /// 몬스터가 확률에 따라 공격 또는 방어를 결정하고 수행
-        private void ProcessMonsterTrun(int id)
+        // 몬스터 턴에서 공격 또는 방어 자세 선택
+        // 공격이면 BattleManager의 StartMonsterPhase메서드에서 플레이어 바로 공격
+        // 방어라면 방어력 올라가고 턴 종료 -> 다음 플레이어가 몬스터 공격 시 몬스터가 받는 데미지 반감
+        // 몬스터 턴이 다시 시작되면 방어 상태 초기화
+        public MonsterAction DecideAndExecuteAction(Monster monster)
         {
-            Monster monster = GetMonsterFromID(id);
+            if (monster.IsDead) return new MonsterAction { Type = EMonsterActionType.NONE };
 
             // 이전 턴의 방어 상태 초기화
-            if (monster.mbIsDefending)
+            if (monster.IsDefending)
             {
-                monster.DefensePower /= 2; // 방어 시 증가했던 방어력을 원상 복구
-                monster.mbIsDefending = false;
+                monster.DefensePower /= 2;
+                monster.IsDefending = false;
             }
 
-            int actionChance = mRand.Next(1, 101); // 1에서 100 사이의 난수 생성
+            int actionChance = mRand.Next(1, 101); // 1~100
 
-            if (actionChance <= 70) // 70% 확률로 공격
+            // 70% 확률로 공격
+            if (actionChance <= 70)
             {
-                ExecuteAttack(monster);
+                // 공격 실행 및 결과 반환
+                // 데미지는 BattleManager에서 플레이어에게 직접 적용
+                return new MonsterAction { Type = EMonsterActionType.ATTACK, Value = (int)monster.AttackPower};
             }
-            else // 30% 확률로 방어
+            // 30% 확률로 방어
+            else
             {
-                ExecuteDefense(monster);
+                // 방어 실행 및 결과 반환
+                monster.IsDefending = true;
+                monster.DefensePower *= 2;
+                return new MonsterAction { Type = EMonsterActionType.DEFEND, Value = (int)monster.DefensePower};
             }
-        }
-
-        private void ExecuteAttack(Monster monster)
-        {
-            Console.WriteLine($"{monster.Name}이(가) 플레이어를 공격합니다!");
-
-            Manager.Instance.Game.PlayerController.TakeDamage((int)monster.AttackPower);
-
-            Console.WriteLine($"플레이어는 {monster.AttackPower}의 데미지를 입었습니다. (시뮬레이션)");
-        }
-
-        private void ExecuteDefense(Monster monster)
-        {
-            monster.mbIsDefending = true;
-            // 방어 시 다음 공격에 대한 방어력을 2배로 증가
-            monster.DefensePower *= 2; 
-
-            Console.WriteLine($"{monster.Name}이(가) 방어 자세를 취합니다! (다음 공격에 대한 방어력이 증가합니다)");
         }
 
         private void OnMonsterDeath(Monster monster)
         {
-            Console.WriteLine($"{monster.Name}을(를) 처치했습니다!");
-            ActiveMonsters.Remove(monster.ID);
+            monster.IsDead = true;
+            monster.CurrentHp = 0;
+            Console.WriteLine($"{monster.Name}을(를) 처치했습니다!\n");
 
-            // TODO: 경험치 획득, 아이템 드랍 로직 추가
+            // TODO: 경험치 획득, 아이템 드랍 로직 추가?
 
+            Manager.Instance.Battle.MonsterKillCount++;
+            bool isAllMonsterDead = true;
+            foreach (Monster m in ActiveMonsters) 
+            {
+                if (!m.IsDead) {
+                    isAllMonsterDead = false;
+                    break;
+                }
+            }
             // 모든 몬스터를 처치했는지 확인
-            if (ActiveMonsters.Count == 0)
+            if (isAllMonsterDead)
             {
                 Console.WriteLine("모든 몬스터를 처치했습니다! 전투에서 승리했습니다!");
-                
-                Thread.Sleep(1000); // 승리 메시지 후 잠시 대기
+                Console.WriteLine("결과를 보려면 아무 키나 누르세요.");
+                Console.ReadKey();
+
+                var battleManager = Manager.Instance.Battle;
+                battleManager.EndBattle
+                    (
+                    isVictory: true,
+                    initialHP: battleManager.InitialHP,
+                    damageTaken: battleManager.TotalDamageTaken,
+                    monsterKillCount: battleManager.MonsterKillCount
+                    );
 
                 // 전투 종료 후 던전 씬으로 전환
-                Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
+                //Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
             }
+
         }
+
+
+        //public Monster GetMonsterFromID(int monsterId)
+        //{
+        //    if(ActiveMonsters.TryGetValue(monsterId, out Monster monster))
+        //    {
+        //        return monster;
+        //    }
+
+        //    return null; // 해당 ID의 몬스터가 없으면 null을 반환합니다.
+
+        //}
 
         public Monster GetMonsterFromID(int monsterId)
         {
-            if(ActiveMonsters.TryGetValue(monsterId, out Monster monster))
-            {
-                return monster;
-            }
+            
 
-            return null; // 해당 ID의 몬스터가 없으면 null을 반환합니다.
+            return ActiveMonsters.FirstOrDefault(m => m.ID == monsterId); 
+            // 해당 ID의 몬스터가 없으면 null을 반환합니다.
         }
+
     }
 }

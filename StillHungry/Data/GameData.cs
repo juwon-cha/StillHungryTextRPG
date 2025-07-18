@@ -10,11 +10,16 @@ namespace StillHungry.Data
     {
         public EClassType ClassType;
         public int Level;
+        public int HP;
         public int MaxHp;
+        public int Mana;
+        public int MaxMana; //최대 마나
         public int Attack;
         public int Defense;
         public int TotalExp;
         public int Gold;
+        public float CriticalRate;
+        public float EvadeRate;
     }
 
     public class PlayerStatLoader : ILoader<EClassType, PlayerStat>
@@ -56,10 +61,37 @@ namespace StillHungry.Data
         public int Defense;
     }
 
+    public class ConsumableHPData : ItemData
+    {
+        public int HPRecovery;
+    }
+
+    public class ConsumableMPData : ItemData
+    {
+        public int MPRecovery;
+    }
+    
+    public class EtcItemData : ItemData
+    {
+        
+    }
+    public class FoodData : ItemData
+    {
+        public int Damage;
+        public int Defense;
+        public float Critical; // 치명타 확률
+        public float Evade;  // 회피 확률
+        public int Skill;
+    }
+
     public class ItemLoader : ILoader<int, ItemData>
     {
         public List<WeaponData> Weapons = new List<WeaponData>();
         public List<ArmorData> Armors = new List<ArmorData>();
+        public List<ConsumableHPData> ConsumableHP = new List<ConsumableHPData>();
+        public List<ConsumableMPData> ConsumableMP = new List<ConsumableMPData>();
+        public List<FoodData> EtcItems = new List<FoodData>();
+        public List<FoodData> Foods = new List<FoodData>();
 
         public Dictionary<int, ItemData> MakeData()
         {
@@ -74,6 +106,30 @@ namespace StillHungry.Data
             {
                 item.ItemType = EItemType.ITEM_ARMOR;
                 dict.Add(item.ID, item);
+            }
+
+            foreach (ItemData itemData in ConsumableHP)
+            {
+                itemData.ItemType = EItemType.ITEM_CONSUMABLEHP;
+                dict.Add(itemData.ID, itemData);
+            }
+
+            foreach (ItemData itemData in ConsumableMP)
+            {
+                itemData.ItemType = EItemType.ITEM_CONSUMABLEMP;
+                dict.Add(itemData.ID, itemData);
+            }
+
+            foreach (ItemData itemData in EtcItems)
+            {
+                itemData.ItemType = EItemType.ITEM_ETC;
+                dict.Add(itemData.ID, itemData);
+            }
+
+            foreach (ItemData itemData in Foods)
+            {
+                itemData.ItemType = EItemType.ITEM_FOOD;
+                dict.Add(itemData.ID, itemData);
             }
 
             return dict;
@@ -111,6 +167,7 @@ namespace StillHungry.Data
     public struct MonsterStat
     {
         public int ID;
+        public int Level;
         public string Name;
         public int MaxHp;
         public int Attack;
@@ -130,6 +187,39 @@ namespace StillHungry.Data
             foreach (MonsterStat monster in MonsterStats)
             {
                 dict.Add(monster.ID, monster);
+            }
+
+            return dict;
+        }
+    }
+    #endregion
+
+    #region 퀘스트
+    public class QuestData
+    {
+        public int ID;
+        public string Name;
+        public string Speech;
+        public string Clear;
+        public string Target;
+        public int Detail;
+        public int PayID;
+        public bool isAchievement = false; // 목표 달성 여부
+        public bool isClear = false; // 퀘스트 완료 여부
+    }
+
+    public class QuestDataLoader : ILoader<int, QuestData>
+    {
+        public List<QuestData> Quest = new List<QuestData>();
+        
+        public Dictionary<int, QuestData> MakeData()
+        {
+            Dictionary<int, QuestData> dict = new Dictionary<int, QuestData>();
+
+            foreach (QuestData quest in Quest)
+            {
+                
+                dict.Add(quest.ID, quest);
             }
 
             return dict;
