@@ -4,6 +4,7 @@ using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Monsters;
 using StillHungry.Utils;
+using System;
 using System.Threading;
 
 namespace StillHungry.UI
@@ -468,7 +469,44 @@ namespace StillHungry.UI
             DisplayOptions(menuOptions, selectedIndex);
         }
 
+        public void ShowSkillSelect(int selectedIndex)
+        {
+            Console.WriteLine("\u001b[33mSkill Select!!\u001b[0m\n");
 
+            // 게임매니저의 인스턴스를 통해서 몬스터의 정보를 얻어온다.
+            foreach (var m in Manager.Instance.Battle.MonsterController.ActiveMonsters)
+            {
+                // 몬스터의 정보를 출력
+                if (m.IsDead)
+                {
+                    Console.WriteLine(
+                    $"\u001b[90mLv.{m.Level} " +
+                    $"{m.Name,-5}\tDEAD\u001b[0m");
+                }
+                else
+                {
+                    Console.WriteLine(
+                    $"Lv.\u001b[33m{m.Level}\u001b[0m " +
+                    $"{m.Name,-5}\tHP \u001b[33m{m.CurrentHp}\u001b[0m");
+                }
+            }
+
+            // 스킬 정보 출력
+            List<string> skills = new List<string>();
+            foreach (var s in Manager.Instance.Game.PlayerController.ActiveSkills)
+            {
+                skills.Add($"{s.Name} - MP {s.RequiredMP}({s.Description})");
+            }
+            skills.Add("돌아가기");
+            DisplayOptions(skills.ToArray(), selectedIndex, "\n스킬을 선택해 주세요");
+
+            // 게임매니저의 인스턴스를 통해서 플레이어의 정보를 얻어온다
+            Console.WriteLine("\n\n[내정보]");
+            var player = Manager.Instance.Game.PlayerController;
+            Console.Write($"Lv. \u001b[33m{player.Level}\u001b[0m\t");
+            Console.WriteLine($"{player.Name} ({StringConverter.ClassTypeToString(player.ClassType)})");
+            Console.WriteLine($"HP : \u001b[33m{player.HP}/{player.MaxHP}\u001b[0m");
+        }
 
 
 
@@ -615,6 +653,7 @@ namespace StillHungry.UI
             Console.WriteLine($"HP : \u001b[33m{player.HP}/{player.MaxHP}\u001b[0m");
             DisplayOptions(menuOptions, selectedIndex);
         }
+
         public void PlayerTurnScreen(string[] menuOptions, int selectedIndex)
         {
             Console.WriteLine("\u001b[33mPlayer Attack Turn!!\u001b[0m");
@@ -622,18 +661,44 @@ namespace StillHungry.UI
             // 게임매니저의 인스턴스를 통해서 플레이어의 정보를 얻어온다
             var player = Manager.Instance.Game.PlayerController;
             Console.WriteLine($"{player.Name} 의 공격!");
-            int monsterId = Manager.Instance.Battle.SelectedMonsterID;
-            if (Manager.Instance.Battle.MonsterController.ActiveMonsters[monsterId].CurrentHp <= 0)
+
+            //int monsterId = Manager.Instance.Battle.SelectedMonsterID;
+
+            //Action<Monster, int, bool> printDamage = (targetMonster, finalDamage, isCritical) =>
+            //{
+            //    if (isCritical)
+            //    {
+            //        Console.WriteLine($"\n{targetMonster.Name}에게 {finalDamage}의 치명상을 입혔습니다!");
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine($"\n{targetMonster.Name}에게 {finalDamage}의 데미지를 입혔습니다!");
+            //    }
+            //};
+
+            //if (Manager.Instance.Battle.MonsterController.ActiveMonsters[monsterId].CurrentHp <= 0)
+            //{
+            //    Console.WriteLine($"그만해! {Manager.Instance.Battle.MonsterController.ActiveMonsters[monsterId].Name}의 HP는 이미 0 이야!");
+            //}
+            //else
+            //{
+            //    Manager.Instance.Battle.AttackMonster(monsterId);
+            //}
+
+            // 몬스터 HP 출력
+            List<Monster> monsters = Manager.Instance.Battle.MonsterController.ActiveMonsters;
+            foreach(Monster monster in monsters)
             {
-                Console.WriteLine($"그만해! {Manager.Instance.Battle.MonsterController.ActiveMonsters[monsterId].Name}의 HP는 이미 0 이야!");
+                if(monster.DamageTaken > 0)
+                {
+                    Console.WriteLine($"{monster.Name}에게 {monster.DamageTaken}의 데미지를 입혔습니다.");
+                }
             }
-            else 
-            {
-                Manager.Instance.Battle.AttackEnemy(monsterId);
-            }
+
             Console.WriteLine($"");
             DisplayOptions(menuOptions, selectedIndex);
         }
+
         private void DisplayOptions(string[] options, int selectedIndex, string message)
         {
             Console.WriteLine();

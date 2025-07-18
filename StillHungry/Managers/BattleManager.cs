@@ -6,6 +6,7 @@ namespace StillHungry.Managers
 {
     public class BattleManager
     {
+        public EDungeonLevel DungeonLevel;
         public int MonsterKillCount = 0;
 
         public MonsterController MonsterController = new MonsterController();
@@ -21,18 +22,22 @@ namespace StillHungry.Managers
         public Monster CurrentAttacker { get; private set; }
         public MonsterAction LastAction { get; private set; }
 
+        public EDungeonLevel CurrentDungeonLevel { get; private set; }
+
         public void SpawnMonsters() 
         {
             MonsterController.SpawnMonstersForBattles(); 
         }
 
-        public void StartBattle() //전투 시작 시 호출될 함수
+        public void StartBattle(EDungeonLevel dungeonLevel) //전투 시작 시 호출될 함수
         {
             IsFighting = true;
             InitialHP = Manager.Instance.Game.PlayerController.HP;
             TotalDamageTaken = 0;
             MonsterKillCount = 0; //전투 시작될때 다시 0으로 출력
             mCurrentMonsterIndex = 0;
+
+            CurrentDungeonLevel = dungeonLevel; //난이도 저장
         }
 
         public void EndBattle(bool isVictory, int initialHP, int damageTaken, int monsterKillCount)
@@ -53,8 +58,11 @@ namespace StillHungry.Managers
                 Console.WriteLine($"Lv.{player.Level} {player.Name}");
                 Console.WriteLine($"HP {initialHP} -> {player.HP}\n");
                 
-                GetPlayerExp();
-                
+                GivePlayerGoldReward();
+                GetPlayerExp(); // 플레이어의 경험치를 조작
+                Manager.Instance.Game.PlayerController.EatFood = null; // 음식버프 초기화
+                Manager.Instance.Game.PlayerController.RecalculateFoodStats();
+
                 Console.WriteLine("던전 입구로 돌아가려면 아무 키나 누르세요.");
                 Console.ReadKey();
 
@@ -118,6 +126,10 @@ namespace StillHungry.Managers
         private void EndMonsterPhase()
         {
             // 모든 몬스터의 턴이 끝났으므로 인덱스 및 공격 몬스터 초기화
+            foreach(var monster in MonsterController.ActiveMonsters)
+            {
+                monster.DamageTaken = 0; // 몬스터 턴 끝나면 받은 데미지 초기화
+            }
             mCurrentMonsterIndex = 0;
             CurrentAttacker = null;
             LastAction = null;
@@ -127,19 +139,32 @@ namespace StillHungry.Managers
             Console.ReadKey();
 
             // 플레이어 공격 턴으로 전환
+            AttackSelectScene ac = (AttackSelectScene)Manager.Instance.Scene.GetScene(ESceneType.ATTACK_SELECT_SCENE);
+            ac.GenerateAttackSelectCommands();
             Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
         }
 
-        // 필요 없으면 나중에 삭제
-       /* public void MonsterAttack(int monsterID, int damage) 
+        
+        public void SetDungeonLevel(EDungeonLevel level) //보상 기준
         {
-            MonsterController.TakeDamage(monsterID, damage);
+            DungeonLevel = level;
         }
-       */
+        public int GetGoldReward() //골드 계산
+        {
+            
+            return Manager.Instance.Dungeon.DungeonResult.RewardGold * MonsterKillCount;
+        }
+
+        // 필요 없으면 나중에 삭제
+        /* public void MonsterAttack(int monsterID, int damage) 
+         {
+             MonsterController.TakeDamage(monsterID, damage);
+         }
+        */
 
         #region 박용규 추가 메소드
         // 몬스터에게 데미지를 주는 메소드
-        public void AttackEnemy(int monsterId) 
+        public void AttackMonster(int monsterId) 
         {
             var player = Manager.Instance.Game.PlayerController;
          
@@ -156,9 +181,13 @@ namespace StillHungry.Managers
                 finalDamage *= 2.0f; //치명타 데미지 2배
                 Console.WriteLine("급소를 맞췄습니다. 데미지 2배!");
             }
+
             //몬스터에게 데미지 적용
+            Monster monster = MonsterController.GetMonsterFromID(monsterId);
+
             Manager.Instance.Battle.MonsterController.TakeDamage(monsterId, (int)finalDamage, isCritical);
         }
+
         // 플레이어의 경험치 획득 처리 메소드
         public void GetPlayerExp()
         {
@@ -171,6 +200,12 @@ namespace StillHungry.Managers
             Console.WriteLine($"경험치를 \u001b[33m{rewardExp}\u001b[0m 획득 했습니다.\n");
             // 플레이어 컨트롤러에 있는 경험치 컨트롤 메서드에 값을 넘겨줌
             Manager.Instance.Game.PlayerController.SetExp(rewardExp);
+        }
+        public void GivePlayerGoldReward()
+        {
+            int goldReward = Manager.Instance.Dungeon.DungeonResult.RewardGold * MonsterKillCount;
+            Manager.Instance.Game.PlayerController.EarnGold(goldReward);
+            Console.WriteLine($"골드를 {goldReward}원 획득 했습니다.\n");
         }
         #endregion
     }

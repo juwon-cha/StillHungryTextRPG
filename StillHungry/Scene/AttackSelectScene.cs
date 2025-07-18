@@ -23,13 +23,25 @@ namespace StillHungry.Scene
             mMenuCommands.Clear();
 
             int monsterCount = Manager.Instance.Battle.MonsterController.ActiveMonsters.Count;
+            mNavigator = new MenuNavigator(monsterCount + 1);
+
             for (int i = 0; i < monsterCount; ++i)
             {
-                mMenuCommands.Add(new ChangeSceneCommand(ESceneType.PLAYER_ATTACK_SCENE));
+                // 죽은 상태의 몬스터를 표시
+                if (Manager.Instance.Battle.MonsterController.ActiveMonsters[i].IsDead)
+                {
+                    // 아무것도 안하는 보이드씬을 생성해서 메뉴에 추가
+                    VoidScene voidScene = new VoidScene(mMenuCommands, mNavigator);
+                    mMenuCommands.Add(new ChangeSceneCommand(ESceneType.VOID_SCENE));
+                }
+                else 
+                {
+                    mMenuCommands.Add(new AttackSelectCommand(mNavigator.SelectedIndex));
+                }
             }
+            // 죽은 몬스터는 선택메뉴에서 위로 올라가게 만들기 **** TODO ****
 
             mMenuCommands.Add(new ChangeSceneCommand(ESceneType.BATTLE_SCENE));
-            mNavigator = new MenuNavigator(monsterCount + 1);
         }
 
         public override void Display()

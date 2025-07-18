@@ -2,7 +2,9 @@ using StillHungry.Controller;
 using StillHungry.Data;
 using StillHungry.Items;
 using StillHungry.Managers;
+using StillHungry.Monsters;
 using StillHungry.Scene;
+using StillHungry.Skills;
 using StillHungry.Utils;
 
 namespace StillHungry.Commands
@@ -225,7 +227,9 @@ namespace StillHungry.Commands
 
             if (choice == "1")
             {
+                // 게임 매니저에서 플레이어 정보 세팅
                 Manager.Instance.Game.SetPlayerData(name, mClassType);
+
                 Console.WriteLine($"\n{name}({className})님, 스파르타 마을로 여정을 시작합니다!");
                 Thread.Sleep(2000);
                 Manager.Instance.Scene.ChangeScene(ESceneType.STORY_SCENE);
@@ -289,6 +293,8 @@ namespace StillHungry.Commands
 
         public void Execute()
         {
+            Manager.Instance.Dungeon.TryEnterDungeon(mDungeonLevel);
+
             Manager.Instance.Battle.SpawnMonsters(); // 던전 입장 시 몬스터 소환
             AttackSelectScene scene = Manager.Instance.Scene.GetScene(ESceneType.ATTACK_SELECT_SCENE) as AttackSelectScene;
             scene.GenerateAttackSelectCommands(); // 공격 선택 커맨드 생성
@@ -796,27 +802,27 @@ namespace StillHungry.Commands
     {
         public void Execute()
         {
-            Manager.Instance.Battle.StartBattle(); // 전투 시작 시 세팅
+            Manager.Instance.Battle.StartBattle(EDungeonLevel.EASY); // 전투 시작 시 세팅
             Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
         }
     }
 
-    // 씬 전환만 담당하는 커맨드는 ChangeSceneCommand를 사용하면 되기 때문에 아래 커맨드들은 삭제해도 될 것 같아요.
-    //public class PlayerTurnCommand : IExecutable
-    //{
-    //    public void Execute()
-    //    {
-    //        Manager.Instance.Scene.ChangeScene(ESceneType.PLAYER_ATTACK_SCENE);
-    //    }
-    //}
+    public class AttackSelectCommand : IExecutable
+    {
+        private readonly int mSelectedIndex;
 
-    //public class EnemyTurnCommand : IExecutable 
-    //{
-    //    public void Execute()
-    //    {
-    //        Manager.Instance.Scene.ChangeScene(ESceneType.MONSTER_PHASE_SCENE);
-    //    }
-    //}
+        public AttackSelectCommand(int index)
+        {
+            mSelectedIndex = index;
+        }
+
+        public void Execute()
+        {
+            Manager.Instance.Battle.AttackMonster(mSelectedIndex);
+
+            Manager.Instance.Scene.ChangeScene(ESceneType.PLAYER_ATTACK_SCENE);
+        }
+    }
 
     public class MonsterPhaseCommand : IExecutable
     {
@@ -825,6 +831,46 @@ namespace StillHungry.Commands
             Manager.Instance.Battle.StartMonsterPhase();
         }
     }
-    #endregion
 
+    public class SkillSelectCommand : IExecutable
+    {
+        public void Execute()
+        {
+            SkillSelectScene scene = Manager.Instance.Scene.GetScene(ESceneType.SKILL_SELECT_SCENE) as SkillSelectScene;
+            scene.GenerateSkillSelectCommands(); // 공격 선택 커맨드 생성
+
+            Manager.Instance.Scene.ChangeScene(ESceneType.SKILL_SELECT_SCENE);
+        }
+    }
+
+    public class UseSkillCommand : IExecutable
+    {
+        private readonly Skill mSkill;
+
+        public UseSkillCommand(Skill skill)
+        {
+            mSkill = skill;
+        }
+
+        public void Execute()
+        {
+            var scene = Manager.Instance.Scene;
+
+            bool isRange = Manager.Instance.Game.PlayerController.UseSkill(mSkill);
+
+            // 범위 공격
+            if (isRange)
+            {
+                // 플레이어 공격 씬으로 전환해서 몬스터 공격
+                scene.ChangeScene(ESceneType.PLAYER_ATTACK_SCENE);
+            }
+            else // 단일 공격
+            {
+                // 몬스터 공격 선택 씬으로 전환해서 단일 스킬 적용 몬스터 선택
+                scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
+            }
+        }
+    }
+
+    #endregion
 }
