@@ -177,20 +177,20 @@
         {
             "ID": 500,
             "Name": "박오맥",
-            "Price": 99,
+            "Price": 100,
             "Description": "박쥐의 오줌으로 만든 특산품 맥주입니다.",
             "Damage": 0,
             "Defense": 0,
             "Critical": 0,
-            "Evade": 0.1,
+            "Evade": 0.15,
             "Skill" : 0
         },
         {
             "ID": 501,
             "Name": "푸푸 겉절이",
-            "Price": 150,
+            "Price": 300,
             "Description": "풀푸푸의 머리를 집어 뜯어 만든 겉절이입니다",
-            "Damage": 1,
+            "Damage": 5,
             "Defense": 0,
             "Critical": 0,
             "Evade": 0,
@@ -202,7 +202,7 @@
             "Price": 200,
             "Description": "스톤 골렘의 발가락을 설탕에 절여 만든 사탕입니다.",
             "Damage": 0,
-            "Defense": 1,
+            "Defense": 10,
             "Critical": 0,
             "Evade": 0,
             "Skill": 2
@@ -214,7 +214,7 @@
             "Description": "피닉스의 알을 사용한 계란찜 입니다.",
             "Damage": 0,
             "Defense": 0,
-            "Critical": 0.1,
+            "Critical": 0.3,
             "Evade": 0,
             "Skill": 3
         },
@@ -222,10 +222,10 @@
             "Name": "드래곤 꼬리구이",
             "Price": 10000,
             "Description": "드래곤의 쫀쫀한 꼬리는 먹으면 무슨맛이 날까?",
-            "Damage": 1,
-            "Defense": 1,
-            "Critical": 0.1,
-            "Evade": 0.1,
+            "Damage": 999,
+            "Defense": 999,
+            "Critical": 0.5,
+            "Evade": 0.4,
             "Skill": 4
 
         }

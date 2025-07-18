@@ -63,7 +63,7 @@
         {
             "ID": "7",
             "Level": "7",
-            "Name": "스톤골렘",
+            "Name": "스톤 골렘",
             "MaxHp": 70,
             "Attack": 25,
             "Defense": 23,
@@ -93,7 +93,7 @@
         {
             "ID": "10",
             "Level": "10",
-            "Name": "베이비피닉스",
+            "Name": "베이비 피닉스",
             "MaxHp": 100,
             "Attack": 35,
             "Defense": 33,
@@ -103,7 +103,7 @@
         {
             "ID": "11",
             "Level": "11",
-            "Name": "용암슬라임",
+            "Name": "용암 슬라임",
             "MaxHp": 110,
             "Attack": 37,
             "Defense": 34,
@@ -113,7 +113,7 @@
         {
             "ID": "12",
             "Level": "12",
-            "Name": "용암기사",
+            "Name": "용암 기사",
             "MaxHp": 120,
             "Attack": 40,
             "Defense": 35,
@@ -123,7 +123,7 @@
         {
             "ID": "100",
             "Level": "99",
-            "Name": "레드드래곤",
+            "Name": "레드 드래곤",
             "MaxHp": 9999,
             "Attack": 999,
             "Defense": 999,
