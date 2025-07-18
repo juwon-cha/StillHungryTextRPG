@@ -34,7 +34,7 @@ namespace StillHungry.Scene
                     VoidScene voidScene = new VoidScene(mMenuCommands, mNavigator);
                     mMenuCommands.Add(new ChangeSceneCommand(ESceneType.VOID_SCENE));
                 }
-                else 
+                else
                 {
                     mMenuCommands.Add(new AttackSelectCommand(mNavigator.SelectedIndex));
                 }

@@ -37,15 +37,9 @@ namespace StillHungry.Controller
             }
         }
 
-        public void TakeDamage(int monsterIndex, int damage, bool isCritical)
+        public void TakeDamage(Monster targetMonster, int damage, bool isCritical)
         {
-            if (monsterIndex < 0 || monsterIndex >= ActiveMonsters.Count)
-            {
-                return;
-            }
-
-            Monster targetMonster = ActiveMonsters[monsterIndex];
-            if (targetMonster.IsDead)
+            if (targetMonster == null && targetMonster.IsDead)
             {
                 return;
             }
@@ -58,15 +52,6 @@ namespace StillHungry.Controller
 
             targetMonster.CurrentHp -= finalDamage;
             targetMonster.DamageTaken += finalDamage;
-
-            //if(isCritical)
-            //{
-            //    Console.WriteLine($"\n{targetMonster.Name}에게 {finalDamage}의 치명상을 입혔습니다!");
-            //}
-            //else
-            //{
-            //    Console.WriteLine($"\n{targetMonster.Name}에게 {finalDamage}의 데미지를 입혔습니다!");
-            //}
 
             if (targetMonster.CurrentHp <= 0)
             {
@@ -148,24 +133,20 @@ namespace StillHungry.Controller
 
         }
 
+        public Monster GetMonsterFromList(int index)
+        {
+            if (index < 0 || index >= ActiveMonsters.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range.");
+            }
 
-        //public Monster GetMonsterFromID(int monsterId)
-        //{
-        //    if(ActiveMonsters.TryGetValue(monsterId, out Monster monster))
-        //    {
-        //        return monster;
-        //    }
-
-        //    return null; // 해당 ID의 몬스터가 없으면 null을 반환합니다.
-
-        //}
+            return ActiveMonsters.ElementAt(index);
+        }
 
         public Monster GetMonsterFromID(int monsterId)
         {
-            
-
             return ActiveMonsters.FirstOrDefault(m => m.ID == monsterId); 
-            // 해당 ID의 몬스터가 없으면 null을 반환합니다.
+            // 해당 ID의 몬스터가 없으면 null을 반환
         }
 
     }

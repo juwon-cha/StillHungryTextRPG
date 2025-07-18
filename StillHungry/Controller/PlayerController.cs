@@ -511,34 +511,34 @@ namespace StillHungry.Controller
                 if (skill.ID == 2)
                 {
                     var targets = livingMonsters.OrderBy(m => Guid.NewGuid()).Take(2).ToList();
-                    for (int i = 0; i < targets.Count; ++i)
+                    foreach (Monster target in targets)
                     {
                         // 스킬 데미지 계산
                         int damage = (int)(this.Attack * skill.DamageMultiplier);
 
-                        monster.TakeDamage(i, damage, false);
+                        monster.TakeDamage(target, damage, false);
                     }
                 }
                 else if (skill.ID == 101) // 메테오
                 {
                     var targets = livingMonsters.OrderBy(m => Guid.NewGuid()).Take(3).ToList();
-                    for (int i = 0; i < targets.Count; ++i)
+                    foreach (Monster target in targets)
                     {
                         // 스킬 데미지 계산
                         int damage = (int)(this.Attack * skill.DamageMultiplier);
 
-                        monster.TakeDamage(i, damage, false);
+                        monster.TakeDamage(target, damage, false);
                     }
                 }
                 else if (skill.ID == 201) // 더블 샷
                 {
                     var targets = livingMonsters.OrderBy(m => Guid.NewGuid()).Take(2).ToList();
-                    for (int i = 0; i < targets.Count; ++i)
+                    foreach (Monster target in targets)
                     {
                         // 스킬 데미지 계산
                         int damage = (int)(this.Attack * skill.DamageMultiplier); 
 
-                        monster.TakeDamage(i, damage, false);
+                        monster.TakeDamage(target, damage, false);
                     }
                 }
             }
