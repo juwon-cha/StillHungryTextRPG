@@ -69,6 +69,9 @@ namespace StillHungry.UI
             if (player.FoodEvasionChance > 0) evasionStat += $" (+{player.FoodEvasionChance * 100:F1})";
             Console.WriteLine(evasionStat + "\n");
 
+            if(player.EatFood !=null)
+                Console.WriteLine($"{player.EatFood} 복용 중\n");
+
             DisplayOptions(menuOptions, selectedIndex);
         }
 
