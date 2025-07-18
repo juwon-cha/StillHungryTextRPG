@@ -45,8 +45,8 @@
       "MaxMana": 100,
       "Attack": 12.0,
       "Defense": 3.0,
-      "Gold": 1300,
-      "TotalExp": 10,
+      "Gold": 670,
+      "TotalExp": 0,
       "CriticalRate": 0.25,
       "EvadeRate": 0.45,
       "Items": [
@@ -57,6 +57,10 @@
         {
           "ID": 102,
           "HasEquipped": true
+        },
+        {
+          "ID": 2,
+          "HasEquipped": false
         }
       ]
     }

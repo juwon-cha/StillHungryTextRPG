@@ -111,6 +111,7 @@ namespace StillHungry.Controller
         {
             monster.IsDead = true;
             monster.CurrentHp = 0;
+            Manager.Instance.Game.PlayerController.QuestKillCountUp(monster.Name);
             Console.WriteLine($"{monster.Name}을(를) 처치했습니다!\n");
 
             // TODO: 경험치 획득, 아이템 드랍 로직 추가?

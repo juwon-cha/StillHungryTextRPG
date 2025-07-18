@@ -60,7 +60,9 @@ namespace StillHungry.Managers
                 
                 GivePlayerGoldReward();
                 GetPlayerExp(); // 플레이어의 경험치를 조작
-                
+                Manager.Instance.Game.PlayerController.EatFood = null; // 음식버프 초기화
+                Manager.Instance.Game.PlayerController.RecalculateFoodStats();
+
                 Console.WriteLine("던전 입구로 돌아가려면 아무 키나 누르세요.");
                 Console.ReadKey();
 
