@@ -61,10 +61,10 @@ namespace StillHungry.Controller
         public int currentQuestKillCount { get; private set; } = 0; // 현재 퀘스트에서 처치한 몬스터 수
 
         // 던전 종료 후 음식 삭제
-        // EatFood = null;  RecalculateFoodStats();
+        // EatFood = null;  Manager.Instance.Game.PlayerController.RecalculateFoodStats();
 
         // 몬스터 죽었을 때
-        // QuestKillCountUp(몬스터 이름)
+        // Manager.Instance.Game.PlayerController.QuestKillCountUp(몬스터 이름)
 
 
         // 새 게임 시작할 때 플레이어 데이터 설정
