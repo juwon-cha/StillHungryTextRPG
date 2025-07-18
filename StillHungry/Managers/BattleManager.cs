@@ -53,7 +53,7 @@ namespace StillHungry.Managers
                 Console.WriteLine($"Lv.{player.Level} {player.Name}");
                 Console.WriteLine($"HP {initialHP} -> {player.HP}\n");
                 
-                GetPlayerExp();
+                GetPlayerExp(); // 플레이어의 경험치를 조작
                 
                 Console.WriteLine("던전 입구로 돌아가려면 아무 키나 누르세요.");
                 Console.ReadKey();
@@ -127,6 +127,8 @@ namespace StillHungry.Managers
             Console.ReadKey();
 
             // 플레이어 공격 턴으로 전환
+            AttackSelectScene ac = (AttackSelectScene)Manager.Instance.Scene.GetScene(ESceneType.ATTACK_SELECT_SCENE);
+            ac.GenerateAttackSelectCommands();
             Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
         }
 
