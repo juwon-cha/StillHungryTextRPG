@@ -2,6 +2,7 @@ using StillHungry.Data;
 using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Scene;
+using StillHungry.Skills;
 
 
 namespace StillHungry.Controller
@@ -44,8 +45,8 @@ namespace StillHungry.Controller
         // 외부에서는 이 프로퍼티를 통해 최종 값만 읽을 수 있음
         public override float Attack => BaseAttack + BonusAttack + FoodAttack;
         public override float Defense => BaseDefense + BonusDefense + FoodDefense;
-        public float CriticalChance => BaseCriticalChance + FoodCriticalChance;
-        public float EvasionChance => BaseEvasionChance + FoodEvasionChance;
+        public override float CriticalChance => BaseCriticalChance + FoodCriticalChance;
+        public override float EvasionChance => BaseEvasionChance + FoodEvasionChance;
 
         public int CurrentMana => Mana;
         public int MaximumMana => MaxMana;
@@ -56,6 +57,9 @@ namespace StillHungry.Controller
         public InventoryController InventoryController { get; private set; } = new InventoryController();
 
         public Food? EatFood { get; set; } = null;// 플레이어가 먹을 음식
+
+        // 보유 스킬
+        public List<Skill> ActiveSkills = new List<Skill>();
 
         // 던전 종료 후 음식 삭제
         // EatFood = null;  RecalculateFoodStats();
@@ -86,6 +90,47 @@ namespace StillHungry.Controller
             else
             {
                 throw new KeyNotFoundException("Initialization Failed: Failed to load PlayerStat");
+            }
+        }
+
+        // 직업에 따라 초기 스킬 세팅
+        public void AssignInitialSkills()
+        {
+            int minIdRange = 0;
+            int maxIdRange = 0;
+
+            switch(ClassType)
+            {
+                case EClassType.WARRIOR:
+                    minIdRange = 1;
+                    maxIdRange = 99;
+                    break;
+
+                case EClassType.MAGICIAN:
+                    minIdRange = 100;
+                    maxIdRange = 199;
+                    break;
+
+                case EClassType.ARCHER:
+                    minIdRange = 200;
+                    maxIdRange = 299;
+                    break;
+
+                case EClassType.THIEF:
+                    minIdRange = 300;
+                    maxIdRange = 399;
+                    break;
+
+                default:
+                    break;
+            }
+
+            foreach(var skill in Manager.Instance.Skill.ActiveSkills)
+            {
+                if(skill.Key >= minIdRange && skill.Key <= maxIdRange)
+                {
+                    ActiveSkills.Add(skill.Value);
+                }
             }
         }
 
@@ -403,12 +448,40 @@ namespace StillHungry.Controller
                 Mana -= amount;
                 return true;
             }
+
             return false;
         }
 
-        public void UseSkill()
+        public int UseSkill(Skill skill)
         {
+            if(!UseMana(skill.RequiredMP))
+            {
+                Console.WriteLine("MP가 부족합니다.");
+            }
+            Console.WriteLine($"{skill.Name} 시전");
 
+            int finalDamage = 0;
+
+            // 공격 스킬 처리 (DamageMultiplier가 0보다 클 때)
+            if (skill.DamageMultiplier > 0)
+            {
+                // 최종 공격력에 스킬 배율을 곱하여 데미지 계산
+                finalDamage = (int)(Attack * skill.DamageMultiplier);
+            }
+            else if (skill.DefenseMultiplier > 0)
+            {
+                Defense *= skill.DefenseMultiplier;
+            }
+            else if(skill.CriticalMultiplier > 0)
+            {
+                CriticalChance *= skill.CriticalMultiplier;
+            }
+            else if(skill.EvadeMultiplier > 0)
+            {
+
+            }
+            
+            return finalDamage;
         }
 
         public void Defend()

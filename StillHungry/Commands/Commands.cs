@@ -226,7 +226,9 @@ namespace StillHungry.Commands
 
             if (choice == "1")
             {
+                // 게임 매니저에서 플레이어 정보 세팅
                 Manager.Instance.Game.SetPlayerData(name, mClassType);
+
                 Console.WriteLine($"\n{name}({className})님, 스파르타 마을로 여정을 시작합니다!");
                 Thread.Sleep(2000);
                 Manager.Instance.Scene.ChangeScene(ESceneType.TOWN_SCENE);
@@ -290,6 +292,8 @@ namespace StillHungry.Commands
 
         public void Execute()
         {
+            Manager.Instance.Dungeon.TryEnterDungeon(mDungeonLevel);
+
             Manager.Instance.Battle.SpawnMonsters(); // 던전 입장 시 몬스터 소환
             AttackSelectScene scene = Manager.Instance.Scene.GetScene(ESceneType.ATTACK_SELECT_SCENE) as AttackSelectScene;
             scene.GenerateAttackSelectCommands(); // 공격 선택 커맨드 생성

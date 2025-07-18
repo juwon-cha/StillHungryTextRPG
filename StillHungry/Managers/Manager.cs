@@ -31,6 +31,7 @@ namespace StillHungry.Managers
         public DungeonManager Dungeon { get; private set; }
         public UIManager UI { get; private set; }
         public BattleManager Battle { get; private set; }
+        public SkillManager Skill { get; private set; }
 
         private void Init()
         {
@@ -44,10 +45,12 @@ namespace StillHungry.Managers
             Game = new GameManager();
             Item = new ItemManager();
             Dungeon = new DungeonManager();
-            Battle = new BattleManager(); 
+            Battle = new BattleManager();
+            Skill = new SkillManager();
 
             Scene.Init();
             Item.Init();
+            Skill.Init();
             UI = new UIManager();
         }
     }
