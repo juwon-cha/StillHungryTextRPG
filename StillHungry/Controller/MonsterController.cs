@@ -37,7 +37,7 @@ namespace StillHungry.Controller
             }
         }
 
-        public void TakeDamage(int monsterIndex, int damage)
+        public void TakeDamage(int monsterIndex, int damage, bool isCritical)
         {
             if (monsterIndex < 0 || monsterIndex >= ActiveMonsters.Count)
             {
@@ -58,7 +58,14 @@ namespace StillHungry.Controller
 
             targetMonster.CurrentHp -= finalDamage;
 
-            Console.WriteLine($"{targetMonster.Name}에게 {finalDamage}의 데미지를 입혔습니다!");
+            if(isCritical)
+            {
+                Console.WriteLine($"{targetMonster.Name}에게 {finalDamage}의 데미지를 입혔습니다!");
+            }
+            else
+            {
+                Console.WriteLine($"{targetMonster.Name}에게 {finalDamage}의 데미지를 입혔습니다!");
+            }
 
             if (targetMonster.CurrentHp <= 0)
             {
@@ -104,11 +111,11 @@ namespace StillHungry.Controller
         {
             monster.IsDead = true;
             monster.CurrentHp = 0;
-            Console.WriteLine($"{monster.Name}을(를) 처치했습니다!");
+            Console.WriteLine($"{monster.Name}을(를) 처치했습니다!\n");
 
             // TODO: 경험치 획득, 아이템 드랍 로직 추가?
 
-            Manager.Instance.Battle.monsterKillCount++;
+            Manager.Instance.Battle.MonsterKillCount++;
             bool isAllMonsterDead = true;
             foreach (Monster m in ActiveMonsters) 
             {
@@ -130,7 +137,7 @@ namespace StillHungry.Controller
                     isVictory: true,
                     initialHP: battleManager.InitialHP,
                     damageTaken: battleManager.TotalDamageTaken,
-                    monsterKillCount: battleManager.monsterKillCount
+                    monsterKillCount: battleManager.MonsterKillCount
                     );
 
                 // 전투 종료 후 던전 씬으로 전환

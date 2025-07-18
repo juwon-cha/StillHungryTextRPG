@@ -1,13 +1,12 @@
 using StillHungry.Controller;
 using StillHungry.Monsters;
 using StillHungry.Scene;
-using System.Numerics;
 
 namespace StillHungry.Managers
 {
     public class BattleManager
     {
-        public int monsterKillCount = 0;
+        public int MonsterKillCount = 0;
 
         public MonsterController MonsterController = new MonsterController();
         public bool IsFighting = false;
@@ -32,7 +31,7 @@ namespace StillHungry.Managers
             IsFighting = true;
             InitialHP = Manager.Instance.Game.PlayerController.HP;
             TotalDamageTaken = 0;
-            monsterKillCount = 0; //전투 시작될때 다시 0으로 출력
+            MonsterKillCount = 0; //전투 시작될때 다시 0으로 출력
             mCurrentMonsterIndex = 0;
         }
 
@@ -50,7 +49,7 @@ namespace StillHungry.Managers
                 Console.WriteLine("Victory\n");
                 Console.ResetColor();
 
-                Console.WriteLine($"던전에서 몬스터 {monsterKillCount}마리를 잡았습니다.");
+                Console.WriteLine($"던전에서 몬스터 {monsterKillCount}마리를 잡았습니다.\n");
                 Console.WriteLine($"Lv.{player.Level} {player.Name}");
                 Console.WriteLine($"HP {initialHP} -> {player.HP}\n");
                 
@@ -78,8 +77,6 @@ namespace StillHungry.Managers
 
         public void StartMonsterPhase()
         {
-            Console.Clear(); // 이전 결과 지우기
-
             // 다음 살아있는 몬스터 찾기
             for (int i = mCurrentMonsterIndex; i < MonsterController.ActiveMonsters.Count; i++)
             {
@@ -95,26 +92,22 @@ namespace StillHungry.Managers
                     // 행동 결과에 따라 플레이어에게 데미지 적용
                     if (LastAction.Type == EMonsterActionType.ATTACK)
                     {
-                        var player = Manager.Instance.Game.PlayerController;
-                        Random rand = new Random();
+                        //Manager.Instance.Game.PlayerController.TakeDamage(LastAction.Value);
+                        bool evaded = Manager.Instance.Game.PlayerController.TakeDamage(LastAction.Value);
 
-                        if (rand.NextDouble() < player.EvasionChance)
+                        if (!evaded) //회피 빼고 누적 피해량 증가
                         {
-                            Console.WriteLine("공격을 회피했습니다!");
+                            TotalDamageTaken += LastAction.Value;
                         }
-                        else
-                        {
-                            player.TakeDamage(LastAction.Value);
-                            Console.WriteLine($"{LastAction.Value}의 피해를 입었습니다!");
-                        }
-                        // 씬 갱신
-                        if (Manager.Instance.Scene.CurrentScene is MonsterPhaseScene scene)
-                        {
-                            scene.RequestRedraw();
-                        }
-
-                        return; // 한 몬스터의 행동 후 정지
                     }
+
+                    // 씬 갱신
+                    if (Manager.Instance.Scene.CurrentScene is MonsterPhaseScene scene)
+                    {
+                        scene.RequestRedraw();
+                    }
+
+                    return; // 한 몬스터의 행동 후 정지
                 }
             }
 
@@ -137,18 +130,34 @@ namespace StillHungry.Managers
             Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
         }
 
-        public void MonsterAttack(int monsterID, int damage) 
+        // 필요 없으면 나중에 삭제
+       /* public void MonsterAttack(int monsterID, int damage) 
         {
             MonsterController.TakeDamage(monsterID, damage);
         }
-
+       */
 
         #region 박용규 추가 메소드
         // 몬스터에게 데미지를 주는 메소드
         public void AttackEnemy(int monsterId) 
         {
-            // 몬스터 컨트롤러에 정의 되어있는 TakeDamage를 그대로 재사용
-            Manager.Instance.Battle.MonsterController.TakeDamage(monsterId, (int)Manager.Instance.Game.PlayerController.Attack);
+            var player = Manager.Instance.Game.PlayerController;
+         
+            float baseDamage = player.Attack;
+            float criticalChance = player.CriticalChance;
+            float finalDamage = baseDamage;
+
+            Random random = new Random(); //랜덤값 생성
+            float roll = (float)random.NextDouble();
+
+            bool isCritical = roll < criticalChance;
+            if (isCritical)
+            {
+                finalDamage *= 2.0f; //치명타 데미지 2배
+                Console.WriteLine("급소를 맞췄습니다. 데미지 2배!");
+            }
+            //몬스터에게 데미지 적용
+            Manager.Instance.Battle.MonsterController.TakeDamage(monsterId, (int)finalDamage, isCritical);
         }
         // 플레이어의 경험치 획득 처리 메소드
         public void GetPlayerExp()

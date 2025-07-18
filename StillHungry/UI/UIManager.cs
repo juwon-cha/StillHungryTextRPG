@@ -445,14 +445,23 @@ namespace StillHungry.UI
                 {
                     Console.WriteLine($"ID: Lv.{attacker.Level} {attacker.Name} 의 공격!");
                     int damage = action.Value;
-                    Console.WriteLine($"{player.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
-                    Console.WriteLine();
-                    Console.WriteLine($"Lv.{player.Level} {player.Name}");
-                    // 공격 받기 전 체력과 후 체력을 함께 표시
-                    Console.Write($"HP {player.HP + damage} -> ");
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(player.HP);
-                    Console.ResetColor();
+
+                    bool evaded = player.TakeDamage(damage);
+                    if (evaded)
+                    {
+                        Console.WriteLine($"{player.Name}님이 공격을 피했습니다!");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{player.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
+                        Console.WriteLine();
+                        Console.WriteLine($"Lv.{player.Level} {player.Name}");
+                        // 공격 받기 전 체력과 후 체력을 함께 표시
+                        Console.Write($"HP {player.HP + damage} -> ");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(player.HP);
+                        Console.ResetColor();
+                    }
                 }
             }
 

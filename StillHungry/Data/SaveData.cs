@@ -35,7 +35,6 @@ namespace StillHungry.Data
         public int TotalExp;
         public float CriticalRate; //기본 치명타 확률
         public float EvadeRate; //기본 회피 확률
-        public float BonusEvadeRate; // 변경된 회피 확률 저장
         public List<UserItemData> Items; // 아이템 정보 배열
     }
 

@@ -1,4 +1,4 @@
-﻿using StillHungry.Data;
+using StillHungry.Data;
 using StillHungry.Scene;
 
 namespace StillHungry.Managers
