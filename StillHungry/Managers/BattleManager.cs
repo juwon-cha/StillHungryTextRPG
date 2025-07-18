@@ -60,6 +60,7 @@ namespace StillHungry.Managers
                 
                 GivePlayerGoldReward();
                 GetPlayerExp(); // 플레이어의 경험치를 조작
+
                 Manager.Instance.Game.PlayerController.EatFood = null; // 음식버프 초기화
                 Manager.Instance.Game.PlayerController.RecalculateFoodStats();
 
@@ -76,10 +77,6 @@ namespace StillHungry.Managers
 
                 Console.WriteLine($"Lv.{player.Level} {player.Name}");
                 Console.WriteLine($"HP {initialHP} -> {player.HP}\n");
-                Console.WriteLine("던전 입구로 돌아가려면 아무 키나 누르세요.");
-                Console.ReadKey();
-
-                Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
             }
         }
 
@@ -164,7 +161,7 @@ namespace StillHungry.Managers
 
         #region 박용규 추가 메소드
         // 몬스터에게 데미지를 주는 메소드
-        public void AttackMonster(int monsterId) 
+        public void AttackMonster(Monster monster) 
         {
             var player = Manager.Instance.Game.PlayerController;
          
@@ -183,9 +180,7 @@ namespace StillHungry.Managers
             }
 
             //몬스터에게 데미지 적용
-            Monster monster = MonsterController.GetMonsterFromID(monsterId);
-
-            Manager.Instance.Battle.MonsterController.TakeDamage(monsterId, (int)finalDamage, isCritical);
+            Manager.Instance.Battle.MonsterController.TakeDamage(monster, (int)finalDamage, isCritical);
         }
 
         // 플레이어의 경험치 획득 처리 메소드
