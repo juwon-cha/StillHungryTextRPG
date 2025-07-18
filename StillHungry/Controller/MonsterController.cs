@@ -57,15 +57,16 @@ namespace StillHungry.Controller
             }
 
             targetMonster.CurrentHp -= finalDamage;
+            targetMonster.DamageTaken += finalDamage;
 
-            if(isCritical)
-            {
-                Console.WriteLine($"{targetMonster.Name}에게 {finalDamage}의 데미지를 입혔습니다!");
-            }
-            else
-            {
-                Console.WriteLine($"{targetMonster.Name}에게 {finalDamage}의 데미지를 입혔습니다!");
-            }
+            //if(isCritical)
+            //{
+            //    Console.WriteLine($"\n{targetMonster.Name}에게 {finalDamage}의 치명상을 입혔습니다!");
+            //}
+            //else
+            //{
+            //    Console.WriteLine($"\n{targetMonster.Name}에게 {finalDamage}의 데미지를 입혔습니다!");
+            //}
 
             if (targetMonster.CurrentHp <= 0)
             {
@@ -112,6 +113,7 @@ namespace StillHungry.Controller
             monster.IsDead = true;
             monster.CurrentHp = 0;
             Manager.Instance.Game.PlayerController.QuestKillCountUp(monster.Name);
+            monster.DamageTaken = 0;
             Console.WriteLine($"{monster.Name}을(를) 처치했습니다!\n");
 
             // TODO: 경험치 획득, 아이템 드랍 로직 추가?

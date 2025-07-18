@@ -15,8 +15,8 @@ namespace StillHungry.Controller
         public int HP { get; set; }
         public int MaxHP { get; protected set; }
 
-        public virtual float CriticalRate { get; protected set; } // 치명타
-        public virtual float DodgeRate { get; protected set; } // 회피
+        public virtual float CriticalChance { get; protected set; } // 치명타
+        public virtual float EvasionChance { get; protected set; } // 회피
 
         public virtual void Init() { }
     }

@@ -20,6 +20,7 @@ namespace StillHungry.Managers
         ATTACK_SELECT_SCENE,
         PLAYER_ATTACK_SCENE,
         QUEST_SCENE,
+        SKILL_SELECT_SCENE,
         VOID_SCENE
     }
 
@@ -51,6 +52,7 @@ namespace StillHungry.Managers
             mSceneDict.Add(ESceneType.ATTACK_SELECT_SCENE, new AttackSelectScene());
             mSceneDict.Add(ESceneType.PLAYER_ATTACK_SCENE, new PlayerAttackScene());
             mSceneDict.Add(ESceneType.QUEST_SCENE, new QuestScene());
+            mSceneDict.Add(ESceneType.SKILL_SELECT_SCENE, new SkillSelectScene());
             //mSceneDict.Add(ESceneType.VOID_SCENE, new VoidScene());
 
             // 타이틀 씬으로 초기화

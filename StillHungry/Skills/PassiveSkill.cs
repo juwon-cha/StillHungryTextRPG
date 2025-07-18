@@ -1,15 +1,7 @@
-using StillHungry.Controller;
 using StillHungry.Managers;
-using StillHungry.Scene;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 // 삭제 예정
-namespace StillHungry
+namespace StillHungry.Skills
 {
     public struct PassiveSkillStat
     {

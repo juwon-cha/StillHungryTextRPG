@@ -1,7 +1,9 @@
 using StillHungry.Data;
 using StillHungry.Items;
 using StillHungry.Managers;
+using StillHungry.Monsters;
 using StillHungry.Scene;
+using StillHungry.Skills;
 
 
 namespace StillHungry.Controller
@@ -44,8 +46,8 @@ namespace StillHungry.Controller
         // 외부에서는 이 프로퍼티를 통해 최종 값만 읽을 수 있음
         public override float Attack => BaseAttack + BonusAttack + FoodAttack;
         public override float Defense => BaseDefense + BonusDefense + FoodDefense;
-        public float CriticalChance => BaseCriticalChance + FoodCriticalChance;
-        public float EvasionChance => BaseEvasionChance + FoodEvasionChance;
+        public override float CriticalChance => BaseCriticalChance + FoodCriticalChance;
+        public override float EvasionChance => BaseEvasionChance + FoodEvasionChance;
 
         public int CurrentMana => Mana;
         public int MaximumMana => MaxMana;
@@ -57,6 +59,7 @@ namespace StillHungry.Controller
 
         public Food? EatFood { get; set; } = null;// 플레이어가 먹을 음식
 
+        public List<Skill> ActiveSkills = new List<Skill>();
         public QuestData? LiveQuest { get; set; } = null; // 현재 진행 중인 퀘스트 데이터
         public int currentQuestKillCount { get; private set; } = 0; // 현재 퀘스트에서 처치한 몬스터 수
 
@@ -93,6 +96,48 @@ namespace StillHungry.Controller
             else
             {
                 throw new KeyNotFoundException("Initialization Failed: Failed to load PlayerStat");
+            }
+        }
+
+        // 직업에 따라 초기 스킬 세팅
+        // TODO: 플레이어 스킬 json에 저장
+        public void AssignInitialSkills()
+        {
+            int minIdRange = 0;
+            int maxIdRange = 0;
+
+            switch(ClassType)
+            {
+                case EClassType.WARRIOR:
+                    minIdRange = 1;
+                    maxIdRange = 99;
+                    break;
+
+                case EClassType.MAGICIAN:
+                    minIdRange = 100;
+                    maxIdRange = 199;
+                    break;
+
+                case EClassType.ARCHER:
+                    minIdRange = 200;
+                    maxIdRange = 299;
+                    break;
+
+                case EClassType.THIEF:
+                    minIdRange = 300;
+                    maxIdRange = 399;
+                    break;
+
+                default:
+                    break;
+            }
+
+            foreach(var skill in Manager.Instance.Skill.ActiveSkills)
+            {
+                if(skill.Key >= minIdRange && skill.Key <= maxIdRange)
+                {
+                    ActiveSkills.Add(skill.Value);
+                }
             }
         }
 
@@ -414,12 +459,91 @@ namespace StillHungry.Controller
                 Mana -= amount;
                 return true;
             }
+
             return false;
         }
 
-        public void UseSkill()
+        public bool UseSkill(Skill skill)
         {
+            if(!UseMana(skill.RequiredMP))
+            {
+                Console.WriteLine("MP가 부족합니다.");
+            }
+            Console.WriteLine($"{skill.Name} 시전");
 
+            // 범위 공격이 아닌 경우
+            if(!skill.IsRangeAttack)
+            {
+                // 공격 스킬 처리 (DamageMultiplier가 0보다 클 때)
+                if (skill.DamageMultiplier > 0)
+                {
+                    // 최종 공격력에 스킬 배율을 곱하여 데미지 계산
+                    Attack = (int)(Attack * skill.DamageMultiplier);
+                }
+                else if (skill.DefenseMultiplier > 0)
+                {
+                    Defense *= skill.DefenseMultiplier;
+                }
+                else if (skill.CriticalMultiplier > 0)
+                {
+                    CriticalChance *= skill.CriticalMultiplier;
+                }
+                else if (skill.EvadeMultiplier > 0)
+                {
+                    EvasionChance *= skill.EvadeMultiplier;
+                }
+            }
+            else
+            {
+                // TODO: 범위 공격 일반화
+                // 플레이어의 범위 공격
+
+                // 살아있는 몬스터 리스트 가져오기
+                var monster = Manager.Instance.Battle.MonsterController;
+                List<Monster> livingMonsters = monster.ActiveMonsters.Where(m => !m.IsDead).ToList();
+                if (livingMonsters.Count == 0)
+                {
+                    Console.WriteLine("공격할 대상이 없습니다.");
+                    return false;
+                }
+
+                // 파워 스트라이크
+                if (skill.ID == 2)
+                {
+                    var targets = livingMonsters.OrderBy(m => Guid.NewGuid()).Take(2).ToList();
+                    for (int i = 0; i < targets.Count; ++i)
+                    {
+                        // 스킬 데미지 계산
+                        int damage = (int)(this.Attack * skill.DamageMultiplier);
+
+                        monster.TakeDamage(i, damage, false);
+                    }
+                }
+                else if (skill.ID == 101) // 메테오
+                {
+                    var targets = livingMonsters.OrderBy(m => Guid.NewGuid()).Take(3).ToList();
+                    for (int i = 0; i < targets.Count; ++i)
+                    {
+                        // 스킬 데미지 계산
+                        int damage = (int)(this.Attack * skill.DamageMultiplier);
+
+                        monster.TakeDamage(i, damage, false);
+                    }
+                }
+                else if (skill.ID == 201) // 더블 샷
+                {
+                    var targets = livingMonsters.OrderBy(m => Guid.NewGuid()).Take(2).ToList();
+                    for (int i = 0; i < targets.Count; ++i)
+                    {
+                        // 스킬 데미지 계산
+                        int damage = (int)(this.Attack * skill.DamageMultiplier); 
+
+                        monster.TakeDamage(i, damage, false);
+                    }
+                }
+            }
+
+            return skill.IsRangeAttack;
         }
 
         public void Defend()

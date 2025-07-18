@@ -226,4 +226,35 @@ namespace StillHungry.Data
         }
     }
     #endregion
+
+    #region 스킬
+    public struct SkillData
+    {
+        public int ID;
+        public string Name;
+        public string Description;
+        public int RequiredMP;
+        public float DamageMultiplier;
+        public float DefenseMultiplier;
+        public float CriticalMultiplier;
+        public float EvadeMultiplier;
+        public bool IsRangeAttack;
+    }
+
+    public class SkillDataLoader : ILoader<int, SkillData>
+    {
+        public List<SkillData> Active = new List<SkillData>();
+
+        public Dictionary<int, SkillData> MakeData()
+        {
+            Dictionary<int, SkillData> dict = new Dictionary<int, SkillData>();
+            foreach (SkillData skill in Active)
+            {
+                dict.Add(skill.ID, skill);
+            }
+
+            return dict;
+        }
+    }
+    #endregion
 }
