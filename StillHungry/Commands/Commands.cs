@@ -228,7 +228,7 @@ namespace StillHungry.Commands
                 Manager.Instance.Game.SetPlayerData(name, mClassType);
                 Console.WriteLine($"\n{name}({className})님, 스파르타 마을로 여정을 시작합니다!");
                 Thread.Sleep(2000);
-                Manager.Instance.Scene.ChangeScene(ESceneType.TOWN_SCENE);
+                Manager.Instance.Scene.ChangeScene(ESceneType.STORY_SCENE);
             }
             else if (choice == "2")
             {
