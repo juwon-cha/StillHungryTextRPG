@@ -7,7 +7,7 @@ namespace StillHungry.Controller
         public Dictionary<int, Item> EquipInventory = new Dictionary<int, Item>();       // 장비 아이템 인벤토리
         public Dictionary<int, Item> ConsumableInventory = new Dictionary<int, Item>();  // 소모품 아이템 인벤토리
         public Dictionary<int, Item> EtcItemInventory = new Dictionary<int, Item>();     // 기타 아이템 인벤토리
-
+        public Dictionary<int, Item> FoodInventory = new Dictionary<int, Item>();         // 요리 아이템 
         public void AddItem(Item item)
         {
             if (item == null)

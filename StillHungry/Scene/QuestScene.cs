@@ -31,9 +31,9 @@ namespace StillHungry.Scene
             mMenuCommands = new IExecutable[mMenuItems.Length];
             for(int j = 0; j < mMenuItems.Length - 1; j++)
             {
-                mMenuCommands[j] = new QuestSceneCommand(RequestRedraw, i);
+                mMenuCommands[j] = new QuestSceneCommand(RequestRedraw, j+1);
             }
-            mMenuCommands[mMenuCommands.Length - 1] = new ChangeSceneCommand(ESceneType.TOWN_SCENE);
+            mMenuCommands[mMenuCommands.Length - 1] = new ChangeSceneCommand(ESceneType.GUILD_SCENE);
             
         }
         public override void Display()
