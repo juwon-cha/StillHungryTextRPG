@@ -1,6 +1,7 @@
 using StillHungry.Data;
 using StillHungry.Items;
 using StillHungry.Managers;
+using StillHungry.Monsters;
 using StillHungry.Scene;
 using StillHungry.Skills;
 
@@ -94,6 +95,7 @@ namespace StillHungry.Controller
         }
 
         // 직업에 따라 초기 스킬 세팅
+        // TODO: 플레이어 스킬 json에 저장
         public void AssignInitialSkills()
         {
             int minIdRange = 0;
@@ -452,7 +454,7 @@ namespace StillHungry.Controller
             return false;
         }
 
-        public int UseSkill(Skill skill)
+        public bool UseSkill(Skill skill)
         {
             if(!UseMana(skill.RequiredMP))
             {
@@ -460,28 +462,79 @@ namespace StillHungry.Controller
             }
             Console.WriteLine($"{skill.Name} 시전");
 
-            int finalDamage = 0;
+            // 범위 공격이 아닌 경우
+            if(!skill.IsRangeAttack)
+            {
+                // 공격 스킬 처리 (DamageMultiplier가 0보다 클 때)
+                if (skill.DamageMultiplier > 0)
+                {
+                    // 최종 공격력에 스킬 배율을 곱하여 데미지 계산
+                    Attack = (int)(Attack * skill.DamageMultiplier);
+                }
+                else if (skill.DefenseMultiplier > 0)
+                {
+                    Defense *= skill.DefenseMultiplier;
+                }
+                else if (skill.CriticalMultiplier > 0)
+                {
+                    CriticalChance *= skill.CriticalMultiplier;
+                }
+                else if (skill.EvadeMultiplier > 0)
+                {
+                    EvasionChance *= skill.EvadeMultiplier;
+                }
+            }
+            else
+            {
+                // TODO: 범위 공격 일반화
+                // 플레이어의 범위 공격
 
-            // 공격 스킬 처리 (DamageMultiplier가 0보다 클 때)
-            if (skill.DamageMultiplier > 0)
-            {
-                // 최종 공격력에 스킬 배율을 곱하여 데미지 계산
-                finalDamage = (int)(Attack * skill.DamageMultiplier);
-            }
-            else if (skill.DefenseMultiplier > 0)
-            {
-                Defense *= skill.DefenseMultiplier;
-            }
-            else if(skill.CriticalMultiplier > 0)
-            {
-                CriticalChance *= skill.CriticalMultiplier;
-            }
-            else if(skill.EvadeMultiplier > 0)
-            {
+                // 살아있는 몬스터 리스트 가져오기
+                var monster = Manager.Instance.Battle.MonsterController;
+                List<Monster> livingMonsters = monster.ActiveMonsters.Where(m => !m.IsDead).ToList();
+                if (livingMonsters.Count == 0)
+                {
+                    Console.WriteLine("공격할 대상이 없습니다.");
+                    return false;
+                }
 
+                // 파워 스트라이크
+                if (skill.ID == 2)
+                {
+                    var targets = livingMonsters.OrderBy(m => Guid.NewGuid()).Take(2).ToList();
+                    for (int i = 0; i < targets.Count; ++i)
+                    {
+                        // 스킬 데미지 계산
+                        int damage = (int)(this.Attack * skill.DamageMultiplier);
+
+                        monster.TakeDamage(i, damage, false);
+                    }
+                }
+                else if (skill.ID == 101) // 메테오
+                {
+                    var targets = livingMonsters.OrderBy(m => Guid.NewGuid()).Take(3).ToList();
+                    for (int i = 0; i < targets.Count; ++i)
+                    {
+                        // 스킬 데미지 계산
+                        int damage = (int)(this.Attack * skill.DamageMultiplier);
+
+                        monster.TakeDamage(i, damage, false);
+                    }
+                }
+                else if (skill.ID == 201) // 더블 샷
+                {
+                    var targets = livingMonsters.OrderBy(m => Guid.NewGuid()).Take(2).ToList();
+                    for (int i = 0; i < targets.Count; ++i)
+                    {
+                        // 스킬 데미지 계산
+                        int damage = (int)(this.Attack * skill.DamageMultiplier); 
+
+                        monster.TakeDamage(i, damage, false);
+                    }
+                }
             }
-            
-            return finalDamage;
+
+            return skill.IsRangeAttack;
         }
 
         public void Defend()

@@ -19,6 +19,7 @@ namespace StillHungry.Skills
         public float DefenseMultiplier;
         public float CriticalMultiplier;
         public float EvadeMultiplier;
+        public bool IsRangeAttack;
 
         public Skill(int id)
         {
@@ -38,6 +39,7 @@ namespace StillHungry.Skills
                 DefenseMultiplier = skillData.DefenseMultiplier;
                 CriticalMultiplier = skillData.CriticalMultiplier;
                 EvadeMultiplier = skillData.EvadeMultiplier;
+                IsRangeAttack = skillData.IsRangeAttack;
             }
         }
 

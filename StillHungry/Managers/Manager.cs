@@ -47,11 +47,11 @@ namespace StillHungry.Managers
             Dungeon = new DungeonManager();
             Battle = new BattleManager();
             Skill = new SkillManager();
+            UI = new UIManager();
 
             Scene.Init();
             Item.Init();
             Skill.Init();
-            UI = new UIManager();
         }
     }
 }

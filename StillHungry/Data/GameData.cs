@@ -234,6 +234,7 @@ namespace StillHungry.Data
         public float DefenseMultiplier;
         public float CriticalMultiplier;
         public float EvadeMultiplier;
+        public bool IsRangeAttack;
     }
 
     public class SkillDataLoader : ILoader<int, SkillData>

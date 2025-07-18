@@ -23,13 +23,14 @@ namespace StillHungry.Scene
             mMenuCommands.Clear();
 
             int monsterCount = Manager.Instance.Battle.MonsterController.ActiveMonsters.Count;
+            mNavigator = new MenuNavigator(monsterCount + 1);
+
             for (int i = 0; i < monsterCount; ++i)
             {
-                mMenuCommands.Add(new ChangeSceneCommand(ESceneType.PLAYER_ATTACK_SCENE));
+                mMenuCommands.Add(new AttackSelectCommand(mNavigator.SelectedIndex));
             }
 
             mMenuCommands.Add(new ChangeSceneCommand(ESceneType.BATTLE_SCENE));
-            mNavigator = new MenuNavigator(monsterCount + 1);
         }
 
         public override void Display()
