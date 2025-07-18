@@ -62,6 +62,7 @@ namespace StillHungry.Managers
         {
             if (CurrentScene != null)
             {
+                Manager.Instance.Game.PlayerController.UpdateActiveQuestProgress();
                 CurrentScene.Display();
             }
         }

@@ -23,7 +23,7 @@ namespace StillHungry.Scene
             mMenuCommands = new IExecutable[]
             {
                 new RestCommand(RequestRedraw),
-                new ChangeSceneCommand(ESceneType.TOWN_SCENE)
+                new ChangeSceneCommand(ESceneType.GUILD_SCENE)
             };
         }
 
