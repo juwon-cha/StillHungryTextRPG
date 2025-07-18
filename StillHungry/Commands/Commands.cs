@@ -3,7 +3,6 @@ using StillHungry.Data;
 using StillHungry.Items;
 using StillHungry.Managers;
 using StillHungry.Scene;
-using StillHungry.UI;
 using StillHungry.Utils;
 
 namespace StillHungry.Commands
@@ -387,23 +386,34 @@ namespace StillHungry.Commands
 
             Console.Write("\n구매할 아이템의 번호를 입력해주세요 (0: 나가기) >> ");
             string input = Console.ReadLine();
+
             var storeItems = Manager.Instance.Item.ConsumableItems;
             if (int.TryParse(input, out int choice) && choice > 0 && choice <= storeItems.Count)
             {
-                Item itemToBuy = storeItems.Values.ElementAt(choice - 1);
-                if (itemToBuy != null)
+                // 구매할 아이템의 갯수 입력
+                Console.Write("\n\n구매할 아이템의 갯수를 입력해주세요 (0: 나가기) >> ");
+                string input1 = Console.ReadLine();
+                if(int.TryParse(input1, out int count) && count > 0)
                 {
-                    EPurchaseResult result = Manager.Instance.Game.PlayerController.BuyItem(itemToBuy);
-                    string message = result switch
+                    Item itemToBuy = storeItems.Values.ElementAt(choice - 1);
+                    if (itemToBuy != null)
                     {
-                        EPurchaseResult.SUCCESS => "구매를 완료했습니다.",
-                        EPurchaseResult.NOT_ENOUGH_GOLD => "Gold가 부족합니다.",
-                        EPurchaseResult.ALREADY_PURCHASED => "이미 구매한 아이템입니다.",
-                        _ => "구매에 실패했습니다."
-                    };
-                    itemToBuy.HasPurchased = false;
-                    Console.WriteLine(message);
+                        EPurchaseResult result = Manager.Instance.Game.PlayerController.BuyItem(itemToBuy, count);
+                        string message = result switch
+                        {
+                            EPurchaseResult.SUCCESS => $"{count}개를 구매했습니다.",
+                            EPurchaseResult.NOT_ENOUGH_GOLD => "Gold가 부족합니다.",
+                            _ => "구매에 실패했습니다."
+                        };
+                        itemToBuy.HasPurchased = false;
+                        Console.WriteLine(message);
+                    }
                 }
+                else if (count != 0)
+                {
+                    Console.WriteLine("잘못된 입력입니다.");
+                }
+
             }
             else if (choice != 0)
             {
@@ -505,7 +515,7 @@ namespace StillHungry.Commands
         public BuyFoodCommand(Action requestRedrawCallback)
         {
             mRequestRedrawCallback = requestRedrawCallback;
-            
+
         }
 
 
@@ -520,11 +530,11 @@ namespace StillHungry.Commands
             Console.WriteLine($"{Manager.Instance.Game.PlayerController.Gold} G\n");
 
 
-            Manager.Instance.UI.PrintFoodItemList(Manager.Instance.Item.FoodItems);
+            Manager.Instance.UI.PrintFoodItemList(Manager.Instance.Game.PlayerController.InventoryController.FoodInventory);
 
             Console.Write("\n구매할 요리의 번호를 입력해주세요 (0: 나가기) >> ");
             string input = Console.ReadLine();
-            var storeItems = Manager.Instance.Item.FoodItems;
+            var storeItems = Manager.Instance.Game.PlayerController.InventoryController.FoodInventory;
             if (int.TryParse(input, out int choice) && choice > 0 && choice <= storeItems.Count)
             {
                 Item itemToBuy = storeItems.Values.ElementAt(choice - 1);
@@ -538,7 +548,7 @@ namespace StillHungry.Commands
                         EPurchaseResult.ALREADY_PURCHASED => $"이미 {Manager.Instance.Game.PlayerController.EatFood.Name}을 먹었습니다.",
                         _ => "구매에 실패했습니다."
                     };
-                    if(result == EPurchaseResult.SUCCESS)
+                    if (result == EPurchaseResult.SUCCESS)
                     {
                         Manager.Instance.Game.PlayerController.EatFood = (Food)itemToBuy;
                         Manager.Instance.Game.PlayerController.RecalculateFoodStats();
@@ -597,61 +607,14 @@ namespace StillHungry.Commands
             mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
         }
     }
-    #endregion
- 
 
-
-    public class QuestSceneCommand : IExecutable
-    {
-        private readonly Action mRequestRedrawCallback;
-        private readonly QuestData focusQuest;
-
-        public QuestSceneCommand(Action requestRedrawCallback, int key)
-        {
-            mRequestRedrawCallback = requestRedrawCallback;
-            focusQuest = DataManager.QuestDataDict[key];
-        }
-
-
-        public void Execute()
-        {
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"퀘스트 - {focusQuest.Name}");
-            Console.ResetColor();
-
-            Console.WriteLine("\n" + focusQuest.Speech);
-            Console.WriteLine();
-            Console.WriteLine("목표");
-            Console.WriteLine($"{focusQuest.Target} {(true ? 0 : 1)} / {focusQuest.Detail}");
-
-            Console.Write("\n1. 수락하기\n2. 거절하기 ");
-            Console.Write("\n번호를 입력해주세요 >> ");
-            string input = Console.ReadLine();
-            if (int.TryParse(input, out int choice) && choice == 1)
-            {
-                Console.WriteLine($"고맙네 역시 자네 뿐이야.");
-            }
-            else if (choice == 2)
-            {
-                Console.WriteLine("생각이 바뀌면 다시 찾아오게.");
-            }
-            else
-            {
-                Console.WriteLine("잘못된 입력입니다.");
-            }
-
-            Thread.Sleep(1000);
-            mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
-        }
-    }
 
     //소모품 창고
     public class ConsumableManageCommand : IExecutable
     {
         private readonly Action mRequestRedrawCallback;
 
-        public ConsumableManageCommand(Action requestRedrawCallback)
+        public ConsumableManageCommand(Action requestRedrawCallback, bool isInventory = true)
         {
             mRequestRedrawCallback = requestRedrawCallback;
         }
@@ -678,7 +641,7 @@ namespace StillHungry.Commands
                     Console.WriteLine($"{itemToEquip.Name}을(를) 사용했습니다.");
                     if (itemToEquip.ID >= 200 && itemToEquip.ID < 300)
                         player.UseHPRecovery((ConsumableHP)itemToEquip); // 아이템 사용 시 HP 회복
-                    else if(itemToEquip.ID >= 300 && itemToEquip.ID < 400)
+                    else if (itemToEquip.ID >= 300 && itemToEquip.ID < 400)
                         player.UseMPRecovery((ConsumableMP)itemToEquip); // 아이템 사용 시 MP 회복
                     else
                         Console.WriteLine("해당 아이템은 사용할 수 없습니다.");
@@ -727,7 +690,108 @@ namespace StillHungry.Commands
             mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
         }
     }
+    #endregion
 
+    #region 퀘스트
+    public class QuestSceneCommand : IExecutable
+    {
+        private readonly Action mRequestRedrawCallback;
+        private readonly QuestData focusQuest;
+
+        public QuestSceneCommand(Action requestRedrawCallback, int key)
+        {
+            mRequestRedrawCallback = requestRedrawCallback;
+            focusQuest = DataManager.QuestDataDict[key];
+        }
+
+
+        public void Execute()
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"퀘스트 - {focusQuest.Name}");
+            Console.ResetColor();
+            Console.WriteLine();
+
+            // (퀘스트ID = 1 || 이전 퀘스트가 클리어 된 경우) && (현재 퀘스트를 안받은 경우 || 현재 퀘스트랑 들어온 퀘스트랑 똑같을 때 || 현재 퀘스트가 클리어 된 상황)
+            if ((focusQuest.ID == 1 || DataManager.QuestDataDict[focusQuest.ID - 1].isClear) && (Manager.Instance.Game.PlayerController.LiveQuest == null || Manager.Instance.Game.PlayerController.LiveQuest == focusQuest || focusQuest.isClear))
+            {
+                // 퀘스트가 클리어된 경우
+                if (focusQuest.isClear)
+                {
+                    Console.WriteLine("\n이미 클리어한 퀘스트라네");
+                    Thread.Sleep(1000);
+                    mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
+                    return;
+                }
+                // 퀘스트 목표를 달성한 경우
+                else if (Manager.Instance.Game.PlayerController.LiveQuest == focusQuest)
+                {
+                    if (focusQuest.isAchievement)
+                    {
+                        focusQuest.isClear = true; // 퀘스트 완료 처리
+                        Console.WriteLine(focusQuest.Clear);
+
+                        Console.WriteLine();
+                        Console.WriteLine($"해금 - {Manager.Instance.Item.FoodItems[focusQuest.PayID].Name}");
+                        Manager.Instance.Game.PlayerController.InventoryController.FoodInventory.Add(focusQuest.PayID, Manager.Instance.Item.FoodItems[focusQuest.PayID]);
+
+
+                        Console.Write("\n0. 나가기 ");
+                        Console.Write("\n번호를 입력해주세요 >> ");
+                        string input = Console.ReadLine();
+
+                        Manager.Instance.Game.PlayerController.LiveQuest = null; // 퀘스트 완료 후 라이브 퀘스트 초기화
+                        Thread.Sleep(1000);
+                        mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
+                        return;
+                    }
+                }
+
+                Console.WriteLine(focusQuest.Speech);
+                Console.WriteLine();
+                Console.WriteLine("목표");
+                Console.WriteLine($"{focusQuest.Target} {Manager.Instance.Game.PlayerController.currentQuestKillCount} / {focusQuest.Detail}");
+                // 똑같은 퀘스트를 들어 왔을 때
+                if (Manager.Instance.Game.PlayerController.LiveQuest == focusQuest)
+                {
+
+                    Console.Write("\n0. 나가기 ");
+                    Console.Write("\n번호를 입력해주세요 >> ");
+                    string input = Console.ReadLine();
+
+                }
+                else
+                {
+                    Console.Write("\n1. 수락하기\n2. 거절하기 ");
+                    Console.Write("\n번호를 입력해주세요 >> ");
+                    string input = Console.ReadLine();
+                    if (int.TryParse(input, out int choice) && choice == 1)
+                    {
+                        Console.WriteLine($"고맙네 역시 자네 뿐이야.");
+                        Manager.Instance.Game.PlayerController.LiveQuest = focusQuest;
+                    }
+                    else if (choice == 2)
+                    {
+                        Console.WriteLine("생각이 바뀌면 다시 찾아오게.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("잘못된 입력입니다.");
+                    }
+                }
+            }
+            // 이전 퀘스트를 완료하지 않은 경우
+            else if (!DataManager.QuestDataDict[focusQuest.ID - 1].isClear)
+            {
+                Console.WriteLine("\n이전 퀘스트 먼저 깨고 오게나.");
+            }
+
+            Thread.Sleep(1000);
+            mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
+        }
+    }
+    #endregion
 
     #region  전투커맨드
     public class BattleStartCommand : IExecutable

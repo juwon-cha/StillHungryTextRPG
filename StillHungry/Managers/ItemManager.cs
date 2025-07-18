@@ -9,7 +9,7 @@ namespace StillHungry.Managers
         public Dictionary<int, Item> EquipmentItems = new Dictionary<int, Item>();   // 장착 아이템 
         public Dictionary<int, Item> ConsumableItems = new Dictionary<int, Item>();  // 소모품 아이템
         public Dictionary<int, Item> EtcItems = new Dictionary<int, Item>();         // 기타 아이템 
-        public Dictionary<int, Item> FoodItems = new Dictionary<int, Item>();         // 기타 아이템 
+        public Dictionary<int, Item> FoodItems = new Dictionary<int, Item>();         // 요리 아이템 
 
         public void Init()
         {
