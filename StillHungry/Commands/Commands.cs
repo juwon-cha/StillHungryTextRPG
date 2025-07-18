@@ -800,9 +800,14 @@ namespace StillHungry.Commands
     #region  전투커맨드
     public class BattleStartCommand : IExecutable
     {
+        private readonly EDungeonLevel mDungeonLevel;
+        public BattleStartCommand(EDungeonLevel dungeonLevel)
+        {
+            mDungeonLevel = dungeonLevel;
+        }
         public void Execute()
         {
-            Manager.Instance.Battle.StartBattle(EDungeonLevel.EASY); // 전투 시작 시 세팅
+            Manager.Instance.Battle.StartBattle(mDungeonLevel); // 전투 시작 시 세팅
             Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
         }
     }

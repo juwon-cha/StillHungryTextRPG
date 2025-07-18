@@ -79,9 +79,11 @@ namespace StillHungry.UI
             Console.WriteLine("던전 입장");
             Console.ResetColor();
             Console.WriteLine("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
-            Console.WriteLine("1. 쉬운 던전\t | 방어력 5 이상 권장");
-            Console.WriteLine("2. 일반 던전\t | 방어력 11 이상 권장");
-            Console.WriteLine("3. 어려운 던전\t | 방어력 17 이상 권장\n");
+            Console.WriteLine("- 축축한 동굴\t\t | 방어력  5 이상 권장");
+            Console.WriteLine("- 건조한 풀밭\t\t | 방어력 11 이상 권장");
+            Console.WriteLine("- 돌 산맥\t\t | 방어력 17 이상 권장");
+            Console.WriteLine("- 용암이 흐르는 계곡\t | 방어력 23 이상 권장");
+            Console.WriteLine("- 레드드래곤의 둥지\t | 방어력 29 이상 권장");
             DisplayOptions(menuOptions, selectedIndex);
         }
 

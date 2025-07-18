@@ -1,19 +1,30 @@
 {
-    "Dungeons": [
-      {
-        "Level": "EASY",
-        "RecommendedDefense": 5,
-        "BaseRewardGold": 1000
-      },
-      {
-        "Level": "NORMAL",
-        "RecommendedDefense": 11,
-        "BaseRewardGold": 1700
-      },
-      {
-        "Level": "HARD",
-        "RecommendedDefense": 17,
-        "BaseRewardGold": 2500
-      }
-    ]
+  "Dungeons": [
+    {
+      "Level": "축축한 동굴",
+      "RecommendedDefense": 5,
+      "BaseRewardGold": 1000
+    },
+    {
+      "Level": "건조한 풀밭",
+      "RecommendedDefense": 11,
+      "BaseRewardGold": 1700
+    },
+    {
+      "Level": "돌 산맥",
+      "RecommendedDefense": 17,
+      "BaseRewardGold": 2500
+    },
+    {
+      "Level": "용암이 흐르는 계곡",
+      "RecommendedDefense": 23,
+      "BaseRewardGold": 3200
+    },
+    {
+      "Level": "레드드래곤의 둥지",
+      "RecommendedDefense": 29,
+      "BaseRewardGold": 3900
+    }
+
+  ]
 }

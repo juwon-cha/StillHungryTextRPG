@@ -23,7 +23,7 @@ namespace StillHungry.Scene
             mNavigator = new MenuNavigator(mMenuItems.Length);
             mMenuCommands = new IExecutable[]
             {
-                new BattleStartCommand(),
+               
                 new SkillSelectCommand(),
                 new ConsumableManageCommand(RequestRedraw),
                 new ChangeSceneCommand(ESceneType.DUNGEON_SCENE),
