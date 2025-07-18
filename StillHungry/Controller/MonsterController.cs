@@ -112,7 +112,6 @@ namespace StillHungry.Controller
         {
             monster.IsDead = true;
             monster.CurrentHp = 0;
-            Manager.Instance.Game.PlayerController.QuestKillCountUp(monster.Name);
             monster.DamageTaken = 0;
             Console.WriteLine($"{monster.Name}을(를) 처치했습니다!\n");
 
