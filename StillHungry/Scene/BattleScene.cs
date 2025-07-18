@@ -25,7 +25,7 @@ namespace StillHungry.Scene
             {
                 new BattleStartCommand(),
                 new BattleStartCommand(),
-                new BattleStartCommand(),
+                new ConsumableManageCommand(RequestRedraw),
                 new ChangeSceneCommand(ESceneType.DUNGEON_SCENE),
             };
         }
