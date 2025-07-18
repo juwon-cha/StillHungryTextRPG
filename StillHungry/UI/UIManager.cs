@@ -38,39 +38,73 @@ namespace StillHungry.UI
 
         public void ShowStatusScreen(string[] menuOptions, int selectedIndex)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("상태 보기");
-            Console.ResetColor();
-            Console.WriteLine("캐릭터의 정보가 표시됩니다.\n");
-
             var player = Manager.Instance.Game.PlayerController;
-            Console.WriteLine($"Lv. {player.Level:D2}");
-            Console.WriteLine($"{player.Name} ( {StringConverter.ClassTypeToString(player.ClassType)} )");
 
+            // 헤더 박스
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│            [ 상태 보기 ]             │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.ResetColor();
+
+            // 기본 정보
+            Console.WriteLine($"이름   : {player.Name} ({StringConverter.ClassTypeToString(player.ClassType)})");
+            Console.WriteLine($"레벨   : {player.Level:D2}");
+
+            // 공격력
+            Console.ForegroundColor = ConsoleColor.Red;
             string attackStat = $"공격력 : {player.Attack}";
-            if (player.BonusAttack > 0) attackStat += $" (+{player.BonusAttack})";
-            if (player.FoodAttack > 0) attackStat += $" (+{player.FoodAttack})";
+            if (player.BonusAttack > 0) attackStat += $"  (장비 +{player.BonusAttack})";
+            if (player.FoodAttack > 0) attackStat += $"  (음식 +{player.FoodAttack})";
             Console.WriteLine(attackStat);
+            Console.ResetColor();
 
+            // 방어력
+            Console.ForegroundColor = ConsoleColor.Blue;
             string defenseStat = $"방어력 : {player.Defense}";
-            if (player.BonusDefense > 0) defenseStat += $" (+{player.BonusDefense})";
-            if (player.FoodDefense > 0) defenseStat += $" (+{player.FoodDefense})";
+            if (player.BonusDefense > 0) defenseStat += $"  (장비 +{player.BonusDefense})";
+            if (player.FoodDefense > 0) defenseStat += $"  (음식 +{player.FoodDefense})";
             Console.WriteLine(defenseStat);
+            Console.ResetColor();
 
-            Console.WriteLine($"체 력 : {player.HP} / {player.MaxHP}");
-            Console.WriteLine($"마 나 : {player.Mana} / {player.MaxMana}");
+            // 체력
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"체  력 : {player.HP} / {player.MaxHP}");
+            Console.ResetColor();
 
-            Console.WriteLine($"Gold : {player.Gold} G");
+            // 마나
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"마  나 : {player.Mana} / {player.MaxMana}");
+            Console.ResetColor();
 
-            string criticalStat = $"치명타 확률 : {player.CriticalChance * 100:F1} %";
-            if (player.FoodCriticalChance > 0) criticalStat += $" (+{player.FoodCriticalChance * 100:F1})";
+            // 치명타 확률
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            string criticalStat = $"치명타 : {player.CriticalChance * 100:F1}%";
+            if (player.FoodCriticalChance > 0) criticalStat += $"  (음식 +{player.FoodCriticalChance * 100:F1}%)";
             Console.WriteLine(criticalStat);
-            string evasionStat = $"회피 확률 : {player.EvasionChance * 100:F1} %";
-            if (player.FoodEvasionChance > 0) evasionStat += $" (+{player.FoodEvasionChance * 100:F1})";
-            Console.WriteLine(evasionStat + "\n");
+            Console.ResetColor();
 
-            if(player.EatFood !=null)
-                Console.WriteLine($"{player.EatFood} 복용 중\n");
+            // 회피 확률
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            string evasionStat = $"회  피 : {player.EvasionChance * 100:F1}%";
+            if (player.FoodEvasionChance > 0) evasionStat += $"  (음식 +{player.FoodEvasionChance * 100:F1}%)";
+            Console.WriteLine(evasionStat);
+            Console.ResetColor();
+
+            // 골드
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"Gold   : {player.Gold} G");
+            Console.ResetColor();
+
+            // 음식 효과
+            if (player.EatFood != null)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine($"[식사 효과] {player.EatFood.Name}");
+                Console.ResetColor();
+            }
+
+            Console.WriteLine("──────────────────────────────────────");
 
             DisplayOptions(menuOptions, selectedIndex);
         }
@@ -356,11 +390,11 @@ namespace StillHungry.UI
                 }
                 if (item.Critical != 0)
                 {
-                    statDisplay += $"크리티컬 확률 +{item.Critical*100}% ";
+                    statDisplay += $"크리티컬 확률 +{item.Critical * 100:F0}% ";
                 }
                 if (item.Evade != 0)
                 {
-                    statDisplay += $"회피 확률 +{item.Evade*100}% ";
+                    statDisplay += $"회피 확률 +{item.Evade*100:F0}% ";
                 }
                 if(item.ID == 504)
                 {
@@ -659,6 +693,34 @@ namespace StillHungry.UI
             Console.WriteLine("(↑, ↓ 방향키로 이동, Enter로 선택)");
         }
         #endregion
+
+        private void DrawBox(int width, int height)
+        {
+            string horizontal = "─";
+            string vertical = "│";
+            string topLeft = "┌";
+            string topRight = "┐";
+            string bottomLeft = "└";
+            string bottomRight = "┘";
+
+            // 상단
+            Console.Write(topLeft);
+            for (int i = 0; i < width - 2; i++) Console.Write(horizontal);
+            Console.WriteLine(topRight);
+
+            // 중간
+            for (int i = 0; i < height - 2; i++)
+            {
+                Console.Write(vertical);
+                for (int j = 0; j < width - 2; j++) Console.Write(" ");
+                Console.WriteLine(vertical);
+            }
+
+            // 하단
+            Console.Write(bottomLeft);
+            for (int i = 0; i < width - 2; i++) Console.Write(horizontal);
+            Console.WriteLine(bottomRight);
+        }
     }
 }
     

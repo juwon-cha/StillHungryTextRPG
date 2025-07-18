@@ -727,6 +727,7 @@ namespace StillHungry.Commands
                 // 퀘스트 목표를 달성한 경우
                 else if (Manager.Instance.Game.PlayerController.LiveQuest == focusQuest)
                 {
+                    focusQuest.isAchievement = true; // 퀘스트 목표 달성 처리
                     if (focusQuest.isAchievement)
                     {
                         focusQuest.isClear = true; // 퀘스트 완료 처리
