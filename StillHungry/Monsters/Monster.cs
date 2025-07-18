@@ -16,7 +16,6 @@ namespace StillHungry.Monsters
         public int GoldReward { get; set; } // 몬스터 처치 시 주는 경험치
         public bool IsDefending { get; set; } = false;
         public bool IsDead { get; set; }
-        public int DamageTaken { get; set; } = 0; // 몬스터가 받은 피해량
 
         public Monster(int id)
         {

@@ -124,10 +124,6 @@ namespace StillHungry.Managers
         private void EndMonsterPhase()
         {
             // 모든 몬스터의 턴이 끝났으므로 인덱스 및 공격 몬스터 초기화
-            foreach(var monster in MonsterController.ActiveMonsters)
-            {
-                monster.DamageTaken = 0; // 몬스터 턴 끝나면 받은 데미지 초기화
-            }
             mCurrentMonsterIndex = 0;
             CurrentAttacker = null;
             LastAction = null;
@@ -162,7 +158,7 @@ namespace StillHungry.Managers
 
         #region 박용규 추가 메소드
         // 몬스터에게 데미지를 주는 메소드
-        public void AttackMonster(int monsterId) 
+        public void AttackEnemy(int monsterId) 
         {
             var player = Manager.Instance.Game.PlayerController;
          
@@ -179,13 +175,9 @@ namespace StillHungry.Managers
                 finalDamage *= 2.0f; //치명타 데미지 2배
                 Console.WriteLine("급소를 맞췄습니다. 데미지 2배!");
             }
-
             //몬스터에게 데미지 적용
-            Monster monster = MonsterController.GetMonsterFromID(monsterId);
-
             Manager.Instance.Battle.MonsterController.TakeDamage(monsterId, (int)finalDamage, isCritical);
         }
-
         // 플레이어의 경험치 획득 처리 메소드
         public void GetPlayerExp()
         {

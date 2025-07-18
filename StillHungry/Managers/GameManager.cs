@@ -17,9 +17,6 @@ namespace StillHungry.Managers
             PlayerController.Init(playerName, classType);
             // DataManager의 현재 유저 정보도 생성된 캐릭터로 설정
             DataManager.CurrentUser = CreateSaveData();
-
-            // 직업에 따라 스킬 보유
-            PlayerController.AssignInitialSkills();
         }
 
         public void SaveGame(int slotIndex)

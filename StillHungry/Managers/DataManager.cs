@@ -19,7 +19,6 @@ namespace StillHungry.Managers
         public static Dictionary<int, QuestData> QuestDataDict { get; private set; } = new Dictionary<int, QuestData>();
         public static Dictionary<int, ItemData> ItemDict { get; private set; } = new Dictionary<int, ItemData>();
         public static Dictionary<string, DungeonData> DungeonDataDict { get; private set; } = new Dictionary<string, DungeonData>();
-        public static Dictionary<int, SkillData> SkillDict { get; private set; } = new Dictionary<int, SkillData>();
 
         // 현재 플레이 중인 유저의 데이터
         public static UserData CurrentUser { get; set; }
@@ -85,7 +84,6 @@ namespace StillHungry.Managers
             QuestDataDict = LoadJson<QuestDataLoader, int, QuestData>("GameData/QuestData").MakeData();
             ItemDict = LoadJson<ItemLoader, int, ItemData>("GameData/ItemData").MakeData();
             DungeonDataDict = LoadJson<DungeonDataLoader, string, DungeonData>("GameData/DungeonData").MakeData();
-            SkillDict = LoadJson<SkillDataLoader, int, SkillData>("GameData/SkillData").MakeData();
         }
 
         // 제약 조건: T 타입으로 들어올 수 있는 클래스는 반드시 ILoader<Key, Value>와 매개변수가 없는 기본 생성자(new T())를 가지고 있어야 함
