@@ -407,14 +407,14 @@ namespace StillHungry.Controller
             if (damage > 0)
             {
                 HP -= damage;
-                if (HP < 0) HP = 0;
 
+                if (HP < 0)
+                {
+                    HP = 0;
+                }
 
                 if (HP == 0)
                 {
-                    Console.WriteLine("\n전투에서 패배했습니다.");
-                    Thread.Sleep(1000);
-
                     var battleManager = Manager.Instance.Battle;
 
                     battleManager.EndBattle

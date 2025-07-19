@@ -11,6 +11,7 @@ namespace StillHungry.Managers
 
         public MonsterController MonsterController = new MonsterController();
         public bool IsFighting = false;
+        public bool IsCritical { get; private set; } = false;
         public int SelectedMonsterID { get; set; } = 0;
 
         public int InitialHP; //전투 시작 시의 플레이어 체력
@@ -45,6 +46,10 @@ namespace StillHungry.Managers
             var player = Manager.Instance.Game.PlayerController;
             IsFighting = false;
 
+            // 전투 종료 후 상태 초기화
+            TotalDamageTaken = 0;
+            MonsterKillCount = 0;
+
             Console.Clear();
             Console.WriteLine("Battle!! - Result\n");
 
@@ -63,11 +68,6 @@ namespace StillHungry.Managers
 
                 Manager.Instance.Game.PlayerController.EatFood = null; // 음식버프 초기화
                 Manager.Instance.Game.PlayerController.RecalculateFoodStats();
-
-                Console.WriteLine("던전 입구로 돌아가려면 아무 키나 누르세요.");
-                Console.ReadKey();
-
-                Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
             }
             else
             {
@@ -78,6 +78,11 @@ namespace StillHungry.Managers
                 Console.WriteLine($"Lv.{player.Level} {player.Name}");
                 Console.WriteLine($"HP {initialHP} -> {player.HP}\n");
             }
+
+            Console.WriteLine("던전 입구로 돌아가려면 아무 키나 누르세요.");
+            Console.ReadKey();
+
+            Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
         }
 
         public void StartMonsterPhase()
@@ -127,13 +132,13 @@ namespace StillHungry.Managers
             {
                 monster.DamageTaken = 0; // 몬스터 턴 끝나면 받은 데미지 초기화
             }
+
             mCurrentMonsterIndex = 0;
             CurrentAttacker = null;
             LastAction = null;
 
-            Console.WriteLine("\n모든 몬스터의 턴이 끝났습니다. 당신의 차례입니다.");
-            Console.WriteLine("계속 하려면 아무 키나 누르세요.");
-            Console.ReadKey();
+            // 플레이어 치명타 여부 초기화
+            IsCritical = false;
 
             // TODO: 플레이어 공격 턴으로 전환 -> 몬스터 턴이 끝나고 배틀 씬(공격, 스킬, 가방 있는 씬)으로 전환?
             AttackSelectScene ac = (AttackSelectScene)Manager.Instance.Scene.GetScene(ESceneType.ATTACK_SELECT_SCENE);
@@ -141,14 +146,13 @@ namespace StillHungry.Managers
             Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
         }
 
-        
         public void SetDungeonLevel(EDungeonLevel level) //보상 기준
         {
             DungeonLevel = level;
         }
+
         public int GetGoldReward() //골드 계산
         {
-            
             return Manager.Instance.Dungeon.DungeonResult.RewardGold * MonsterKillCount;
         }
 
@@ -172,15 +176,15 @@ namespace StillHungry.Managers
             Random random = new Random(); //랜덤값 생성
             float roll = (float)random.NextDouble();
 
-            bool isCritical = roll < criticalChance;
-            if (isCritical)
+            //IsCritical = true; // 테스트용으로 치명타 무조건 발생
+            IsCritical = roll < criticalChance;
+            if (IsCritical)
             {
                 finalDamage *= 2.0f; //치명타 데미지 2배
-                Console.WriteLine("급소를 맞췄습니다. 데미지 2배!");
             }
 
             //몬스터에게 데미지 적용
-            Manager.Instance.Battle.MonsterController.TakeDamage(monster, (int)finalDamage, isCritical);
+            Manager.Instance.Battle.MonsterController.TakeDamage(monster, (int)finalDamage, IsCritical);
         }
 
         // 플레이어의 경험치 획득 처리 메소드
@@ -196,6 +200,7 @@ namespace StillHungry.Managers
             // 플레이어 컨트롤러에 있는 경험치 컨트롤 메서드에 값을 넘겨줌
             Manager.Instance.Game.PlayerController.SetExp(rewardExp);
         }
+
         public void GivePlayerGoldReward()
         {
             int goldReward = Manager.Instance.Dungeon.DungeonResult.RewardGold * MonsterKillCount;

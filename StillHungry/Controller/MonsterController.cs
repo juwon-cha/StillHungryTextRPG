@@ -98,8 +98,6 @@ namespace StillHungry.Controller
             monster.IsDead = true;
             monster.CurrentHp = 0;
             Manager.Instance.Game.PlayerController.QuestKillCountUp(monster.Name);
-            monster.DamageTaken = 0;
-            Console.WriteLine($"{monster.Name}을(를) 처치했습니다!\n");
 
             // TODO: 경험치 획득, 아이템 드랍 로직 추가?
 
@@ -112,26 +110,6 @@ namespace StillHungry.Controller
                     break;
                 }
             }
-            // 모든 몬스터를 처치했는지 확인
-            if (isAllMonsterDead)
-            {
-                Console.WriteLine("모든 몬스터를 처치했습니다! 전투에서 승리했습니다!");
-                Console.WriteLine("결과를 보려면 아무 키나 누르세요.");
-                Console.ReadKey();
-
-                var battleManager = Manager.Instance.Battle;
-                battleManager.EndBattle
-                    (
-                    isVictory: true,
-                    initialHP: battleManager.InitialHP,
-                    damageTaken: battleManager.TotalDamageTaken,
-                    monsterKillCount: battleManager.MonsterKillCount
-                    );
-
-                // 전투 종료 후 던전 씬으로 전환
-                //Manager.Instance.Scene.ChangeScene(ESceneType.DUNGEON_SCENE);
-            }
-
         }
 
         public Monster GetMonsterFromList(int index)

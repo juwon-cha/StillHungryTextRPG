@@ -448,21 +448,35 @@ namespace StillHungry.UI
             Console.WriteLine("\n(↑, ↓ 방향키로 이동, Enter로 선택)");
         }
 
-
+        #region 전투
         public void ShowMonsterPhaseScreen(string[] menuOptions, int selectedIndex, Monster attacker, MonsterAction action, PlayerController player)
         {
             Console.WriteLine("\u001b[33mBattle!!\u001b[0m\n");
 
-            // 공격자나 행동 정보가 없을 경우의 예외 처리
-            if (attacker == null || action == null || action.Type == EMonsterActionType.NONE)
+            bool isAllMonsterDead = true;
+            foreach (Monster m in Manager.Instance.Battle.MonsterController.ActiveMonsters)
             {
+                if (!m.IsDead)
+                {
+                    isAllMonsterDead = false;
+                    break;
+                }
+            }
+
+            if (isAllMonsterDead)
+            {
+                Console.WriteLine("모든 몬스터가 쓰러졌습니다! 전투에서 승리했습니다!");
+            }
+            else if (attacker == null || action == null || action.Type == EMonsterActionType.NONE)
+            {
+                // 공격자나 행동 정보가 없을 경우의 예외 처리
                 Console.WriteLine("몬스터들이 다음 행동을 준비합니다...");
             }
             else
             {
                 // MonsterAction에 담긴 메시지를 출력
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                if(action.Type == EMonsterActionType.ATTACK)
+                if (action.Type == EMonsterActionType.ATTACK)
                 {
                     Console.WriteLine($"{attacker.Name}이(가) 공격 자세를 취합니다!");
                 }
@@ -540,88 +554,21 @@ namespace StillHungry.UI
             Console.WriteLine($"HP : \u001b[33m{player.HP}/{player.MaxHP}\u001b[0m");
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        #region 박용규 추가 메소드
         public void ShowAttackSelect(int selectedIndex) 
         {
-            Console.WriteLine($"{StringConverter.DungeonLevelToString(Manager.Instance.Dungeon.CurrentDungeonLevel)}");
+            Console.WriteLine($"{StringConverter.DungeonLevelToString(Manager.Instance.Dungeon.CurrentDungeonLevel)}\n");
+
+            bool isAllMonsterDead = true;
+            foreach (Monster m in Manager.Instance.Battle.MonsterController.ActiveMonsters)
+            {
+                if (!m.IsDead)
+                {
+                    isAllMonsterDead = false;
+                    break;
+                }
+            }
+            ShowAllMonstersDead(isAllMonsterDead);
+
             Console.WriteLine("\u001b[33mAttack Select!!\u001b[0m");
 
             // 게임매니저의 인스턴스를 통해서 몬스터의 정보를 얻어온다.
@@ -641,7 +588,6 @@ namespace StillHungry.UI
                     $"Lv.\u001b[33m{m.Level}\u001b[0m " +
                     $"{m.Name,-5}\tHP \u001b[33m{m.CurrentHp}\u001b[0m");
                 }
-
             }
             monsters.Add("돌아가기");
             DisplayOptions(monsters.ToArray(), selectedIndex, "\n공격 대상을 선택해 주세요");
@@ -652,6 +598,35 @@ namespace StillHungry.UI
             Console.Write($"Lv. \u001b[33m{player.Level}\u001b[0m\t");
             Console.WriteLine($"{player.Name} ({StringConverter.ClassTypeToString(player.ClassType)})");
             Console.WriteLine($"HP : \u001b[33m{player.HP}/{player.MaxHP}\u001b[0m");
+        }
+
+        public void ShowAllMonstersDead(bool isAllMonsterDead)
+        {
+            if(isAllMonsterDead)
+            {
+                Console.WriteLine("모든 몬스터를 처치했습니다! 전투에서 승리했습니다!");
+
+                foreach (var m in Manager.Instance.Battle.MonsterController.ActiveMonsters)
+                {
+                    // 몬스터의 정보를 출력
+                    if (m.IsDead)
+                    {
+                        Console.WriteLine($"\u001b[90mLv.{m.Level} " + $"{m.Name,-5}\tDEAD\u001b[0m");
+                    }
+                }
+
+                Console.WriteLine("전투 결과를 보려면 아무 키나 누르세요.");
+                Console.ReadKey();
+
+                var battleManager = Manager.Instance.Battle;
+                battleManager.EndBattle
+                    (
+                    isVictory: true,
+                    initialHP: battleManager.InitialHP,
+                    damageTaken: battleManager.TotalDamageTaken,
+                    monsterKillCount: battleManager.MonsterKillCount
+                    );
+            }
         }
 
         public void ShowBattleScreen(string[] menuOptions, int selectedIndex)
@@ -726,7 +701,14 @@ namespace StillHungry.UI
             {
                 if(monster.DamageTaken > 0)
                 {
-                    Console.WriteLine($"{monster.Name}에게 {monster.DamageTaken}의 데미지를 입혔습니다.");
+                    if (Manager.Instance.Battle.IsCritical)
+                    {
+                        Console.WriteLine($"{monster.Name}에게 {monster.DamageTaken}의 치명상을 입혔습니다!");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{monster.Name}에게 {monster.DamageTaken}의 데미지를 입혔습니다.");
+                    }
                 }
             }
 
@@ -758,4 +740,3 @@ namespace StillHungry.UI
         #endregion
     }
 }
-    
