@@ -9,6 +9,7 @@ using System.Threading;
 
 namespace StillHungry.UI
 {
+    // 559 634
     public class UIManager
     {
         #region 메인 UI 출력 메서드
@@ -556,7 +557,7 @@ namespace StillHungry.UI
 
         public void ShowAttackSelect(int selectedIndex) 
         {
-            Console.WriteLine($"{StringConverter.DungeonLevelToString(Manager.Instance.Dungeon.CurrentDungeonLevel)}\n");
+            Console.WriteLine($"{Manager.Instance.Dungeon}\n"); // 던전 이름으로 수정
 
             bool isAllMonsterDead = true;
             foreach (Monster m in Manager.Instance.Battle.MonsterController.ActiveMonsters)
@@ -631,7 +632,7 @@ namespace StillHungry.UI
 
         public void ShowBattleScreen(string[] menuOptions, int selectedIndex)
         {
-            Console.WriteLine($"{StringConverter.DungeonLevelToString(Manager.Instance.Dungeon.CurrentDungeonLevel)}");
+            Console.WriteLine($"{Manager.Instance.Dungeon}"); // 던전 이름으로 수정
             Console.WriteLine("\u001b[33mBattle!!\u001b[0m");
 
             // 게임매니저의 인스턴스를 통해서 몬스터의 정보를 얻어온다.

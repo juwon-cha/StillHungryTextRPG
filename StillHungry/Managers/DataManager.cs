@@ -18,7 +18,7 @@ namespace StillHungry.Managers
         public static Dictionary<int, MonsterStat> MonsterStatDict { get; private set; } = new Dictionary<int, MonsterStat>();
         public static Dictionary<int, QuestData> QuestDataDict { get; private set; } = new Dictionary<int, QuestData>();
         public static Dictionary<int, ItemData> ItemDict { get; private set; } = new Dictionary<int, ItemData>();
-        public static Dictionary<string, DungeonData> DungeonDataDict { get; private set; } = new Dictionary<string, DungeonData>();
+        public static Dictionary<int, DungeonData> DungeonDataDict { get; private set; } = new Dictionary<int, DungeonData>();
         public static Dictionary<int, SkillData> SkillDict { get; private set; } = new Dictionary<int, SkillData>();
 
         // 현재 플레이 중인 유저의 데이터
@@ -84,7 +84,7 @@ namespace StillHungry.Managers
             MonsterStatDict = LoadJson<MonsterStatLoader, int, MonsterStat>("GameData/MonsterStat").MakeData();
             QuestDataDict = LoadJson<QuestDataLoader, int, QuestData>("GameData/QuestData").MakeData();
             ItemDict = LoadJson<ItemLoader, int, ItemData>("GameData/ItemData").MakeData();
-            DungeonDataDict = LoadJson<DungeonDataLoader, string, DungeonData>("GameData/DungeonData").MakeData();
+            DungeonDataDict = LoadJson<DungeonDataLoader, int, DungeonData>("GameData/DungeonData").MakeData();
             SkillDict = LoadJson<SkillDataLoader, int, SkillData>("GameData/SkillData").MakeData();
         }
 

@@ -19,16 +19,16 @@ namespace StillHungry.Managers
 
     class DungeonManager
     {
-        public EDungeonLevel CurrentDungeonLevel { get; set; }
+        public int CurrentDungeonID { get; set; }
         public DungeonResult DungeonResult { get; private set; }
 
-        public void TryEnterDungeon(EDungeonLevel level)
+        public void TryEnterDungeon(int dungeonID)
         {
 
             var player = Manager.Instance.Game.PlayerController;
 
             // json 던전 데이터 로드
-            if (!DataManager.DungeonDataDict.TryGetValue(level.ToString(), out DungeonData dungeonData))
+            if (!DataManager.DungeonDataDict.TryGetValue(dungeonID, out DungeonData dungeonData))
             {
                 // 데이터가 없는 예외적인 경우
                 DungeonResult = new DungeonResult(false, 0);

@@ -140,22 +140,23 @@ namespace StillHungry.Data
     #region Dungeon
     public struct DungeonData
     {
-        public EDungeonLevel Level;
+        public int ID;
+        public string Name;
         public int RecommendedDefense;
         public int BaseRewardGold;
     }
 
-    public class DungeonDataLoader : ILoader<string, DungeonData>
+    public class DungeonDataLoader : ILoader<int, DungeonData>
     {
         public List<DungeonData> Dungeons = new List<DungeonData>();
 
-        public Dictionary<string, DungeonData> MakeData()
+        public Dictionary<int, DungeonData> MakeData()
         {
-            Dictionary<string, DungeonData> dict = new Dictionary<string, DungeonData>();
+            Dictionary<int, DungeonData> dict = new Dictionary<int, DungeonData>();
 
             foreach (DungeonData dungeonData in Dungeons)
             {
-                dict.Add(dungeonData.Level.ToString(), dungeonData);
+                dict.Add(dungeonData.ID, dungeonData);
             }
 
             return dict;
