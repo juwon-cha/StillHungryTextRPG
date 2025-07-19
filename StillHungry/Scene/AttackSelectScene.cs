@@ -36,7 +36,7 @@ namespace StillHungry.Scene
                 }
                 else
                 {
-                    mMenuCommands.Add(new AttackSelectCommand(mNavigator.SelectedIndex));
+                    mMenuCommands.Add(new AttackSelectCommand(i));
                 }
             }
             // 죽은 몬스터는 선택메뉴에서 위로 올라가게 만들기 **** TODO ****

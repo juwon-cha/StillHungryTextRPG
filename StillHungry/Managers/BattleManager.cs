@@ -37,7 +37,7 @@ namespace StillHungry.Managers
             MonsterKillCount = 0; //전투 시작될때 다시 0으로 출력
             mCurrentMonsterIndex = 0;
 
-            CurrentDungeonLevel = dungeonLevel; //난이도 저장
+            CurrentDungeonLevel = dungeonLevel; // 난이도 저장
         }
 
         public void EndBattle(bool isVictory, int initialHP, int damageTaken, int monsterKillCount)
@@ -135,7 +135,7 @@ namespace StillHungry.Managers
             Console.WriteLine("계속 하려면 아무 키나 누르세요.");
             Console.ReadKey();
 
-            // 플레이어 공격 턴으로 전환
+            // TODO: 플레이어 공격 턴으로 전환 -> 몬스터 턴이 끝나고 배틀 씬(공격, 스킬, 가방 있는 씬)으로 전환?
             AttackSelectScene ac = (AttackSelectScene)Manager.Instance.Scene.GetScene(ESceneType.ATTACK_SELECT_SCENE);
             ac.GenerateAttackSelectCommands();
             Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);

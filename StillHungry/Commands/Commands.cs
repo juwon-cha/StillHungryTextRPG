@@ -293,11 +293,17 @@ namespace StillHungry.Commands
 
         public void Execute()
         {
-            Manager.Instance.Dungeon.TryEnterDungeon(mDungeonLevel);
+            // 던전 정보 설정
+            var dungeon = Manager.Instance.Dungeon;
+            dungeon.CurrentDungeonLevel = mDungeonLevel;
+            dungeon.TryEnterDungeon(mDungeonLevel);
 
-            Manager.Instance.Battle.SpawnMonsters(); // 던전 입장 시 몬스터 소환
+            // 던전 입장 시 몬스터 소환
+            Manager.Instance.Battle.SpawnMonsters();
+
+            // 공격 선택 커맨드 생성
             AttackSelectScene scene = Manager.Instance.Scene.GetScene(ESceneType.ATTACK_SELECT_SCENE) as AttackSelectScene;
-            scene.GenerateAttackSelectCommands(); // 공격 선택 커맨드 생성
+            scene.GenerateAttackSelectCommands();
 
             if (Manager.Instance.Game.PlayerController.HP <= 0)
             {
@@ -805,13 +811,11 @@ namespace StillHungry.Commands
         {
             mDungeonLevel = dungeonLevel;
         }
+
         public void Execute()
         {
-
-            Manager.Instance.Battle.StartBattle(mDungeonLevel); // 전투 시작 시 세팅
-
-            // TODO: 던전레벨에 따라 전투 시작 세팅
-           // Manager.Instance.Battle.StartBattle(EDungeonLevel.EASY);
+            // 전투 시작 시 던전 레벨 세팅
+            Manager.Instance.Battle.StartBattle(mDungeonLevel); 
 
             Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
         }

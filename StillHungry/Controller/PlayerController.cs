@@ -465,7 +465,10 @@ namespace StillHungry.Controller
 
         public bool UseSkill(Skill skill)
         {
-            if(!UseMana(skill.RequiredMP))
+            // 스킬을 사용하면 배틀 매니저의 상태를 전투 중으로 전환
+            Manager.Instance.Battle.IsFighting = true;
+
+            if (!UseMana(skill.RequiredMP))
             {
                 Console.WriteLine("MP가 부족합니다.");
             }
@@ -678,7 +681,7 @@ namespace StillHungry.Controller
         #region 박용규 추가 메소드
         public void SetExp(int plusValue)
         {
-            plusValue += plusValue * 100;   // ***** 디버그용 코드  
+            plusValue += plusValue * 100;   // ***** 디버그용 코드
             BonusExpRate = 1.0f;            // ***** 디버그용 코드
 
             TotalExp += (int)(plusValue * BonusExpRate);

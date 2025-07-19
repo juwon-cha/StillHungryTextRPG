@@ -76,14 +76,44 @@ namespace StillHungry.UI
         public void ShowDungeonScreen(string[] menuOptions, int selectedIndex)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("던전 입장");
+            Console.WriteLine("던전 입장\n");
             Console.ResetColor();
-            Console.WriteLine("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
-            Console.WriteLine("- 축축한 동굴\t\t | 방어력  5 이상 권장");
-            Console.WriteLine("- 건조한 풀밭\t\t | 방어력 11 이상 권장");
-            Console.WriteLine("- 돌 산맥\t\t | 방어력 17 이상 권장");
-            Console.WriteLine("- 용암이 흐르는 계곡\t | 방어력 23 이상 권장");
-            Console.WriteLine("- 레드드래곤의 둥지\t | 방어력 29 이상 권장");
+
+            Console.WriteLine("플레이어 상태");
+            var player = Manager.Instance.Game.PlayerController;
+            Console.WriteLine($"Lv. {player.Level:D2}");
+            Console.WriteLine($"{player.Name} ( {StringConverter.ClassTypeToString(player.ClassType)} )");
+
+            string attackStat = $"공격력 : {player.Attack}";
+            if (player.BonusAttack > 0) attackStat += $" (+{player.BonusAttack})";
+            if (player.FoodAttack > 0) attackStat += $" (+{player.FoodAttack})";
+            Console.WriteLine(attackStat);
+
+            string defenseStat = $"방어력 : {player.Defense}";
+            if (player.BonusDefense > 0) defenseStat += $" (+{player.BonusDefense})";
+            if (player.FoodDefense > 0) defenseStat += $" (+{player.FoodDefense})";
+            Console.WriteLine(defenseStat);
+
+            Console.WriteLine($"체 력 : {player.HP} / {player.MaxHP}");
+            Console.WriteLine($"마 나 : {player.Mana} / {player.MaxMana}");
+
+            Console.WriteLine($"Gold : {player.Gold} G");
+
+            string criticalStat = $"치명타 확률 : {player.CriticalChance * 100:F1} %";
+            if (player.FoodCriticalChance > 0) criticalStat += $" (+{player.FoodCriticalChance * 100:F1})";
+            Console.WriteLine(criticalStat);
+            string evasionStat = $"회피 확률 : {player.EvasionChance * 100:F1} %";
+            if (player.FoodEvasionChance > 0) evasionStat += $" (+{player.FoodEvasionChance * 100:F1})";
+            Console.WriteLine(evasionStat);
+
+            //Console.WriteLine($"");
+            //Console.WriteLine("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
+            //Console.WriteLine("- 축축한 동굴\t\t | 방어력  5 이상 권장");
+            //Console.WriteLine("- 건조한 풀밭\t\t | 방어력 11 이상 권장");
+            //Console.WriteLine("- 돌 산맥\t\t | 방어력 17 이상 권장");
+            //Console.WriteLine("- 용암이 흐르는 계곡\t | 방어력 23 이상 권장");
+            //Console.WriteLine("- 레드드래곤의 둥지\t | 방어력 29 이상 권장");
+
             DisplayOptions(menuOptions, selectedIndex);
         }
 
@@ -591,6 +621,7 @@ namespace StillHungry.UI
         #region 박용규 추가 메소드
         public void ShowAttackSelect(int selectedIndex) 
         {
+            Console.WriteLine($"{StringConverter.DungeonLevelToString(Manager.Instance.Dungeon.CurrentDungeonLevel)}");
             Console.WriteLine("\u001b[33mAttack Select!!\u001b[0m");
 
             // 게임매니저의 인스턴스를 통해서 몬스터의 정보를 얻어온다.
@@ -625,6 +656,7 @@ namespace StillHungry.UI
 
         public void ShowBattleScreen(string[] menuOptions, int selectedIndex)
         {
+            Console.WriteLine($"{StringConverter.DungeonLevelToString(Manager.Instance.Dungeon.CurrentDungeonLevel)}");
             Console.WriteLine("\u001b[33mBattle!!\u001b[0m");
 
             // 게임매니저의 인스턴스를 통해서 몬스터의 정보를 얻어온다.
@@ -687,7 +719,8 @@ namespace StillHungry.UI
             //    Manager.Instance.Battle.AttackMonster(monsterId);
             //}
 
-            // 몬스터 HP 출력
+            // TODO: 몬스터가 범위 공격을 받자마자 죽은 상태가 되면 데미지 출력이 안되는 문제
+            // 몬스터가 받은 데미지 출력
             List<Monster> monsters = Manager.Instance.Battle.MonsterController.ActiveMonsters;
             foreach(Monster monster in monsters)
             {

@@ -1,13 +1,6 @@
 using StillHungry.Commands;
-using StillHungry.Controller;
 using StillHungry.Managers;
 using StillHungry.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static StillHungry.Scene.CharacterSettingScene;
 
 namespace StillHungry.Scene
 {
@@ -23,7 +16,7 @@ namespace StillHungry.Scene
             mNavigator = new MenuNavigator(mMenuItems.Length);
             mMenuCommands = new IExecutable[]
             {
-               
+                new BattleStartCommand(Manager.Instance.Dungeon.CurrentDungeonLevel),
                 new SkillSelectCommand(),
                 new ConsumableManageCommand(RequestRedraw),
                 new ChangeSceneCommand(ESceneType.DUNGEON_SCENE),

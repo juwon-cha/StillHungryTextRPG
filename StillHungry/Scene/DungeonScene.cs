@@ -15,8 +15,8 @@ namespace StillHungry.Scene
 
     public class DungeonScene : BaseScene
     {
-        private readonly string[] mMenuItems = {"1. 축축한동굴", "2. 건조한 풀밭",
-            "3. 돌 산맥", "4. 용암이 흐르는 계곡", "5. 레드드래곤의 둥지", "0. 나가기" };
+        private readonly string[] mMenuItems = {"축축한 동굴", "건조한 풀밭",
+            "돌 산맥", "용암이 흐르는 계곡", "레드 드래곤의 둥지", "나가기" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
