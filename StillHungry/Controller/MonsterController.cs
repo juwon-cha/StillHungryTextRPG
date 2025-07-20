@@ -1,5 +1,6 @@
 using StillHungry.Managers;
 using StillHungry.Monsters;
+using StillHungry.Scene;
 
 namespace StillHungry.Controller
 {
@@ -27,13 +28,69 @@ namespace StillHungry.Controller
         {
             ActiveMonsters.Clear();
 
-            // 1~3마리의 몬스터를 생성
-            int numberOfMonsters = mRand.Next(1, 4);
+            var dungeonLevel = Manager.Instance.Dungeon.CurrentDungeonLevel;
 
-            for (int i = 1; i <= numberOfMonsters; i++)
+            int minMonsterLevel = 0;
+            int maxMonsterLevel = 0;
+
+            // 던전 레벨에 따라 몬스터 레벨 범위 설정
+            switch (dungeonLevel)
             {
-                // TODO: 랜덤 몬스터 스폰
-                ActiveMonsters.Add(Monster.SpawnMonster(i));
+                case EDungeonLevel.DAMP_CAVE:
+                    minMonsterLevel = 1;
+                    maxMonsterLevel = 3;
+                    break;
+
+                case EDungeonLevel.DRY_GRASS:
+                    minMonsterLevel = 4;
+                    maxMonsterLevel = 6;
+                    break;
+
+                case EDungeonLevel.STONE_MOUNTAIN:
+                    minMonsterLevel = 7;
+                    maxMonsterLevel = 9;
+                    break;
+
+                case EDungeonLevel.LAVA_VALLEY:
+                    minMonsterLevel = 10;
+                    maxMonsterLevel = 12;
+                    break;
+
+                case EDungeonLevel.RED_DRAGON_NEST:
+                    minMonsterLevel = 99;
+                    maxMonsterLevel = 100;
+                    break;
+
+                default:
+                    break;
+            }
+
+            // 레벨 범위에 해당하는 모든 몬스터의 ID 리스트를 만듦
+            List<int> possibleMonsterIds = DataManager.MonsterStatDict.Values
+                .Where(m => m.Level >= minMonsterLevel && m.Level <= maxMonsterLevel)
+                .Select(m => m.ID)
+                .ToList();
+
+            if (possibleMonsterIds.Count == 0)
+            {
+                return;
+            }
+
+            // TODO: 레드 드래곤이 있는 던전은 항상 1마리 스폰하도록 처리
+            if (possibleMonsterIds[0] == 100)
+            {
+                ActiveMonsters.Add(Monster.SpawnMonster(100)); // 레드 드래곤은 항상 1마리 스폰
+                return;
+            }
+
+            // 1~4마리의 몬스터를 랜덤하게 결정하고, 중복을 허용하여 스폰
+            int numberOfMonsters = mRand.Next(1, 5); // 1, 2, 3, 4 중 하나의 숫자를 반환
+            for (int i = 0; i < numberOfMonsters; i++)
+            {
+                // 몬스터 후보 리스트에서 무작위로 하나의 ID를 선택
+                int randomIndex = mRand.Next(0, possibleMonsterIds.Count);
+                int randomMonsterId = possibleMonsterIds[randomIndex];
+                ActiveMonsters.Add(Monster.SpawnMonster(randomMonsterId));
             }
         }
 

@@ -806,16 +806,10 @@ namespace StillHungry.Commands
     #region  전투커맨드
     public class BattleStartCommand : IExecutable
     {
-        private readonly EDungeonLevel mDungeonLevel;
-        public BattleStartCommand(EDungeonLevel dungeonLevel)
-        {
-            mDungeonLevel = dungeonLevel;
-        }
-
         public void Execute()
         {
             // 전투 시작 시 던전 레벨 세팅
-            Manager.Instance.Battle.StartBattle(mDungeonLevel); 
+            Manager.Instance.Battle.StartBattle(Manager.Instance.Dungeon.CurrentDungeonLevel);
 
             Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
         }

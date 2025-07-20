@@ -23,11 +23,9 @@ namespace StillHungry.Managers
         public Monster CurrentAttacker { get; private set; }
         public MonsterAction LastAction { get; private set; }
 
-        public EDungeonLevel CurrentDungeonLevel { get; private set; }
-
         public void SpawnMonsters() 
         {
-            MonsterController.SpawnMonstersForBattles(); 
+            MonsterController.SpawnMonstersForBattles();
         }
 
         public void StartBattle(EDungeonLevel dungeonLevel) //전투 시작 시 호출될 함수
@@ -37,8 +35,6 @@ namespace StillHungry.Managers
             TotalDamageTaken = 0;
             MonsterKillCount = 0; //전투 시작될때 다시 0으로 출력
             mCurrentMonsterIndex = 0;
-
-            CurrentDungeonLevel = dungeonLevel; // 난이도 저장
         }
 
         public void EndBattle(bool isVictory, int initialHP, int damageTaken, int monsterKillCount)
