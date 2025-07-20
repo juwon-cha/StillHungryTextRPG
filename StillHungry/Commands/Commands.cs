@@ -282,12 +282,12 @@ namespace StillHungry.Commands
 
     public class EnterDungeonCommand : IExecutable
     {
-        private readonly EDungeonLevel mDungeonLevel;
+        private readonly int dungeonID;
         private readonly Action mRequestRedrawCallback;
 
-        public EnterDungeonCommand(EDungeonLevel level, Action requestRedrawCallback)
+        public EnterDungeonCommand(int ID, Action requestRedrawCallback)
         {
-            mDungeonLevel = level;
+            dungeonID = ID;
             mRequestRedrawCallback = requestRedrawCallback;
         }
 
@@ -295,8 +295,8 @@ namespace StillHungry.Commands
         {
             // 던전 정보 설정
             var dungeon = Manager.Instance.Dungeon;
-            dungeon.CurrentDungeonLevel = mDungeonLevel;
-            dungeon.TryEnterDungeon(mDungeonLevel);
+            dungeon.CurrentDungeonID = dungeonID;
+            dungeon.TryEnterDungeon(dungeonID);
 
             // 던전 입장 시 몬스터 소환
             Manager.Instance.Battle.SpawnMonsters();
@@ -806,10 +806,16 @@ namespace StillHungry.Commands
     #region  전투커맨드
     public class BattleStartCommand : IExecutable
     {
+        private readonly int mDungeonID;
+        public BattleStartCommand(int dungeonID)
+        {
+            mDungeonID = dungeonID;
+        }
+
         public void Execute()
         {
             // 전투 시작 시 던전 레벨 세팅
-            Manager.Instance.Battle.StartBattle(Manager.Instance.Dungeon.CurrentDungeonLevel);
+            Manager.Instance.Battle.StartBattle(mDungeonID);
 
             Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
         }

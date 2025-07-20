@@ -24,8 +24,16 @@ namespace StillHungry.Data
 
     public class PlayerStatLoader : ILoader<EClassType, PlayerStat>
     {
+        // Newtonsoft.Json 라이브러리는 JSON 파일의 키 이름과 역직렬화 대상 클래스(PlayerStatLoader)의 프로퍼티(변수) 이름을 비교하여 자동으로 데이터를 매핑
+        // JSON의 키 이름과 일치해야 함
         public List<PlayerStat> Stats = new List<PlayerStat>();
 
+        // JSON 데이터가 PlayerStatLoader 객체의 List들에 모두 채워지면,
+        // LoadJson 메서드는 이 객체를 반환한다. 이어서 .MakeData()가 호출된다.
+
+        // MakeData()의 역할은 데이터를 사용하기 좋은 형태로 가공하는 것
+        // Dictionary에 stat.ClassType를 키로 저장해두면 데이터를 빠르게 찾을 수 있다.
+        // 배열이나 리스트로 저장하면 찾을 때마다 순차적으로 탐색해야 하므로 비효율적이다.
         public Dictionary<EClassType, PlayerStat> MakeData()
         {
             Dictionary<EClassType, PlayerStat> dict = new Dictionary<EClassType, PlayerStat>();
@@ -140,22 +148,23 @@ namespace StillHungry.Data
     #region Dungeon
     public struct DungeonData
     {
-        public EDungeonLevel Level;
+        public int ID;
+        public string Name;
         public int RecommendedDefense;
         public int BaseRewardGold;
     }
 
-    public class DungeonDataLoader : ILoader<string, DungeonData>
+    public class DungeonDataLoader : ILoader<int, DungeonData>
     {
         public List<DungeonData> Dungeons = new List<DungeonData>();
 
-        public Dictionary<string, DungeonData> MakeData()
+        public Dictionary<int, DungeonData> MakeData()
         {
-            Dictionary<string, DungeonData> dict = new Dictionary<string, DungeonData>();
+            Dictionary<int, DungeonData> dict = new Dictionary<int, DungeonData>();
 
             foreach (DungeonData dungeonData in Dungeons)
             {
-                dict.Add(dungeonData.Level.ToString(), dungeonData);
+                dict.Add(dungeonData.ID, dungeonData);
             }
 
             return dict;

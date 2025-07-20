@@ -22,13 +22,14 @@ namespace StillHungry.Managers
         // UI에 표시할 몬스터의 공격 결과 정보
         public Monster CurrentAttacker { get; private set; }
         public MonsterAction LastAction { get; private set; }
+        public int CurrentDungeonLevel { get; private set; }
 
         public void SpawnMonsters() 
         {
             MonsterController.SpawnMonstersForBattles();
         }
 
-        public void StartBattle(EDungeonLevel dungeonLevel) //전투 시작 시 호출될 함수
+        public void StartBattle(int dungeonLevel) //전투 시작 시 호출될 함수
         {
             IsFighting = true;
             InitialHP = Manager.Instance.Game.PlayerController.HP;
