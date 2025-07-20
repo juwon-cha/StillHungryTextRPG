@@ -299,7 +299,10 @@ namespace StillHungry.Commands
             dungeon.TryEnterDungeon(dungeonID);
 
             // 던전 입장 시 몬스터 소환
-            Manager.Instance.Battle.SpawnMonsters();
+            var battle = Manager.Instance.Battle;
+            battle.SpawnMonsters();
+            battle.InitialHP = Manager.Instance.Game.PlayerController.HP; // 던전 입장 시 플레이어의 초기 체력 저장
+            battle.MonsterKillCount = 0; // 던전 입장 시 몬스터 킬 카운트 초기화
 
             // 공격 선택 커맨드 생성
             AttackSelectScene scene = Manager.Instance.Scene.GetScene(ESceneType.ATTACK_SELECT_SCENE) as AttackSelectScene;

@@ -32,20 +32,16 @@ namespace StillHungry.Managers
         public void StartBattle(int dungeonLevel) //전투 시작 시 호출될 함수
         {
             IsFighting = true;
-            InitialHP = Manager.Instance.Game.PlayerController.HP;
+            //InitialHP = Manager.Instance.Game.PlayerController.HP;
             TotalDamageTaken = 0;
-            MonsterKillCount = 0; //전투 시작될때 다시 0으로 출력
             mCurrentMonsterIndex = 0;
         }
 
         public void EndBattle(bool isVictory, int initialHP, int damageTaken, int monsterKillCount)
         {
+            // 전투 종료 후 전투 상태 초기화
             var player = Manager.Instance.Game.PlayerController;
             IsFighting = false;
-
-            // 전투 종료 후 상태 초기화
-            TotalDamageTaken = 0;
-            MonsterKillCount = 0;
 
             Console.Clear();
             Console.WriteLine("Battle!! - Result\n");
@@ -72,9 +68,22 @@ namespace StillHungry.Managers
                 Console.WriteLine("You Lose\n");
                 Console.ResetColor();
 
+                if (LastAction.Type == EMonsterActionType.ATTACK)
+                {
+                    Console.WriteLine($"{CurrentAttacker.Name}으로부터 {LastAction.Value}의 데미지를 받았습니다.\n");
+                }
+
                 Console.WriteLine($"Lv.{player.Level} {player.Name}");
                 Console.WriteLine($"HP {initialHP} -> {player.HP}\n");
             }
+
+            // 전투 종료 후 전투 상태 초기화
+            TotalDamageTaken = 0;
+            MonsterKillCount = 0;
+
+            // 전투 종료 후 몬스터 상태 초기화
+            CurrentAttacker = null;
+            LastAction = null;
 
             Console.WriteLine("던전 입구로 돌아가려면 아무 키나 누르세요.");
             Console.ReadKey();
@@ -104,7 +113,14 @@ namespace StillHungry.Managers
 
                         if (!evaded) //회피 빼고 누적 피해량 증가
                         {
-                            TotalDamageTaken += LastAction.Value;
+                            if(LastAction == null)
+                            {
+                                TotalDamageTaken = 0;
+                            }
+                            else
+                            {
+                                TotalDamageTaken += LastAction.Value;
+                            }
                         }
                     }
 
@@ -137,30 +153,19 @@ namespace StillHungry.Managers
             // 플레이어 치명타 여부 초기화
             IsCritical = false;
 
-            // TODO: 플레이어 공격 턴으로 전환 -> 몬스터 턴이 끝나고 배틀 씬(공격, 스킬, 가방 있는 씬)으로 전환?
-            AttackSelectScene ac = (AttackSelectScene)Manager.Instance.Scene.GetScene(ESceneType.ATTACK_SELECT_SCENE);
-            ac.GenerateAttackSelectCommands();
-            Manager.Instance.Scene.ChangeScene(ESceneType.ATTACK_SELECT_SCENE);
+            if(MonsterKillCount == MonsterController.ActiveMonsters.Count) // 모든 몬스터 처치
+            {
+                EndBattle(true, InitialHP, TotalDamageTaken, MonsterKillCount);
+            }
+            else
+            {
+                // 몬스터 턴이 끝나고 배틀 씬(공격, 스킬, 가방 있는 씬)으로 전환
+                AttackSelectScene ac = (AttackSelectScene)Manager.Instance.Scene.GetScene(ESceneType.ATTACK_SELECT_SCENE);
+                ac.GenerateAttackSelectCommands();
+                Manager.Instance.Scene.ChangeScene(ESceneType.BATTLE_SCENE);
+            }
         }
 
-        public void SetDungeonLevel(EDungeonLevel level) //보상 기준
-        {
-            DungeonLevel = level;
-        }
-
-        public int GetGoldReward() //골드 계산
-        {
-            return Manager.Instance.Dungeon.DungeonResult.RewardGold * MonsterKillCount;
-        }
-
-        // 필요 없으면 나중에 삭제
-        /* public void MonsterAttack(int monsterID, int damage) 
-         {
-             MonsterController.TakeDamage(monsterID, damage);
-         }
-        */
-
-        #region 박용규 추가 메소드
         // 몬스터에게 데미지를 주는 메소드
         public void AttackMonster(Monster monster) 
         {
@@ -204,6 +209,5 @@ namespace StillHungry.Managers
             Manager.Instance.Game.PlayerController.EarnGold(goldReward);
             Console.WriteLine($"골드를 {goldReward}원 획득 했습니다.\n");
         }
-        #endregion
     }
 }

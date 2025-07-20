@@ -11,7 +11,7 @@ namespace StillHungry.Scene
 {
     class MonsterPhaseScene : BaseScene
     {
-        private readonly string[] mMenuItems = { "0. 다음" };
+        private readonly string[] mMenuItems = { "다음" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 

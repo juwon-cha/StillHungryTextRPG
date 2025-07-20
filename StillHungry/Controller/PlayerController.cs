@@ -426,6 +426,7 @@ namespace StillHungry.Controller
                         );
                 }
             }
+
             return false;  // 데미지 적용
         }
 

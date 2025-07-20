@@ -672,30 +672,6 @@ namespace StillHungry.UI
             var player = Manager.Instance.Game.PlayerController;
             Console.WriteLine($"{player.Name} 의 공격!");
 
-            //int monsterId = Manager.Instance.Battle.SelectedMonsterID;
-
-            //Action<Monster, int, bool> printDamage = (targetMonster, finalDamage, isCritical) =>
-            //{
-            //    if (isCritical)
-            //    {
-            //        Console.WriteLine($"\n{targetMonster.Name}에게 {finalDamage}의 치명상을 입혔습니다!");
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine($"\n{targetMonster.Name}에게 {finalDamage}의 데미지를 입혔습니다!");
-            //    }
-            //};
-
-            //if (Manager.Instance.Battle.MonsterController.ActiveMonsters[monsterId].CurrentHp <= 0)
-            //{
-            //    Console.WriteLine($"그만해! {Manager.Instance.Battle.MonsterController.ActiveMonsters[monsterId].Name}의 HP는 이미 0 이야!");
-            //}
-            //else
-            //{
-            //    Manager.Instance.Battle.AttackMonster(monsterId);
-            //}
-
-            // TODO: 몬스터가 범위 공격을 받자마자 죽은 상태가 되면 데미지 출력이 안되는 문제
             // 몬스터가 받은 데미지 출력
             List<Monster> monsters = Manager.Instance.Battle.MonsterController.ActiveMonsters;
             foreach(Monster monster in monsters)
