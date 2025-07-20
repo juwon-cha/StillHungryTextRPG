@@ -28,41 +28,27 @@ namespace StillHungry.Controller
         {
             ActiveMonsters.Clear();
 
-            var dungeonLevel = Manager.Instance.Dungeon.CurrentDungeonLevel;
+            var dungeonLevel = Manager.Instance.Dungeon.CurrentDungeonID;
 
             int minMonsterLevel = 0;
             int maxMonsterLevel = 0;
 
             // 던전 레벨에 따라 몬스터 레벨 범위 설정
-            switch (dungeonLevel)
+            if (dungeonLevel >= 1 && dungeonLevel <= 4)
             {
-                case EDungeonLevel.DAMP_CAVE:
-                    minMonsterLevel = 1;
-                    maxMonsterLevel = 3;
-                    break;
-
-                case EDungeonLevel.DRY_GRASS:
-                    minMonsterLevel = 4;
-                    maxMonsterLevel = 6;
-                    break;
-
-                case EDungeonLevel.STONE_MOUNTAIN:
-                    minMonsterLevel = 7;
-                    maxMonsterLevel = 9;
-                    break;
-
-                case EDungeonLevel.LAVA_VALLEY:
-                    minMonsterLevel = 10;
-                    maxMonsterLevel = 12;
-                    break;
-
-                case EDungeonLevel.RED_DRAGON_NEST:
-                    minMonsterLevel = 99;
-                    maxMonsterLevel = 100;
-                    break;
-
-                default:
-                    break;
+                minMonsterLevel = 1 + (dungeonLevel - 1) * 3;
+                maxMonsterLevel = minMonsterLevel + 2;
+            }
+            else if (dungeonLevel == 5)
+            {
+                minMonsterLevel = 99;
+                maxMonsterLevel = 100;
+            }
+            else
+            {
+                // 예외 처리: 범위 밖의 던전 레벨
+                minMonsterLevel = 1;
+                maxMonsterLevel = 3;
             }
 
             // 레벨 범위에 해당하는 모든 몬스터의 ID 리스트를 만듦

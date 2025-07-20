@@ -557,7 +557,7 @@ namespace StillHungry.UI
 
         public void ShowAttackSelect(int selectedIndex) 
         {
-            Console.WriteLine($"{Manager.Instance.Dungeon}\n"); // 던전 이름으로 수정
+            Console.WriteLine($"{DataManager.DungeonDataDict[Manager.Instance.Dungeon.CurrentDungeonID].Name}");
 
             bool isAllMonsterDead = true;
             foreach (Monster m in Manager.Instance.Battle.MonsterController.ActiveMonsters)
@@ -632,7 +632,7 @@ namespace StillHungry.UI
 
         public void ShowBattleScreen(string[] menuOptions, int selectedIndex)
         {
-            Console.WriteLine($"{Manager.Instance.Dungeon}"); // 던전 이름으로 수정
+            Console.WriteLine($"{DataManager.DungeonDataDict[Manager.Instance.Dungeon.CurrentDungeonID].Name}");
             Console.WriteLine("\u001b[33mBattle!!\u001b[0m");
 
             // 게임매니저의 인스턴스를 통해서 몬스터의 정보를 얻어온다.
