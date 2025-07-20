@@ -16,16 +16,17 @@ namespace StillHungry.UI
         public void ShowTitleScreen(string[] menuOptions, int selectedIndex)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(@" ____                   _                 ");
-            Console.WriteLine(@"/ ___| _ __   __ _ _ __| |_ __ _          ");
-            Console.WriteLine(@"\___ \| '_ \ / _` | '__| __/ _` |         ");
-            Console.WriteLine(@" ___) | |_) | (_| | |  | || (_| |         ");
-            Console.WriteLine(@"|____/| .__/ \__,_|_|   \__\__,_|         ");
-            Console.WriteLine(@"|  _ \|_|  _ _ __   __ _  ___  ___  _ __  ");
-            Console.WriteLine(@"| | | | | | | '_ \ / _` |/ _ \/ _ \| '_ \ ");
-            Console.WriteLine(@"| |_| | |_| | | | | (_| |  __/ (_) | | | |");
-            Console.WriteLine(@"|____/ \__,_|_| |_|\__, |\___|\___/|_| |_|");
-            Console.WriteLine(@"                   |___/                  ");
+
+            Console.WriteLine(@" ___ _             ____  _   _ _ _  ");
+            Console.WriteLine(@"|_ _( )_ __ ___   / ___|| |_(_) | | ");
+            Console.WriteLine(@" | ||/| '_ ` _ \  \___ \| __| | | | ");
+            Console.WriteLine(@" | |  | | | | | |  ___) | |_| | | | ");
+            Console.WriteLine(@"|___|_|_| |_| |_| |____/ \__|_|_|_| ");
+            Console.WriteLine(@"| | | |_   _ _ __   __ _ _ __ _   _ ");
+            Console.WriteLine(@"| |_| | | | | '_ \ / _` | '__| | | |");
+            Console.WriteLine(@"|  _  | |_| | | | | (_| | |  | |_| |");
+            Console.WriteLine(@"|_| |_|\__,_|_| |_|\__, |_|   \__, |");
+            Console.WriteLine(@"                   |___/      |___/ ");
 
             Console.ResetColor();
             DisplayOptions(menuOptions, selectedIndex);
@@ -33,7 +34,7 @@ namespace StillHungry.UI
 
         public void ShowTownScreen(string[] menuOptions, int selectedIndex)
         {
-            Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
+            Console.WriteLine("노아의 안식처에 오신 여러분 환영합니다.");
             Console.WriteLine("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.");
             DisplayOptions(menuOptions, selectedIndex);
         }
