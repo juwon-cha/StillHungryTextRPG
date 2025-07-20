@@ -6,7 +6,7 @@ namespace StillHungry.Scene
 {
     public class StatusScene : BaseScene
     {
-        private readonly string[] mMenuItems = { "0. 나가기" };
+        private readonly string[] mMenuItems = { "나가기" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 

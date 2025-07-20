@@ -8,7 +8,7 @@ namespace StillHungry.Scene
 
     internal class GuildScene : BaseScene
     {
-        private readonly string[] mMenuItems = { "1. 장비 상점", "2. 소모품 상점", "3. 요리 상점  ","4. 퀘스트 보드","5. 휴식하기", "0. 나가기" };
+        private readonly string[] mMenuItems = { "장비 상점", "소모품 상점", "요리 상점  ","퀘스트 보드","휴식하기", "나가기" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 

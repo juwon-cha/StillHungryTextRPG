@@ -11,7 +11,7 @@ namespace StillHungry.Scene
 {
     internal class ConsumableStoreScene : BaseScene
     {
-        private readonly string[] mMenuItems = { "1. 아이템 구매", "2. 아이템 판매", "0. 나가기" };
+        private readonly string[] mMenuItems = { "아이템 구매", "아이템 판매", "나가기" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 

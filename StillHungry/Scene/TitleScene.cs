@@ -6,7 +6,7 @@ namespace StillHungry.Scene
 {
     public class TitleScene : BaseScene
     {
-        private readonly string[] mMenuItems = { "1. New Game", "2. Load Game", "0. Exit" };
+        private readonly string[] mMenuItems = { "New Game", "Load Game", "Exit" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 

@@ -13,7 +13,7 @@ namespace StillHungry.Scene
 
     public class CampsiteScene : BaseScene
     {
-        private readonly string[] mMenuItems = { "1. 휴식하기", "0. 나가기" };
+        private readonly string[] mMenuItems = { "휴식하기", "나가기" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 

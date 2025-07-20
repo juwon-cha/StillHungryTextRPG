@@ -22,10 +22,10 @@ namespace StillHungry.Scene
             int i = 0;
             foreach (QuestData quest in DataManager.QuestDataDict.Values)
             {
-                mMenuItems[i] = $"{i + 1}. "+ quest.Name;
+                mMenuItems[i] = quest.Name;
                 i++;
             }
-            mMenuItems[i] = "0. 나가기"; // 마지막에 나가기 메뉴 추가
+            mMenuItems[i] = "나가기"; // 마지막에 나가기 메뉴 추가
             
             mNavigator = new MenuNavigator(mMenuItems.Length);
             mMenuCommands = new IExecutable[mMenuItems.Length];

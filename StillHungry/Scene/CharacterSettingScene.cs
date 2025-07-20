@@ -10,7 +10,7 @@ namespace StillHungry.Scene
         public enum ESettingState { EnterName, SelectClass }
         private ESettingState mCurrentState = ESettingState.EnterName;
 
-        private readonly string[] mMenuItems = { "1. 전사", "2. 마법사", "3. 궁수", "4. 도적" };
+        private readonly string[] mMenuItems = { "전사", "마법사", "궁수", "도적" };
         private readonly IExecutable[] mMenuCommands;
         private readonly MenuNavigator mNavigator;
 
