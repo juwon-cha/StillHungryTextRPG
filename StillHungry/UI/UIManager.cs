@@ -223,7 +223,7 @@ namespace StillHungry.UI
         #region 캐릭터 정보
         public void ShowNameSettingScreen()
         {
-            Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
+            Console.WriteLine("노아의 안식처에 오신 여러분 환영합니다.");
             Console.Write("원하는 이름을 설정해주세요: ");
         }
 
