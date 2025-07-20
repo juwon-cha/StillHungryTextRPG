@@ -28,7 +28,6 @@ namespace StillHungry.Scene
 
         public override void Display()
         {
-            Update();
             Render();
 
             // 상태에 따라 다른 입력 처리 로직 호출
@@ -58,8 +57,6 @@ namespace StillHungry.Scene
             }
             bNeedsRedraw = false;
         }
-
-        protected override void Update() { }
 
         // 씬의 상태를 설정할 수 있는 메서드(이름 선택, 직업 선택)
         public void SetSettingState(ESettingState state)

@@ -38,7 +38,6 @@ namespace StillHungry.Scene
         }
         public override void Display()
         {
-            Update();
             ProcessInput(mMenuCommands, mNavigator);
             int i = mNavigator.SelectedIndex;
             Render();
@@ -54,11 +53,6 @@ namespace StillHungry.Scene
             Console.Clear();
             Manager.Instance.UI.QuestScreen(mMenuItems, mNavigator.SelectedIndex);
             bNeedsRedraw = false;
-        }
-
-        protected override void Update()
-        {
-
         }
     }
 }

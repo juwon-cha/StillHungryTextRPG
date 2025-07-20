@@ -46,7 +46,6 @@ namespace StillHungry.Scene
 
         public override void Display()
         {
-            Update();
             ProcessInput(mMenuCommands.ToArray(), mNavigator);
             Render();
         }
@@ -61,10 +60,6 @@ namespace StillHungry.Scene
             Console.Clear();
             Manager.Instance.UI.ShowAttackSelect(mNavigator.SelectedIndex);
             bNeedsRedraw = false;
-        }
-
-        protected override void Update()
-        {
         }
 
         // 플레이어가 공격할 몬스터의 ID값을 동적으로 얻어오기 위한 메소드(기존의 코드를 재사용)

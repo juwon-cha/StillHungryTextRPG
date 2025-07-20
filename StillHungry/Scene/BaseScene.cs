@@ -10,7 +10,6 @@ namespace StillHungry.Scene
 
         // 자식 씬들이 반드시 각자 구현해야 하는 부분들
         public abstract void Display();
-        protected abstract void Update(); // 애니메이션이나 상태 업데이트가 필요하다면 여기에 구현
         public abstract void Render(); // UI 출력
 
         // 입력 처리 메소드

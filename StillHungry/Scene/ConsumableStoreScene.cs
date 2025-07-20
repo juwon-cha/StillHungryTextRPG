@@ -25,13 +25,11 @@ namespace StillHungry.Scene
                 new ChangeSceneCommand(ESceneType.GUILD_SCENE)
             };
         }
+
         public override void Display()
         {
-
-            Update();
             ProcessInput(mMenuCommands, mNavigator);
             Render();
-
         }
 
         public override void Render()
@@ -44,11 +42,6 @@ namespace StillHungry.Scene
             Console.Clear();
             Manager.Instance.UI.ConsumableStoreScreen(mMenuItems, mNavigator.SelectedIndex);
             bNeedsRedraw = false;
-        }
-
-        protected override void Update()
-        {
-
         }
     }
 }

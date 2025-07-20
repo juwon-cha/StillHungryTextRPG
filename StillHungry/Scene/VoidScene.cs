@@ -16,16 +16,12 @@ namespace StillHungry.Managers
         }
         public override void Display()
         {
-            Update();
             ProcessInput(mMenuCommands.ToArray(), mNavigator);
             Render();
         }
         public override void Render()
         {
             return;
-        }
-        protected override void Update()
-        {
         }
     }
 }

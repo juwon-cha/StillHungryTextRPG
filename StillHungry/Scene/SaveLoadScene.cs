@@ -55,7 +55,6 @@ namespace StillHungry.Scene
 
         public override void Display()
         {
-            Update();
             ProcessInput(mMenuCommands, mNavigator);
             Render();
         }
@@ -68,10 +67,6 @@ namespace StillHungry.Scene
             // UIManager를 통해 화면을 그림
             Manager.Instance.UI.ShowSaveLoadScreen(mMenuItems, mNavigator.SelectedIndex, mbIsSavingMode);
             bNeedsRedraw = false;
-        }
-
-        protected override void Update()
-        {
         }
     }
 }

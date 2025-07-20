@@ -27,7 +27,6 @@ namespace StillHungry.Scene
 
         public override void Display()
         {
-            Update();
             Render();
         }
 
@@ -133,11 +132,6 @@ namespace StillHungry.Scene
                 Console.Write(c);
                 Thread.Sleep(speed);
             }
-        }
-
-        protected override void Update()
-        {
-            // 필요 시 업데이트 처리
         }
     }
 }

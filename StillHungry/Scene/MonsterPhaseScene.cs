@@ -26,7 +26,6 @@ namespace StillHungry.Scene
 
         public override void Display()
         {
-            Update();
             ProcessInput(mMenuCommands, mNavigator);
             Render();
         }
@@ -49,11 +48,6 @@ namespace StillHungry.Scene
             Manager.Instance.UI.ShowMonsterPhaseScreen(mMenuItems, mNavigator.SelectedIndex, attacker, lastAction, player);
 
             bNeedsRedraw = false;
-        }
-
-        protected override void Update()
-        {
-            
         }
     }
 }
