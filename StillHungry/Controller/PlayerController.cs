@@ -194,6 +194,20 @@ namespace StillHungry.Controller
                     }
                 }
             }
+
+            // 로드한 유저 데이터로부터 스킬 세팅
+            if (userData.SkillIds != null)
+            {
+                foreach (int skillId in userData.SkillIds)
+                {
+                    // 스킬 매니저에서 스킬 아이디로 스킬 가져오기
+                    Skill skill = Manager.Instance.Skill.GetSkillFromID(skillId);
+                    if (skill != null)
+                    {
+                        ActiveSkills.Add(skill);
+                    }
+                }
+            }
         }
 
         public void EquipItem(Item item)

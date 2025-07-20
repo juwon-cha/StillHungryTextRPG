@@ -36,6 +36,7 @@ namespace StillHungry.Data
         public float CriticalRate; //기본 치명타 확률
         public float EvadeRate; //기본 회피 확률
         public List<UserItemData> Items; // 아이템 정보 배열
+        public List<int> SkillIds; // 아이템 정보 배열
     }
 
     public class UserDataLoader : ILoader<int, UserData>

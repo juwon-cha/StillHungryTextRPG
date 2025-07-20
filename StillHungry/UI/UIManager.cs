@@ -40,6 +40,13 @@ namespace StillHungry.UI
 
         public void ShowStatusScreen(string[] menuOptions, int selectedIndex)
         {
+            ShowPlayerStatus();
+
+            DisplayOptions(menuOptions, selectedIndex);
+        }
+
+        public void ShowPlayerStatus()
+        {
             var player = Manager.Instance.Game.PlayerController;
 
             // 헤더 박스
@@ -106,9 +113,20 @@ namespace StillHungry.UI
                 Console.ResetColor();
             }
 
-            Console.WriteLine("──────────────────────────────────────");
+            Console.WriteLine("보유 스킬");
+            if (player.ActiveSkills.Count == 0)
+            {
+                Console.WriteLine(" - 없음");
+            }
+            else
+            {
+                foreach (var skill in player.ActiveSkills)
+                {
+                    Console.WriteLine($" - {skill.Name} (MP {skill.RequiredMP})");
+                }
+            }
 
-            DisplayOptions(menuOptions, selectedIndex);
+            Console.WriteLine("──────────────────────────────────────");
         }
 
         public void ShowDungeonScreen(string[] menuOptions, int selectedIndex)
@@ -117,50 +135,7 @@ namespace StillHungry.UI
             Console.WriteLine("던전 입장\n");
             Console.ResetColor();
 
-            Console.WriteLine("플레이어 상태");
-            var player = Manager.Instance.Game.PlayerController;
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"Lv. {player.Level:D2}");
-            Console.ResetColor();
-            Console.WriteLine($"{player.Name} ( {StringConverter.ClassTypeToString(player.ClassType)} )");
-
-            Console.ForegroundColor = ConsoleColor.Red;
-            string attackStat = $"공격력 : {player.Attack}";
-            if (player.BonusAttack > 0) attackStat += $" (+{player.BonusAttack})";
-            if (player.FoodAttack > 0) attackStat += $" (+{player.FoodAttack})";
-            Console.WriteLine(attackStat);
-            Console.ResetColor();
-
-            Console.ForegroundColor = ConsoleColor.Blue;
-            string defenseStat = $"방어력 : {player.Defense}";
-            if (player.BonusDefense > 0) defenseStat += $" (+{player.BonusDefense})";
-            if (player.FoodDefense > 0) defenseStat += $" (+{player.FoodDefense})";
-            Console.WriteLine(defenseStat);
-            Console.ResetColor();
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"체 력 : {player.HP} / {player.MaxHP}");
-            Console.ResetColor();
-
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"마 나 : {player.Mana} / {player.MaxMana}");
-            Console.ResetColor();
-
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"Gold : {player.Gold} G");
-            Console.ResetColor();
-
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            string criticalStat = $"치명타 확률 : {player.CriticalChance * 100:F1} %";
-            if (player.FoodCriticalChance > 0) criticalStat += $" (+{player.FoodCriticalChance * 100:F1})";
-            Console.WriteLine(criticalStat);
-            Console.ResetColor();
-
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            string evasionStat = $"회피 확률 : {player.EvasionChance * 100:F1} %";
-            if (player.FoodEvasionChance > 0) evasionStat += $" (+{player.FoodEvasionChance * 100:F1})";
-            Console.WriteLine(evasionStat);
-            Console.ResetColor();
+            ShowPlayerStatus();
 
             DisplayOptions(menuOptions, selectedIndex);
         }

@@ -47,8 +47,6 @@ namespace StillHungry.Managers
             userData.CriticalRate = PlayerController.CriticalChance;
             userData.EvadeRate = PlayerController.EvasionChance;
 
-
-
             // 유저가 소유하고 있는 아이템 정보(아이디, 장착여부) 저장
             var inventory = PlayerController.InventoryController.EquipInventory;
             if (inventory.Count != 0)
@@ -58,6 +56,16 @@ namespace StillHungry.Managers
                 foreach (KeyValuePair<int, Item> item in inventory)
                 {
                     userData.Items.Add(new UserItemData(item.Value.ID, item.Value.HasEquipped));
+                }
+            }
+
+            // 유저가 보유한 스킬 아이디 저장
+            if (PlayerController.ActiveSkills.Count != 0)
+            {
+                userData.SkillIds = new List<int>();
+                foreach (var skill in PlayerController.ActiveSkills)
+                {
+                    userData.SkillIds.Add(skill.ID);
                 }
             }
 

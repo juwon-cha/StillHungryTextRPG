@@ -36,7 +36,7 @@
         {
             "ID": 101,
             "Name": "메테오",
-            "Description": "현재 공격력만큼 모든 적을 공격합니다.",
+            "Description": "현재 공격력만큼 3명의 적을 랜덤으로 공격합니다.",
             "RequiredMp": 20,
             "DamageMultiplier": 1,
             "DefenseMultiplier": 0,
