@@ -195,6 +195,22 @@ namespace StillHungry.Controller
                 }
             }
 
+            // 로드한 유저 데이터로부터 소비 아이템 세팅
+            if (userData.Consumables != null)
+            {
+                foreach (ConsumableItemData savedConsumable in userData.Consumables)
+                {
+                    // 아이템 정보를 아이템 매니저에서 가져오기
+                    Item consumable = Manager.Instance.Item.GetItemFromID(savedConsumable.ID);
+                    consumable.Quantity = savedConsumable.Count;
+                    if (consumable != null)
+                    {
+                        // 인벤토리에 복원된 상태의 소비 아이템 추가
+                        InventoryController.ConsumableInventory.Add(consumable.ID, consumable);
+                    }
+                }
+            }
+
             // 로드한 유저 데이터로부터 스킬 세팅
             if (userData.SkillIds != null)
             {

@@ -59,6 +59,17 @@ namespace StillHungry.Managers
                 }
             }
 
+            // 유저가 소유하고 있는 소모 아이템 저장
+            var consumableInventory = PlayerController.InventoryController.ConsumableInventory;
+            if (consumableInventory.Count != 0)
+            {
+                userData.Consumables = new List<ConsumableItemData>();
+                foreach (KeyValuePair<int, Item> item in consumableInventory)
+                {
+                    userData.Consumables.Add(new ConsumableItemData(item.Value.ID, item.Value.Quantity));
+                }
+            }
+
             // 유저가 보유한 스킬 아이디 저장
             if (PlayerController.ActiveSkills.Count != 0)
             {

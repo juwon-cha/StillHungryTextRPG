@@ -616,6 +616,7 @@ namespace StillHungry.Commands
             {
                 Console.WriteLine("잘못된 입력입니다.");
             }
+
             Thread.Sleep(1000);
             mRequestRedrawCallback?.Invoke(); // 화면 갱신 요청
         }

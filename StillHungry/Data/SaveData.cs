@@ -18,6 +18,18 @@ namespace StillHungry.Data
         }
     }
 
+    public class ConsumableItemData
+    {
+        public int ID;
+        public int Count;
+
+        public ConsumableItemData(int iD, int count)
+        {
+            ID = iD;
+            Count = count;
+        }
+    }
+
     public class UserData
     {
         public int SlotID;
@@ -36,6 +48,7 @@ namespace StillHungry.Data
         public float CriticalRate; //기본 치명타 확률
         public float EvadeRate; //기본 회피 확률
         public List<UserItemData> Items; // 아이템 정보 배열
+        public List<ConsumableItemData> Consumables; // 아이템 정보 배열
         public List<int> SkillIds; // 아이템 정보 배열
     }
 
