@@ -740,6 +740,7 @@ namespace StillHungry.Commands
                 // 퀘스트 목표를 달성한 경우
                 else if (Manager.Instance.Game.PlayerController.LiveQuest == focusQuest)
                 {
+                    focusQuest.isAchievement = true;
                     if (focusQuest.isAchievement)
                     {
                         focusQuest.isClear = true; // 퀘스트 완료 처리
@@ -769,9 +770,13 @@ namespace StillHungry.Commands
                 if (Manager.Instance.Game.PlayerController.LiveQuest == focusQuest)
                 {
 
-                    Console.Write("\n0. 나가기 ");
+                    Console.Write("1. 퀘스트 완료\n0. 나가기 ");
                     Console.Write("\n번호를 입력해주세요 >> ");
                     string input = Console.ReadLine();
+                    if (int.TryParse(input, out int choice) && choice == 1)
+                    {
+                        focusQuest.isAchievement = true;
+                    }
 
                 }
                 else

@@ -40,36 +40,73 @@ namespace StillHungry.UI
 
         public void ShowStatusScreen(string[] menuOptions, int selectedIndex)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("상태 보기");
-            Console.ResetColor();
-            Console.WriteLine("캐릭터의 정보가 표시됩니다.\n");
-
             var player = Manager.Instance.Game.PlayerController;
-            Console.WriteLine($"Lv. {player.Level:D2}");
-            Console.WriteLine($"{player.Name} ( {StringConverter.ClassTypeToString(player.ClassType)} )");
 
+            // 헤더 박스
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("┌──────────────────────────────────────┐");
+            Console.WriteLine("│             [ 상태 창 ]              │");
+            Console.WriteLine("└──────────────────────────────────────┘");
+            Console.ResetColor();
+
+            // 기본 정보
+            Console.WriteLine($"이름   : {player.Name} ({StringConverter.ClassTypeToString(player.ClassType)})");
+            Console.WriteLine($"레벨   : {player.Level:D2}");
+
+            // 공격력
+            Console.ForegroundColor = ConsoleColor.Red;
             string attackStat = $"공격력 : {player.Attack}";
-            if (player.BonusAttack > 0) attackStat += $" (+{player.BonusAttack})";
-            if (player.FoodAttack > 0) attackStat += $" (+{player.FoodAttack})";
+            if (player.BonusAttack > 0) attackStat += $"  (장비 +{player.BonusAttack})";
+            if (player.FoodAttack > 0) attackStat += $"  (음식 +{player.FoodAttack})";
             Console.WriteLine(attackStat);
+            Console.ResetColor();
 
+            // 방어력
+            Console.ForegroundColor = ConsoleColor.Blue;
             string defenseStat = $"방어력 : {player.Defense}";
-            if (player.BonusDefense > 0) defenseStat += $" (+{player.BonusDefense})";
-            if (player.FoodDefense > 0) defenseStat += $" (+{player.FoodDefense})";
+            if (player.BonusDefense > 0) defenseStat += $"  (장비 +{player.BonusDefense})";
+            if (player.FoodDefense > 0) defenseStat += $"  (음식 +{player.FoodDefense})";
             Console.WriteLine(defenseStat);
+            Console.ResetColor();
 
-            Console.WriteLine($"체 력 : {player.HP} / {player.MaxHP}");
-            Console.WriteLine($"마 나 : {player.Mana} / {player.MaxMana}");
+            // 체력
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"체  력 : {player.HP} / {player.MaxHP}");
+            Console.ResetColor();
 
-            Console.WriteLine($"Gold : {player.Gold} G");
+            // 마나
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"마  나 : {player.Mana} / {player.MaxMana}");
+            Console.ResetColor();
 
-            string criticalStat = $"치명타 확률 : {player.CriticalChance * 100:F1} %";
-            if (player.FoodCriticalChance > 0) criticalStat += $" (+{player.FoodCriticalChance * 100:F1})";
+            // 치명타 확률
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            string criticalStat = $"치명타 : {player.CriticalChance * 100:F1}%";
+            if (player.FoodCriticalChance > 0) criticalStat += $"  (음식 +{player.FoodCriticalChance * 100:F1}%)";
             Console.WriteLine(criticalStat);
-            string evasionStat = $"회피 확률 : {player.EvasionChance * 100:F1} %";
-            if (player.FoodEvasionChance > 0) evasionStat += $" (+{player.FoodEvasionChance * 100:F1})";
-            Console.WriteLine(evasionStat + "\n");
+            Console.ResetColor();
+
+            // 회피 확률
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            string evasionStat = $"회  피 : {player.EvasionChance * 100:F1}%";
+            if (player.FoodEvasionChance > 0) evasionStat += $"  (음식 +{player.FoodEvasionChance * 100:F1}%)";
+            Console.WriteLine(evasionStat);
+            Console.ResetColor();
+
+            // 골드
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"Gold   : {player.Gold} G");
+            Console.ResetColor();
+
+            // 음식 효과
+            if (player.EatFood != null)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine($"[식사 효과] {player.EatFood.Name}");
+                Console.ResetColor();
+            }
+
+            Console.WriteLine("──────────────────────────────────────");
 
             DisplayOptions(menuOptions, selectedIndex);
         }
@@ -82,38 +119,48 @@ namespace StillHungry.UI
 
             Console.WriteLine("플레이어 상태");
             var player = Manager.Instance.Game.PlayerController;
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"Lv. {player.Level:D2}");
+            Console.ResetColor();
             Console.WriteLine($"{player.Name} ( {StringConverter.ClassTypeToString(player.ClassType)} )");
 
+            Console.ForegroundColor = ConsoleColor.Red;
             string attackStat = $"공격력 : {player.Attack}";
             if (player.BonusAttack > 0) attackStat += $" (+{player.BonusAttack})";
             if (player.FoodAttack > 0) attackStat += $" (+{player.FoodAttack})";
             Console.WriteLine(attackStat);
+            Console.ResetColor();
 
+            Console.ForegroundColor = ConsoleColor.Blue;
             string defenseStat = $"방어력 : {player.Defense}";
             if (player.BonusDefense > 0) defenseStat += $" (+{player.BonusDefense})";
             if (player.FoodDefense > 0) defenseStat += $" (+{player.FoodDefense})";
             Console.WriteLine(defenseStat);
+            Console.ResetColor();
 
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"체 력 : {player.HP} / {player.MaxHP}");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"마 나 : {player.Mana} / {player.MaxMana}");
+            Console.ResetColor();
 
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"Gold : {player.Gold} G");
+            Console.ResetColor();
 
+            Console.ForegroundColor = ConsoleColor.Magenta;
             string criticalStat = $"치명타 확률 : {player.CriticalChance * 100:F1} %";
             if (player.FoodCriticalChance > 0) criticalStat += $" (+{player.FoodCriticalChance * 100:F1})";
             Console.WriteLine(criticalStat);
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             string evasionStat = $"회피 확률 : {player.EvasionChance * 100:F1} %";
             if (player.FoodEvasionChance > 0) evasionStat += $" (+{player.FoodEvasionChance * 100:F1})";
             Console.WriteLine(evasionStat);
-
-            //Console.WriteLine($"");
-            //Console.WriteLine("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
-            //Console.WriteLine("- 축축한 동굴\t\t | 방어력  5 이상 권장");
-            //Console.WriteLine("- 건조한 풀밭\t\t | 방어력 11 이상 권장");
-            //Console.WriteLine("- 돌 산맥\t\t | 방어력 17 이상 권장");
-            //Console.WriteLine("- 용암이 흐르는 계곡\t | 방어력 23 이상 권장");
-            //Console.WriteLine("- 레드드래곤의 둥지\t | 방어력 29 이상 권장");
+            Console.ResetColor();
 
             DisplayOptions(menuOptions, selectedIndex);
         }
@@ -277,12 +324,12 @@ namespace StillHungry.UI
 
         private void PrintItemList(Dictionary<int, Item> items, bool isSellingContext)
         {
-            // 문자열 포맷 폭 설정
             const int nameWidth = 22;
             const int statWidth = 16;
             const int descWidth = 55;
 
-            // 헤더를 포맷팅 함수를 적용하여 정렬
+            // 헤더
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(
                 StringFormatting.PadRightForMixedText("-", 4) +
                 StringFormatting.PadRightForMixedText("아이템 이름", nameWidth) + " | " +
@@ -290,7 +337,8 @@ namespace StillHungry.UI
                 StringFormatting.PadRightForMixedText("설명", descWidth) + " | " +
                 "가격"
             );
-            Console.WriteLine(new string('-', 120)); // 구분선
+            Console.ResetColor();
+            Console.WriteLine(new string('-', 120));
 
             int count = 1;
             foreach (var itemPair in items)
@@ -299,54 +347,117 @@ namespace StillHungry.UI
                 string equipped = item.HasEquipped ? "[E] " : "";
                 string name = $"{equipped}{item.Name}";
 
-                string statDisplay = "";
+                // 이름 컬럼 색상
+                if (item.HasEquipped)
+                    Console.ForegroundColor = ConsoleColor.Green;
+                else if (item is ConsumableHP || item is ConsumableMP)
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                else if (item is Food)
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                else
+                    Console.ForegroundColor = ConsoleColor.White;
+                string countStr = StringFormatting.PadRightForMixedText($"- {count}", 4);
+                string nameStr = StringFormatting.PadRightForMixedText(name, nameWidth);
+                Console.Write(countStr + nameStr);
+
+                // 능력치 컬럼
+                Console.Write(" | ");
+                int statLen = 0;
                 if (item is Weapon weapon)
                 {
-                    statDisplay = $"공격력 +{weapon.Damage}";
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    string s = $"공격력 +{weapon.Damage}";
+                    Console.Write(s.PadRight(statWidth));
                 }
                 else if (item is Armor armor)
                 {
-                    statDisplay = $"방어력 +{armor.Defense}";
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    string s = $"방어력 +{armor.Defense}";
+                    Console.Write(s.PadRight(statWidth));
                 }
                 else if (item is ConsumableHP consumable)
                 {
-                    statDisplay = $"체력 회복량 +{consumable.HPRecovery}";
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    string s = $"체력 회복 +{consumable.HPRecovery}";
+                    Console.Write(s.PadRight(statWidth));
                 }
                 else if (item is ConsumableMP consumableMP)
                 {
-                    statDisplay = $"마나 회복량 +{consumableMP.MPRecovery}";
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    string s = $"마나 회복 +{consumableMP.MPRecovery}";
+                    Console.Write(s.PadRight(statWidth));
+                }
+                else if (item is Food food)
+                {
+                    int written = 0;
+                    if (food.Damage != 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        string s = $"공격력 +{food.Damage} ";
+                        Console.Write(s); written += s.Length;
+                    }
+                    if (food.Defense != 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        string s = $"방어력 +{food.Defense} ";
+                        Console.Write(s); written += s.Length;
+                    }
+                    if (food.Critical != 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        string s = $"치명타 +{food.Critical * 100}% ";
+                        Console.Write(s); written += s.Length;
+                    }
+                    if (food.Evade != 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        string s = $"회피 +{food.Evade * 100}% ";
+                        Console.Write(s); written += s.Length;
+                    }
+                    if (food.ID == 504)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                        string s = "???";
+                        Console.Write(s); written += s.Length;
+                    }
+                    if (written < statWidth)
+                        Console.Write(new string(' ', statWidth - written));
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.Write(new string(' ', statWidth));
                 }
 
+                // 설명 컬럼
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                string descStr = StringFormatting.PadRightForMixedText(item.Description, descWidth);
+                Console.Write(" | " + descStr);
+
+                // 가격 컬럼
                 string priceDisplay;
                 if (isSellingContext)
                 {
                     if (item is ConsumableHP consumable || item is ConsumableMP consumableMP)
-                    {
-                        priceDisplay = $"{item.SellingPrice}G" + $" x {item.Quantity}";
-                    }
+                        priceDisplay = $"{item.SellingPrice}G x {item.Quantity}";
                     else
-                    {
                         priceDisplay = $"{item.SellingPrice}G";
-                    }
                 }
                 else
                 {
                     if (item is ConsumableHP consumable || item is ConsumableMP consumableMP)
-                    {
-                        priceDisplay = $"{item.Price}G" + $" x {item.Quantity}";
-                    }
+                        priceDisplay = $"{item.Price}G x {item.Quantity}";
                     else
                         priceDisplay = item.HasPurchased ? "구매완료" : $"{item.Price}G";
                 }
 
-                // 각 부분을 유틸 함수를 이용해 정렬된 문자열로 만든다.
-                string countStr = StringFormatting.PadRightForMixedText($"- {count}", 4);
-                string nameStr = StringFormatting.PadRightForMixedText(name, nameWidth);
-                string statStr = StringFormatting.PadRightForMixedText(statDisplay, statWidth);
-                string descStr = StringFormatting.PadRightForMixedText(item.Description, descWidth);
+                if (priceDisplay == "구매완료")
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                else
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(" | " + priceDisplay);
 
-                // 정렬된 문자열들을 조합하여 최종 출력
-                Console.WriteLine($"{countStr}{nameStr} | {statStr} | {descStr} | {priceDisplay}");
+                Console.ResetColor();
                 count++;
             }
         }
