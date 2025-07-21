@@ -59,9 +59,9 @@
 
 ### 데이터 흐름
 
-1.  **`DataManager`**가 `Data/` 폴더의 JSON 파일들을 읽어 게임에 필요한 모든 데이터를 로드합니다.
-2.  **`GameManager`**는 `PlayerController`를 통해 플레이어 캐릭터를 생성하고, `DataManager`로부터 로드한 데이터를 기반으로 초기화합니다.
-3.  **`SceneManager`**는 현재 게임 상태에 맞는 씬을 화면에 표시합니다.
-4.  플레이어의 입력에 따라 **`SceneManager`**는 다른 씬으로 전환하거나, **`GameManager`**를 통해 게임 상태를 변경합니다.
-5.  전투 시에는 **`BattleManager`**가 `PlayerController`와 `MonsterController`를 사용하여 전투를 진행합니다.
-6.  게임 진행 상황은 **`GameManager`**의 저장 기능을 통해 `UserData.json` 파일에 저장됩니다.
+1.  `DataManager`가 `Data/` 폴더의 JSON 파일들을 읽어 게임에 필요한 모든 데이터를 로드합니다.
+2.  `GameManager`는 `PlayerController`를 통해 플레이어 캐릭터를 생성하고, `DataManager`로부터 로드한 데이터를 기반으로 초기화합니다.
+3.  `SceneManager`는 현재 게임 상태에 맞는 씬을 화면에 표시합니다.
+4.  플레이어의 입력에 따라 `SceneManager`는 다른 씬으로 전환하거나, `GameManager`를 통해 게임 상태를 변경합니다.
+5.  전투 시에는 `BattleManager`가 `PlayerController`와 `MonsterController`를 사용하여 전투를 진행합니다.
+6.  게임 진행 상황은 `GameManager`의 저장 기능을 통해 `UserData.json` 파일에 저장됩니다.
